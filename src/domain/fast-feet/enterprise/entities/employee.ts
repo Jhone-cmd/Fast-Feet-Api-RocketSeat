@@ -18,8 +18,18 @@ export class Employee extends Entity<EmployeeProps> {
 		return this.props.name
 	}
 
+	set name(name: string) {
+		this.props.name = name
+		this.touch()
+	}
+
 	get email() {
 		return this.props.email
+	}
+
+	set email(email: string) {
+		this.props.email = email
+		this.touch()
 	}
 
 	get cpf() {
@@ -30,8 +40,18 @@ export class Employee extends Entity<EmployeeProps> {
 		return this.props.password
 	}
 
+	set password(password: string) {
+		this.props.password = password
+		this.touch()
+	}
+
 	get role() {
 		return this.props.role
+	}
+
+	set role(role: Role) {
+		this.props.role = role
+		this.touch()
 	}
 
 	get createdAt() {
@@ -40,6 +60,10 @@ export class Employee extends Entity<EmployeeProps> {
 
 	get updatedAt() {
 		return this.props.updatedAt
+	}
+
+	private touch() {
+		this.props.updatedAt = new Date()
 	}
 
 	static create(props: EmployeeProps, id?: UniqueEntityId) {

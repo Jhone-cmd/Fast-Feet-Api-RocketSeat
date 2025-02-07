@@ -10,8 +10,8 @@ export interface OrderProps {
     recipientId: UniqueEntityId
     status: OrderStatus
     slug: Slug
-    latitude: string
-    longitude: string
+    latitude: number
+    longitude: number
     createdAt: Date
     updatedAt?: Date
 }
@@ -20,6 +20,11 @@ export interface OrderProps {
 export class Order extends Entity<OrderProps> {
     get name() {
         return this.props.name
+    }
+
+    set name(name: string) {
+        this.props.name = name
+        this.touch()
     }
 
     get employeeId() {
@@ -38,12 +43,31 @@ export class Order extends Entity<OrderProps> {
         return this.props.status
     }
 
+    set status(status: OrderStatus) {
+        this.props.status = status
+        this.touch()
+    }
+
+    get slug() {
+        return this.props.slug
+    }
+
     get latitude() {
         return this.props.latitude
     }
 
+    set latitude(latitude: number) {
+        this.props.latitude = latitude
+        this.touch()
+    }
+
     get longitude() {
         return this.props.longitude
+    }
+
+    set longitude(longitude: number) {
+        this.props.longitude = longitude
+        this.touch()
     }
 
     get createdAt() {

@@ -15,9 +15,19 @@ export class Recipient extends Entity<RecipientProps> {
 		return this.props.name
 	}
 
+	set name(name: string) {
+		this.props.name = name
+		this.touch()
+	}
+
     get address() {
         return this.props.address
     }
+
+	set address(address: string) {
+		this.props.address = address
+		this.touch()
+	}
 
     get cpf() {
         return this.props.cpf
@@ -25,6 +35,11 @@ export class Recipient extends Entity<RecipientProps> {
 
 	get password() {
 		return this.props.password
+	}
+
+	set password(password: string) {
+		this.props.password = password
+		this.touch()
 	}
 
 	get createdAt() {
