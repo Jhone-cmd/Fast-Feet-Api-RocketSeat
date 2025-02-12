@@ -1,7 +1,7 @@
 export class CPF {
     public value: string
 
-    private constructor(value: string) {
+    constructor(value: string) {
         this.value = this.formatted(value)
     }
 
@@ -14,7 +14,7 @@ export class CPF {
         return false
     }
 
-    private formatted(cpf: string) {
+    private formatted(cpf: string): string {
         cpf.replace(/[^\d]+/g, ''); 
         return cpf
     }
