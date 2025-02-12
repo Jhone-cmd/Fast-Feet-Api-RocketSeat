@@ -1,0 +1,28 @@
+import type { EmployeeRepository } from "src/domain/fast-feet/application/repositories/employee-repository";
+import type { Employee } from "src/domain/fast-feet/enterprise/entities/employee";
+
+export class InMemoryEmployeeRepository implements EmployeeRepository {
+
+    public items: Employee[] = []
+
+    async create(employee: Employee): Promise<void> {
+        this.items.push(employee)
+    }
+
+    async findByEmail(email: string): Promise<Employee | null> {
+        const employee = this.items.find((item) => item.email === email);
+
+        if (!employee) return null
+
+        return employee
+    }
+
+    async findByCPF(cpf: string): Promise<Employee | null> {
+        const employee = this.items.find((item) => item.cpf.value === cpf);
+
+        if (!employee) return null
+
+        return employee
+    }
+    
+}
