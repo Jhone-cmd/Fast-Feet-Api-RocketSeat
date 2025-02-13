@@ -21,14 +21,13 @@ describe('Register Employee', () => {
             cpf: '12345678910',
             password: '123456',
             role: 'admin'
-        })
-
+        })       
+        
         expect(inMemoryEmployeeRepository.items).toHaveLength(1);
-        expect(result.employee).toEqual(
-            expect.objectContaining({
-                name: 'john doe'
-            })
-        )
+        expect(result.isRight()).toBeTruthy()
+        expect(result.value).toEqual({
+            employee: inMemoryEmployeeRepository.items[0]
+        })
     })
 
     it('should not be able to register an employee with same email', async () => {
@@ -49,7 +48,8 @@ describe('Register Employee', () => {
             role: 'admin'
         })
 
-        expect(result).toBeInstanceOf(EmployeeAlreadyExists)
+        expect(result.isLeft()).toBeTruthy()
+        expect(result.value).toBeInstanceOf(EmployeeAlreadyExists)
     })
 
 
@@ -71,12 +71,13 @@ describe('Register Employee', () => {
             role: 'admin'
         })
 
-        expect(result).toBeInstanceOf(EmployeeAlreadyExists)
+        expect(result.isLeft()).toBeTruthy()
+        expect(result.value).toBeInstanceOf(EmployeeAlreadyExists)
 
     })
 
     it('should hash password upon registration', async () => {
-        await sut.execute({
+        const result = await sut.execute({
             name: 'john doe',
             email: 'johndoe@email.com',
             cpf: '12345678910',
@@ -86,6 +87,7 @@ describe('Register Employee', () => {
 
         const hashedPassword = await fakerHasher.hash('123456')
 
+        expect(result.isRight()).toBeTruthy()
         expect(inMemoryEmployeeRepository.items[0].password).toEqual(hashedPassword)
     })
 })
