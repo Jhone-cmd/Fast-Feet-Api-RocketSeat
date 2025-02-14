@@ -1,3 +1,3 @@
-export class USeCaseError {
+export class UseCaseError {
     message: string
 }

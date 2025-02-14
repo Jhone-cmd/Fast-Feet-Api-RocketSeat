@@ -4,7 +4,7 @@ import type { Optional } from "src/core/types/optional";
 import type { Role } from "./types/role";
 import type { CPF } from "./value-objects/cpf";
 
-interface EmployeeProps {
+export interface EmployeeProps {
 	name: string;
 	email: string;
 	cpf: CPF;
