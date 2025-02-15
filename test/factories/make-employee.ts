@@ -14,7 +14,7 @@ export function makeEmployee (
         cpf: new CPF('12345687910'),
         role: 'admin',    
         ...override     
-    })
+    }, id)
 
     return employee
 }
