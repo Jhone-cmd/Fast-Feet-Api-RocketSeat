@@ -43,7 +43,16 @@ export class InMemoryEmployeeRepository implements EmployeeRepository {
 		return deliveryMan;
 	}
 
+	async permission(id: string): Promise<boolean> {
+		const employee = this.items.find((item) => item.id.toString() === id)
+
+		if (employee?.role === 'deliveryman') return false
+
+		return true
+	}
+
     async delete(employee: Employee): Promise<void> {
-        
+		const employeeIndex = this.items.findIndex((item) => item.id === employee.id)
+		this.items.splice(employeeIndex, 1)
     }
 }

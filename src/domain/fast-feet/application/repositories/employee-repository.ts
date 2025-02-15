@@ -7,5 +7,6 @@ export interface EmployeeRepository {
     findByCPF(cpf: string): Promise<Employee | null>
     findById(id: string): Promise<Employee | null>
     findManyDeliveryMan(params: PaginationParams): Promise<Employee[]>
+    permission(id: string): Promise<boolean>
     delete(employee: Employee): Promise<void>
 }
