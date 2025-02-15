@@ -9,4 +9,5 @@ export interface EmployeeRepository {
     findManyDeliveryMan(params: PaginationParams): Promise<Employee[]>
     permission(id: string): Promise<boolean>
     delete(employee: Employee): Promise<void>
+    save(employee: Employee): Promise<void>
 }

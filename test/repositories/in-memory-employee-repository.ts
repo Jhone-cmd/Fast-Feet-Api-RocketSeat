@@ -51,6 +51,11 @@ export class InMemoryEmployeeRepository implements EmployeeRepository {
 		return true
 	}
 
+	async save(employee: Employee): Promise<void> {
+		const employeeIndex = this.items.findIndex((item) => item.id === employee.id)
+		this.items[employeeIndex] = employee
+	}
+
     async delete(employee: Employee): Promise<void> {
 		const employeeIndex = this.items.findIndex((item) => item.id === employee.id)
 		this.items.splice(employeeIndex, 1)
