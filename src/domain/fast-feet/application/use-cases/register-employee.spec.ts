@@ -1,6 +1,6 @@
 import { FakerHasher } from "test/cryptography/faker-hasher"
 import { InMemoryEmployeeRepository } from "test/repositories/in-memory-employee-repository"
-import { EmployeeAlreadyExists } from "./errors/employee-already-exists"
+import { UserAlreadyExists } from "./errors/user-already-exists"
 import { RegisterEmployeeUseCase } from "./register-employee"
 
 let inMemoryEmployeeRepository: InMemoryEmployeeRepository
@@ -49,7 +49,7 @@ describe('Register Employee', () => {
         })
 
         expect(result.isLeft()).toBeTruthy()
-        expect(result.value).toBeInstanceOf(EmployeeAlreadyExists)
+        expect(result.value).toBeInstanceOf(UserAlreadyExists)
     })
 
 
@@ -72,7 +72,7 @@ describe('Register Employee', () => {
         })
 
         expect(result.isLeft()).toBeTruthy()
-        expect(result.value).toBeInstanceOf(EmployeeAlreadyExists)
+        expect(result.value).toBeInstanceOf(UserAlreadyExists)
 
     })
 
