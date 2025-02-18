@@ -2,7 +2,7 @@ import type { Optional } from "@/core/types/optional";
 import { Entity } from "src/core/entities/entity";
 import type { UniqueEntityId } from "src/core/entities/unique-entity-id";
 import type { CPF } from "./value-objects/cpf";
-interface RecipientProps {
+export interface RecipientProps {
 	name: string;
 	address: string;
 	phone: string;
