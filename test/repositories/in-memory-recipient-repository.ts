@@ -17,6 +17,14 @@ export class InMemoryRecipientRepository implements RecipientRepository {
 		return recipient
 	}
 
+	async findById(id: string): Promise<Recipient | null> {
+		const recipient = this.items.find((item) => item.id.toString() === id)
+
+		if (!recipient) return null
+
+		return recipient
+	}
+
 	async findManyRecipient({ page }: PaginationParams): Promise<Recipient[]> {
 		const recipient = this.items
 			.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
@@ -24,4 +32,11 @@ export class InMemoryRecipientRepository implements RecipientRepository {
 
 		return recipient
 	}
+
+	async delete(recipient: Recipient): Promise<void> {
+		const recipientIndex = this.items.findIndex((item) => item.id === recipient.id)
+		this.items.splice(recipientIndex, 1)
+	}
+
+	
 }

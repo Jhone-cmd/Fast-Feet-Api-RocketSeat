@@ -5,4 +5,6 @@ export interface RecipientRepository {
 	create(recipient: Recipient): Promise<void>
 	findByCPF(cpf: string): Promise<Recipient | null>
 	findManyRecipient(params: PaginationParams): Promise<Recipient[]>
+	findById(id: string): Promise<Recipient | null>
+	delete(recipient: Recipient): Promise<void>
 }
