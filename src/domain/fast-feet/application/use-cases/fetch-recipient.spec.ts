@@ -34,7 +34,7 @@ describe("Fetch Recipient", () => {
         const result = await sut.execute({
             page: 1
         });
-
+        
         expect(result.value?.recipient).toEqual([
             expect.objectContaining({ createdAt: new Date(2025, 1, 15) }),
             expect.objectContaining({ createdAt: new Date(2025, 1, 12) }),

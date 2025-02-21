@@ -1,5 +1,6 @@
 import { FakerHasher } from "test/cryptography/faker-hasher"
 import { InMemoryEmployeeRepository } from "test/repositories/in-memory-employee-repository"
+import { generateCPF } from "test/utils/generate-cpf"
 import { UserAlreadyExists } from "./errors/user-already-exists"
 import { RegisterEmployeeUseCase } from "./register-employee"
 
@@ -18,7 +19,7 @@ describe('Register Employee', () => {
         const result = await sut.execute({
             name: 'john doe',
             email: 'johndoe@email.com',
-            cpf: '12345678910',
+            cpf: generateCPF(),
             password: '123456',
             role: 'admin'
         })       
@@ -35,7 +36,7 @@ describe('Register Employee', () => {
         await sut.execute({
             name: 'john doe',
             email: 'johndoe@email.com',
-            cpf: '12345678910',
+            cpf: generateCPF(),
             password: '123456',
             role: 'admin'
         })
@@ -43,7 +44,7 @@ describe('Register Employee', () => {
         const result = await sut.execute({
             name: 'john doe',
             email: 'johndoe@email.com',
-            cpf: '12345678910',
+            cpf: generateCPF(),
             password: '123456',
             role: 'admin'
         })
@@ -80,7 +81,7 @@ describe('Register Employee', () => {
         const result = await sut.execute({
             name: 'john doe',
             email: 'johndoe@email.com',
-            cpf: '12345678910',
+            cpf: generateCPF(),
             password: '123456',
             role: 'admin'
         })

@@ -1,4 +1,5 @@
 import { InMemoryRecipientRepository } from "test/repositories/in-memory-recipient-repository"
+import { generateCPF } from "test/utils/generate-cpf"
 import { CreateRecipientUseCase } from "./create-recipient"
 import { UserAlreadyExists } from "./errors/user-already-exists"
 
@@ -16,7 +17,7 @@ describe('Create Recipient', () => {
             name: 'john doe',
             address: 'Rua Nova Cidade',
             phone: '61988776655',
-            cpf: '12345678910',
+            cpf: generateCPF(),
         })       
         
         expect(inMemoryRecipientRepository.items).toHaveLength(1);
