@@ -1,5 +1,5 @@
-import type { DeliveryMan } from "../../enterprise/entities/delivery-man";
+import type { DeliveryMan } from '../../enterprise/entities/delivery-man'
 
 export interface DeliveryManRepository {
-    create(deliveryman: DeliveryMan): Promise<void>
+  create(deliveryman: DeliveryMan): Promise<void>
 }

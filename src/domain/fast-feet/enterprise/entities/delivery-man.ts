@@ -1,72 +1,72 @@
-import { Entity } from "src/core/entities/entity";
-import type { UniqueEntityId } from "src/core/entities/unique-entity-id";
-import type { CPF } from "./value-objects/cpf";
+import { Entity } from 'src/core/entities/entity'
+import type { UniqueEntityId } from 'src/core/entities/unique-entity-id'
+import type { CPF } from './value-objects/cpf'
 
 interface DeliveryManProps {
-	name: string
-	cpf: CPF
-	password: string
-	latitude: number
-	longitude: number
-	createdAt: Date
-	updatedAt?: Date
+  name: string
+  cpf: CPF
+  password: string
+  latitude: number
+  longitude: number
+  createdAt: Date
+  updatedAt?: Date
 }
 
 export class DeliveryMan extends Entity<DeliveryManProps> {
-	get name() {
-		return this.props.name
-	}
+  get name() {
+    return this.props.name
+  }
 
-	set name(name: string) {
-		this.props.name = name
-		this.touch()
-	}
+  set name(name: string) {
+    this.props.name = name
+    this.touch()
+  }
 
-	get cpf() {
-		return this.props.cpf
-	}
+  get cpf() {
+    return this.props.cpf
+  }
 
-	get password() {
-		return this.props.password
-	}
+  get password() {
+    return this.props.password
+  }
 
-	set password(password: string) {
-		this.props.password = password
-		this.touch()
-	}
+  set password(password: string) {
+    this.props.password = password
+    this.touch()
+  }
 
-	get latitude() {
-		return this.props.latitude
-	}
+  get latitude() {
+    return this.props.latitude
+  }
 
-	set latitude(latitude: number) {
-		this.props.latitude = latitude
-		this.touch()
-	}
+  set latitude(latitude: number) {
+    this.props.latitude = latitude
+    this.touch()
+  }
 
-	get longitude() {
-		return this.props.longitude
-	}
+  get longitude() {
+    return this.props.longitude
+  }
 
-	set longitude(longitude: number) {
-		this.props.longitude = longitude
-		this.touch()
-	}
+  set longitude(longitude: number) {
+    this.props.longitude = longitude
+    this.touch()
+  }
 
-	get createdAt() {
-		return this.props.createdAt
-	}
+  get createdAt() {
+    return this.props.createdAt
+  }
 
-	get updatedAt() {
-		return this.props.updatedAt
-	}
+  get updatedAt() {
+    return this.props.updatedAt
+  }
 
-	private touch() {
-		this.props.updatedAt = new Date()
-	}
+  private touch() {
+    this.props.updatedAt = new Date()
+  }
 
-	static create(props: DeliveryManProps, id?: UniqueEntityId) {
-		const deliveryMan = new DeliveryMan(props, id)
-		return deliveryMan
-	}
+  static create(props: DeliveryManProps, id?: UniqueEntityId) {
+    const deliveryMan = new DeliveryMan(props, id)
+    return deliveryMan
+  }
 }

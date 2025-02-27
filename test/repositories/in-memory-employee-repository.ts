@@ -1,63 +1,61 @@
-import type { PaginationParams } from "@/core/repositories/pagination-params";
-import type { EmployeeRepository } from "src/domain/fast-feet/application/repositories/employee-repository";
-import type { Employee } from "src/domain/fast-feet/enterprise/entities/employee";
+import type { PaginationParams } from '@/core/repositories/pagination-params'
+import type { EmployeeRepository } from 'src/domain/fast-feet/application/repositories/employee-repository'
+import type { Employee } from 'src/domain/fast-feet/enterprise/entities/employee'
 
 export class InMemoryEmployeeRepository implements EmployeeRepository {
-	public items: Employee[] = [];
+  public items: Employee[] = []
 
-	async create(employee: Employee): Promise<void> {
-		this.items.push(employee);
-	}
+  async create(employee: Employee): Promise<void> {
+    this.items.push(employee)
+  }
 
-	async findByEmail(email: string): Promise<Employee | null> {
-		const employee = this.items.find((item) => item.email === email);
+  async findByEmail(email: string): Promise<Employee | null> {
+    const employee = this.items.find(item => item.email === email)
 
-		if (!employee) return null;
+    if (!employee) return null
 
-		return employee;
-	}
+    return employee
+  }
 
-	async findByCPF(cpf: string): Promise<Employee | null> {
-		const employee = this.items.find((item) => item.cpf.value === cpf);
+  async findByCPF(cpf: string): Promise<Employee | null> {
+    const employee = this.items.find(item => item.cpf.value === cpf)
 
-		if (!employee) return null;
+    if (!employee) return null
 
-		return employee;
-	}
+    return employee
+  }
 
-    async findById(id: string): Promise<Employee | null> {
-        const employee = this.items.find((item) => item.id.toString() === id)
-        if (!employee) return null
+  async findById(id: string): Promise<Employee | null> {
+    const employee = this.items.find(item => item.id.toString() === id)
+    if (!employee) return null
 
-        return employee
-    }
+    return employee
+  }
 
-	async findManyDeliveryMan(
-		{ page }: PaginationParams,
-	): Promise<Employee[]> {
-		const deliveryMan = this.items
-			.filter((item) => item.role === 'deliveryman')
-			.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
-			.slice((page - 1) * 20, page * 20);
+  async findManyDeliveryMan({ page }: PaginationParams): Promise<Employee[]> {
+    const deliveryMan = this.items
+      .filter(item => item.role === 'deliveryman')
+      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+      .slice((page - 1) * 20, page * 20)
 
-		return deliveryMan;
-	}
+    return deliveryMan
+  }
 
-	async permission(id: string): Promise<boolean> {
-		const employee = this.items.find((item) => item.id.toString() === id)
+  async permission(id: string): Promise<boolean> {
+    const employee = this.items.find(item => item.id.toString() === id)
 
-		if (employee?.role === 'deliveryman') return false
+    if (employee?.role === 'deliveryman') return false
 
-		return true
-	}
+    return true
+  }
 
-	async save(employee: Employee): Promise<void> {
-		const employeeIndex = this.items.findIndex((item) => item.id === employee.id)
-		this.items[employeeIndex] = employee
-	}
+  async save(employee: Employee): Promise<void> {
+    const employeeIndex = this.items.findIndex(item => item.id === employee.id)
+    this.items[employeeIndex] = employee
+  }
 
-    async delete(employee: Employee): Promise<void> {
-		const employeeIndex = this.items.findIndex((item) => item.id === employee.id)
-		this.items.splice(employeeIndex, 1)
-    }
+  async delete(employee: Employee): Promise<void> {
+    const employeeIndex = this.items.findIndex(item => item.id === employee.id)
+    this.items.splice(employeeIndex, 1)
+  }
 }

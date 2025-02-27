@@ -1,5 +1,5 @@
-import type { Order } from "../../enterprise/entities/order";
+import type { Order } from '../../enterprise/entities/order'
 
 export interface OrderRepository {
-    create(order: Order): Promise<void>
+  create(order: Order): Promise<void>
 }
