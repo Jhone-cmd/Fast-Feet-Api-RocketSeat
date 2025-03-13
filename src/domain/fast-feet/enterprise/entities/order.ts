@@ -1,19 +1,20 @@
+import type { Optional } from '@/core/types/optional'
 import { Entity } from 'src/core/entities/entity'
 import type { UniqueEntityId } from 'src/core/entities/unique-entity-id'
 import type { OrderStatus } from './types/order-status'
-import type { Slug } from './value-objects/slug'
+import { Slug } from './value-objects/slug'
 
 export interface OrderProps {
   name: string
-  employeeId: UniqueEntityId
-  deliverymanId: UniqueEntityId
+  // employeeId: UniqueEntityId
+  deliverymanId: UniqueEntityId | null
   recipientId: UniqueEntityId
   status: OrderStatus
   slug: Slug
   latitude: number
   longitude: number
   createdAt: Date
-  updatedAt?: Date
+  updatedAt?: Date | null
 }
 
 export class Order extends Entity<OrderProps> {
@@ -26,12 +27,17 @@ export class Order extends Entity<OrderProps> {
     this.touch()
   }
 
-  get employeeId() {
-    return this.props.employeeId
-  }
+  // get employeeId() {
+  //   return this.props.employeeId
+  // }
 
   get deliverymanId() {
     return this.props.deliverymanId
+  }
+
+  set deliverymanId(deliverymanId: UniqueEntityId | null) {
+    this.props.deliverymanId = deliverymanId
+    this.touch()
   }
 
   get recipientId() {
@@ -81,8 +87,19 @@ export class Order extends Entity<OrderProps> {
     this.props.updatedAt = new Date()
   }
 
-  static create(props: OrderProps, id?: UniqueEntityId) {
-    const order = new Order(props, id)
+  static create(
+    props: Optional<OrderProps, 'createdAt' | 'slug' | 'deliverymanId'>,
+    id?: UniqueEntityId
+  ) {
+    const order = new Order(
+      {
+        ...props,
+        deliverymanId: props.deliverymanId ?? null,
+        slug: props.slug ?? Slug.createFromText(props.name),
+        createdAt: props.createdAt ?? new Date(),
+      },
+      id
+    )
     return order
   }
 }
