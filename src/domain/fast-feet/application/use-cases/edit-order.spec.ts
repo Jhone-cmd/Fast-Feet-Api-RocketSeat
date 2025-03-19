@@ -2,35 +2,18 @@ import { UniqueEntityId } from '@/core/entities/unique-entity-id'
 import { NotAllowed } from '@/core/errors/error/not-allowed'
 import { makeOrder } from 'test/factories/make-order'
 import { InMemoryOrderRepository } from 'test/repositories/in-memory-order-repository'
-import { DeleteOrderUseCase } from './delete-order'
+import { EditOrderUseCase } from './edit-order'
 
 let inMemoryOrderRepository: InMemoryOrderRepository
-let sut: DeleteOrderUseCase
+let sut: EditOrderUseCase
 
-describe('Delete Order', () => {
+describe('Edit order', () => {
   beforeEach(() => {
     inMemoryOrderRepository = new InMemoryOrderRepository()
-    sut = new DeleteOrderUseCase(inMemoryOrderRepository)
+    sut = new EditOrderUseCase(inMemoryOrderRepository)
   })
 
-  it('should be able to delete a order', async () => {
-    const newOrder = makeOrder(
-      {
-        recipientId: new UniqueEntityId('recipient-1'),
-      },
-      new UniqueEntityId('order-1')
-    )
-    await inMemoryOrderRepository.create(newOrder)
-
-    await sut.execute({
-      orderId: 'order-1',
-      recipientId: 'recipient-1',
-    })
-
-    expect(inMemoryOrderRepository.items).toHaveLength(0)
-  })
-
-  it('should not be able to delete a order from another recipient', async () => {
+  it('should be able to edit a order', async () => {
     const newOrder = makeOrder(
       {
         recipientId: new UniqueEntityId('recipient-1'),
@@ -41,6 +24,29 @@ describe('Delete Order', () => {
 
     const result = await sut.execute({
       orderId: 'order-1',
+      recipientId: 'recipient-1',
+      name: 'new name',
+      status: 'delivered',
+    })
+
+    expect(result.isRight).toBeTruthy()
+    expect(inMemoryOrderRepository.items[0]).toMatchObject({
+      name: 'new name',
+      status: 'delivered',
+    })
+  })
+
+  it('should not be able to edit a order from another recipient', async () => {
+    const newOrder = makeOrder(
+      {
+        recipientId: new UniqueEntityId('recipient-1'),
+      },
+      new UniqueEntityId('order-2')
+    )
+    await inMemoryOrderRepository.create(newOrder)
+
+    const result = await sut.execute({
+      orderId: 'order-2',
       recipientId: 'recipient-2',
     })
 
