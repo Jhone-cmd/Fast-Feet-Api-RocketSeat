@@ -1,6 +1,8 @@
+import type { FindNearbyOrdersParams } from '@/core/repositories/find-nearby-orders-params'
 import type { PaginationParams } from '@/core/repositories/pagination-params'
 import type { OrderRepository } from '@/domain/fast-feet/application/repositories/order-repository'
 import type { Order } from '@/domain/fast-feet/enterprise/entities/order'
+import { getDistanceBetweenCoordinates } from '@/utils/get-distance-between-coordenates'
 
 export class InMemoryOrderRepository implements OrderRepository {
   public items: Order[] = []
@@ -23,6 +25,32 @@ export class InMemoryOrderRepository implements OrderRepository {
     if (!order) return null
 
     return order
+  }
+
+  async findNearbyOrders({
+    page,
+    latitude,
+    longitude,
+  }: FindNearbyOrdersParams): Promise<Order[]> {
+    const orders = this.items
+      .filter(item => {
+        const distance = getDistanceBetweenCoordinates(
+          {
+            latitude: latitude,
+            longitude: longitude,
+          },
+          {
+            latitude: item.latitude,
+            longitude: item.longitude,
+          }
+        )
+
+        return distance < 10
+      })
+      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+      .slice((page - 1) * 20, page * 20)
+
+    return orders
   }
 
   async save(order: Order): Promise<void> {
