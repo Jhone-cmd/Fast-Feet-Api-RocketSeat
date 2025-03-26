@@ -81,7 +81,7 @@ export class Employee extends Entity<EmployeeProps> {
     return employee
   }
 
-  static isValidRole(role: string): boolean {
+  static isValidRole(role: string): role is 'admin' | 'deliveryman' {
     const responsibility: string[] = ['admin', 'deliveryman']
     return responsibility.includes(role)
   }
