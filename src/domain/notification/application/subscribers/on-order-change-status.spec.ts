@@ -1,5 +1,4 @@
 import { makeOrder } from 'test/factories/make-order'
-import { makeRecipient } from 'test/factories/make-recipient'
 import { InMemoryNotificationRepository } from 'test/repositories/in-memory-notification-repository'
 import { InMemoryOrderRepository } from 'test/repositories/in-memory-order-repository'
 import { InMemoryRecipientRepository } from 'test/repositories/in-memory-recipient-repository'
@@ -40,10 +39,7 @@ describe('On Order Change Status', () => {
   })
 
   it('should send a notification when order change status', async () => {
-    const recipient = makeRecipient()
-    await inMemoryRecipientRepository.create(recipient)
-
-    const order = makeOrder({ recipientId: recipient.id })
+    const order = makeOrder()
     await inMemoryOrderRepository.create(order)
 
     order.status = 'delivered'
