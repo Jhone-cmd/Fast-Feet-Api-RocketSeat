@@ -14,7 +14,7 @@ export class OrderChangeStatusEvent implements DomainEvent {
     this.occurredAt = new Date()
   }
 
-  getAggregatedId(): UniqueEntityId {
+  public getAggregatedId(): UniqueEntityId {
     return this.order.id
   }
 }

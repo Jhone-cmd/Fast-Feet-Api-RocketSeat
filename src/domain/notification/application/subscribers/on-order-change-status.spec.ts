@@ -1,6 +1,8 @@
 import { makeOrder } from 'test/factories/make-order'
+import { makeRecipient } from 'test/factories/make-recipient'
 import { InMemoryNotificationRepository } from 'test/repositories/in-memory-notification-repository'
 import { InMemoryOrderRepository } from 'test/repositories/in-memory-order-repository'
+import { InMemoryRecipientRepository } from 'test/repositories/in-memory-recipient-repository'
 import { waitFor } from 'test/utils/wait-for'
 import type { MockInstance } from 'vitest'
 import {
@@ -11,6 +13,7 @@ import {
 import { OnOrderChangeStatus } from './on-order-change-status'
 
 let inMemoryOrderRepository: InMemoryOrderRepository
+let inMemoryRecipientRepository: InMemoryRecipientRepository
 let inMemoryNotificationRepository: InMemoryNotificationRepository
 let sendNotificationUseCase: SendNotificationUseCase
 
@@ -25,6 +28,7 @@ let sendNotificationExecuteSpy: MockInstance<
 describe('On Order Change Status', () => {
   beforeEach(() => {
     inMemoryOrderRepository = new InMemoryOrderRepository()
+    inMemoryRecipientRepository = new InMemoryRecipientRepository()
     inMemoryNotificationRepository = new InMemoryNotificationRepository()
     sendNotificationUseCase = new SendNotificationUseCase(
       inMemoryNotificationRepository
@@ -36,7 +40,10 @@ describe('On Order Change Status', () => {
   })
 
   it('should send a notification when order change status', async () => {
-    const order = makeOrder()
+    const recipient = makeRecipient()
+    await inMemoryRecipientRepository.create(recipient)
+
+    const order = makeOrder({ recipientId: recipient.id })
     await inMemoryOrderRepository.create(order)
 
     order.status = 'delivered'

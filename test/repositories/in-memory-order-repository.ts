@@ -1,3 +1,4 @@
+import { DomainEvents } from '@/core/events/domain-events'
 import type { FindNearbyOrdersParams } from '@/core/repositories/find-nearby-orders-params'
 import type { PaginationParams } from '@/core/repositories/pagination-params'
 import type { OrderRepository } from '@/domain/fast-feet/application/repositories/order-repository'
@@ -56,6 +57,7 @@ export class InMemoryOrderRepository implements OrderRepository {
   async save(order: Order): Promise<void> {
     const orderIndex = this.items.findIndex(item => item.id === order.id)
     this.items[orderIndex] = order
+    DomainEvents.dispatchEventsForAggregate(order.id)
   }
 
   async delete(order: Order): Promise<void> {

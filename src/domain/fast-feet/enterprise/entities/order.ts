@@ -1,6 +1,7 @@
+import { AggregateRoot } from '@/core/entities/aggregate-root'
 import type { Optional } from '@/core/types/optional'
-import { Entity } from 'src/core/entities/entity'
 import type { UniqueEntityId } from 'src/core/entities/unique-entity-id'
+import { OrderChangeStatusEvent } from '../events/order-change-status-event'
 import type { OrderStatus } from './types/order-status'
 import { Slug } from './value-objects/slug'
 
@@ -17,7 +18,7 @@ export interface OrderProps {
   updatedAt?: Date | null
 }
 
-export class Order extends Entity<OrderProps> {
+export class Order extends AggregateRoot<OrderProps> {
   get name() {
     return this.props.name
   }
@@ -51,6 +52,8 @@ export class Order extends Entity<OrderProps> {
   set status(status: OrderStatus) {
     this.props.status = status
     this.touch()
+
+    this.addDomainEvent(new OrderChangeStatusEvent(this, status))
   }
 
   get slug() {

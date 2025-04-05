@@ -22,11 +22,11 @@ export class OnOrderChangeStatus implements EventHandler {
   private async sendOrderChangeStatusNotification({
     order,
   }: OrderChangeStatusEvent) {
-    const orderStatus = await this.orderRepository.findById(order.id.toString())
+    const receiver = await this.orderRepository.findById(order.id.toString())
 
-    if (orderStatus) {
+    if (receiver) {
       await this.sendoNotification.execute({
-        recipientId: order.id.toString(),
+        recipientId: order.recipientId.toString(),
         title: `Mudança de status do pedido para ${order.name}`,
         content: `${order.status}`,
       })
