@@ -24,7 +24,7 @@
       "enabled": true,
       "rules": {
         "style": {
-          "useImportType":"off"
+          "useImportType": "off"
         },
         "recommended": true,
         "complexity": {
