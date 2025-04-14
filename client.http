@@ -10,3 +10,8 @@ Content-Type: application/json
     "cpf": "12345678900",
 	"password": "123456"
 }
+
+###
+
+POST {{baseUrl}}/sessions
+Content-Type: application/json
