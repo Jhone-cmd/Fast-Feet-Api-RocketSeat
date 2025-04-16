@@ -27,8 +27,8 @@ importers:
         specifier: ^11.0.1
         version: 11.0.7(@nestjs/common@11.0.7(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@11.0.7)
       '@prisma/client':
-        specifier: ^6.5.0
-        version: 6.5.0(prisma@6.5.0(typescript@5.7.3))(typescript@5.7.3)
+        specifier: ^6.6.0
+        version: 6.6.0(prisma@6.5.0(typescript@5.7.3))(typescript@5.7.3)
       bcryptjs:
         specifier: ^3.0.2
         version: 3.0.2
@@ -36,8 +36,8 @@ importers:
         specifier: ^4.0.1
         version: 4.0.1
       pnpm:
-        specifier: ^10.4.0
-        version: 10.4.0
+        specifier: ^10.8.1
+        version: 10.8.1
       reflect-metadata:
         specifier: ^0.2.2
         version: 0.2.2
@@ -814,8 +814,8 @@ packages:
     resolution: {integrity: sha512-cq8o4cWH0ibXh9VGi5P20Tu9XF/0fFXl9EUinr9QfTM7a7p0oTA4iJRCQWppXR1Pg8dSM0UCItCkPwsk9qWWYA==}
     engines: {node: ^12.20.0 || ^14.18.0 || >=16.0.0}
 
-  '@prisma/client@6.5.0':
-    resolution: {integrity: sha512-M6w1Ql/BeiGoZmhMdAZUXHu5sz5HubyVcKukbLs3l0ELcQb8hTUJxtGEChhv4SVJ0QJlwtLnwOLgIRQhpsm9dw==}
+  '@prisma/client@6.6.0':
+    resolution: {integrity: sha512-vfp73YT/BHsWWOAuthKQ/1lBgESSqYqAWZEYyTdGXyFAHpmewwWL2Iz6ErIzkj4aHbuc6/cGSsE6ZY+pBO04Cg==}
     engines: {node: '>=18.18'}
     peerDependencies:
       prisma: '*'
@@ -3097,8 +3097,8 @@ packages:
     resolution: {integrity: sha512-Nc3IT5yHzflTfbjgqWcCPpo7DaKy4FnpB0l/zCAW0Tc7jxAiuqSxHasntB3D7887LSrA93kDJ9IXovxJYxyLCA==}
     engines: {node: '>=4'}
 
-  pnpm@10.4.0:
-    resolution: {integrity: sha512-a4SdB4fZf49OHwOpuP+PA4554VPW8RrlOa58Q1/555bfaoYsmRUCaVx/no+siur8GsWo2rR+NhSNGDgy2IbdUg==}
+  pnpm@10.8.1:
+    resolution: {integrity: sha512-xQCIupmMZ7jKjJnfil4C/Sri4rKaryOP6qnhJCSNP0j5+22yQklJ/5Ac/7teDwzBrWrttgLNKUUHUdEcNQI2dw==}
     engines: {node: '>=18.12'}
     hasBin: true
 
@@ -4508,7 +4508,7 @@ snapshots:
 
   '@pkgr/core@0.1.1': {}
 
-  '@prisma/client@6.5.0(prisma@6.5.0(typescript@5.7.3))(typescript@5.7.3)':
+  '@prisma/client@6.6.0(prisma@6.5.0(typescript@5.7.3))(typescript@5.7.3)':
     optionalDependencies:
       prisma: 6.5.0(typescript@5.7.3)
       typescript: 5.7.3
@@ -4548,7 +4548,7 @@ snapshots:
       eslint: 9.19.0
       eslint-config-prettier: 9.1.0(eslint@9.19.0)
       eslint-config-standard: 17.1.0(eslint-plugin-import@2.31.0(@typescript-eslint/parser@6.21.0(eslint@9.19.0)(typescript@5.7.3))(eslint@9.19.0))(eslint-plugin-n@16.6.2(eslint@9.19.0))(eslint-plugin-promise@6.6.0(eslint@9.19.0))(eslint@9.19.0)
-      eslint-plugin-import: 2.31.0(@typescript-eslint/parser@6.21.0(eslint@9.19.0)(typescript@5.7.3))(eslint@9.19.0)
+      eslint-plugin-import: 2.31.0(@typescript-eslint/parser@8.23.0(eslint@9.19.0)(typescript@5.7.3))(eslint@9.19.0)
       eslint-plugin-jsx-a11y: 6.10.2(eslint@9.19.0)
       eslint-plugin-n: 16.6.2(eslint@9.19.0)
       eslint-plugin-prettier: 5.2.3(@types/eslint@9.6.1)(eslint-config-prettier@9.1.0(eslint@9.19.0))(eslint@9.19.0)(prettier@3.4.2)
@@ -5870,7 +5870,7 @@ snapshots:
   eslint-config-standard@17.1.0(eslint-plugin-import@2.31.0(@typescript-eslint/parser@6.21.0(eslint@9.19.0)(typescript@5.7.3))(eslint@9.19.0))(eslint-plugin-n@16.6.2(eslint@9.19.0))(eslint-plugin-promise@6.6.0(eslint@9.19.0))(eslint@9.19.0):
     dependencies:
       eslint: 9.19.0
-      eslint-plugin-import: 2.31.0(@typescript-eslint/parser@6.21.0(eslint@9.19.0)(typescript@5.7.3))(eslint@9.19.0)
+      eslint-plugin-import: 2.31.0(@typescript-eslint/parser@8.23.0(eslint@9.19.0)(typescript@5.7.3))(eslint@9.19.0)
       eslint-plugin-n: 16.6.2(eslint@9.19.0)
       eslint-plugin-promise: 6.6.0(eslint@9.19.0)
 
@@ -5899,7 +5899,7 @@ snapshots:
       eslint: 9.19.0
       eslint-compat-utils: 0.5.1(eslint@9.19.0)
 
-  eslint-plugin-import@2.31.0(@typescript-eslint/parser@6.21.0(eslint@9.19.0)(typescript@5.7.3))(eslint@9.19.0):
+  eslint-plugin-import@2.31.0(@typescript-eslint/parser@8.23.0(eslint@9.19.0)(typescript@5.7.3))(eslint@9.19.0):
     dependencies:
       '@rtsao/scc': 1.1.0
       array-includes: 3.1.8
@@ -5922,7 +5922,7 @@ snapshots:
       string.prototype.trimend: 1.0.9
       tsconfig-paths: 3.15.0
     optionalDependencies:
-      '@typescript-eslint/parser': 6.21.0(eslint@9.19.0)(typescript@5.7.3)
+      '@typescript-eslint/parser': 8.23.0(eslint@9.19.0)(typescript@5.7.3)
     transitivePeerDependencies:
       - eslint-import-resolver-typescript
       - eslint-import-resolver-webpack
@@ -7039,7 +7039,7 @@ snapshots:
 
   pluralize@8.0.0: {}
 
-  pnpm@10.4.0: {}
+  pnpm@10.8.1: {}
 
   possible-typed-array-names@1.0.0: {}
 

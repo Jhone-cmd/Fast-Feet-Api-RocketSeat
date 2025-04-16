@@ -4,6 +4,7 @@ import { AuthModule } from './auth/auth.module'
 import { AuthenticateController } from './controllers/authenticate.controller'
 import { CreateAccountController } from './controllers/create-account.controller'
 import { CreateOrderController } from './controllers/create-order.controller'
+import { CreateRecipientController } from './controllers/create-recipient.controller'
 import { envSchema } from './env'
 import { PrismaService } from './prisma/prisma.service'
 
@@ -19,6 +20,7 @@ import { PrismaService } from './prisma/prisma.service'
     CreateAccountController,
     AuthenticateController,
     CreateOrderController,
+    CreateRecipientController,
   ],
   providers: [PrismaService],
 })

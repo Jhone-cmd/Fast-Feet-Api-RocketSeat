@@ -31,3 +31,16 @@ model Accounts {
 
   @@map("accounts")
 }
+
+model Recipients {
+  id      String @id @default(uuid())
+  name    String
+  cpf     String @unique
+  phone   String
+  address String
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime? @updatedAt @map("updated_at")
+
+  @@map("recipients")
+}
