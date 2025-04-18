@@ -32,18 +32,6 @@ Content-Type: application/json
 }
 
 ###
-# @name create_order
-POST {{baseUrl}}/recipients/20465089-a6c7-4a53-94eb-596a2b053d41/orders
-Content-Type: application/json
-Authorization: Bearer {{authToken}}
-
-{
-    "name": "Create Order 1",
-	"latitude": -16.0167985,
-    "longitude": -48.0722519
-}
-
-###
 # @name create_recipient
 POST {{baseUrl}}/accounts/recipient
 Content-Type: application/json
@@ -55,3 +43,25 @@ Authorization: Bearer {{authToken}}
 	"phone": "7798888-7777",
     "address": "Rua nada Bairro Grande"
 }
+
+### 
+
+# @name fetch_recipients
+GET  {{baseUrl}}/accounts/recipients
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+###
+
+# @name create_order
+POST {{baseUrl}}/recipients/20465089-a6c7-4a53-94eb-596a2b053d41/orders
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+    "name": "Create Order 1",
+	"latitude": -16.0167985,
+    "longitude": -48.0722519
+}
+
+
