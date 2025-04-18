@@ -16,7 +16,7 @@ const queryValidationPipe = new ZodValidationPipe(pageQueryParamSchema)
 type PageQueryParamSchema = z.infer<typeof pageQueryParamSchema>
 
 @Controller('/accounts/deliverymans')
-export class FetchDeliveryManController {
+export class FetchDeliveryMansController {
   constructor(private prisma: PrismaService) {}
 
   @Get()

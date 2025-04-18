@@ -32,6 +32,7 @@ Content-Type: application/json
 }
 
 ###
+
 # @name create_recipient
 POST {{baseUrl}}/accounts/recipient
 Content-Type: application/json
@@ -64,4 +65,12 @@ Authorization: Bearer {{authToken}}
     "longitude": -48.0722519
 }
 
+###
+
+# @name fetch_recent_orders
+GET  {{baseUrl}}/orders
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+###
 

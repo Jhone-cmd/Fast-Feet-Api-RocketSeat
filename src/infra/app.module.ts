@@ -5,8 +5,9 @@ import { AuthenticateController } from './controllers/authenticate.controller'
 import { CreateAccountController } from './controllers/create-account.controller'
 import { CreateOrderController } from './controllers/create-order.controller'
 import { CreateRecipientController } from './controllers/create-recipient.controller'
-import { FetchDeliveryManController } from './controllers/fetch-deliveryman.controller'
-import { FetchRecipientController } from './controllers/fetch-recipient.controller'
+import { FetchDeliveryMansController } from './controllers/fetch-deliverymans.controller'
+import { FetchRecentOrdersController } from './controllers/fetch-recent-orders.controller'
+import { FetchRecipientsController } from './controllers/fetch-recipients.controller'
 import { envSchema } from './env'
 import { PrismaService } from './prisma/prisma.service'
 
@@ -23,8 +24,9 @@ import { PrismaService } from './prisma/prisma.service'
     AuthenticateController,
     CreateOrderController,
     CreateRecipientController,
-    FetchDeliveryManController,
-    FetchRecipientController,
+    FetchDeliveryMansController,
+    FetchRecipientsController,
+    FetchRecentOrdersController,
   ],
   providers: [PrismaService],
 })
