@@ -6,11 +6,19 @@ POST {{baseUrl}}/accounts
 Content-Type: application/json
 
 {
-    "name": "john doe",
-	"email": "johndoe@email.com",
-    "cpf": "12345678900",
+    "name": "deliveryman",
+	"email": "deliveryman@email.com",
+    "cpf": "12345678901",
 	"password": "123456"
 }
+
+###
+
+# @name fetch_deliveryman
+GET  {{baseUrl}}/accounts/deliverymans
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
 
 ###
 
