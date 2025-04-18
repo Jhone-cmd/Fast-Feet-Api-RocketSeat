@@ -1,4 +1,4 @@
-import { type Either, left, right } from 'src/core/function/either'
+import { type Either, left, right } from '@/core/function/either'
 import { Employee } from '../../enterprise/entities/employee'
 import type { Role } from '../../enterprise/entities/types/role'
 import { CPF } from '../../enterprise/entities/value-objects/cpf'

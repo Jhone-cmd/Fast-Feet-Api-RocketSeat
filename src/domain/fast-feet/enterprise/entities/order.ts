@@ -1,6 +1,6 @@
 import { AggregateRoot } from '@/core/entities/aggregate-root'
+import type { UniqueEntityId } from '@/core/entities/unique-entity-id'
 import type { Optional } from '@/core/types/optional'
-import type { UniqueEntityId } from 'src/core/entities/unique-entity-id'
 import { OrderChangeStatusEvent } from '../events/order-change-status-event'
 import type { OrderStatus } from './types/order-status'
 import { Slug } from './value-objects/slug'

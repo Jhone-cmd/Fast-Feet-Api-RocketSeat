@@ -1,6 +1,6 @@
+import { Entity } from '@/core/entities/entity'
+import type { UniqueEntityId } from '@/core/entities/unique-entity-id'
 import type { Optional } from '@/core/types/optional'
-import { Entity } from 'src/core/entities/entity'
-import type { UniqueEntityId } from 'src/core/entities/unique-entity-id'
 import type { CPF } from './value-objects/cpf'
 export interface RecipientProps {
   name: string

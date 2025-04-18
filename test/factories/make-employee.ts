@@ -1,10 +1,10 @@
-import { faker } from '@faker-js/faker'
-import type { UniqueEntityId } from 'src/core/entities/unique-entity-id'
+import type { UniqueEntityId } from '@/core/entities/unique-entity-id'
 import {
   Employee,
   type EmployeeProps,
-} from 'src/domain/fast-feet/enterprise/entities/employee'
-import { CPF } from 'src/domain/fast-feet/enterprise/entities/value-objects/cpf'
+} from '@/domain/fast-feet/enterprise/entities/employee'
+import { CPF } from '@/domain/fast-feet/enterprise/entities/value-objects/cpf'
+import { faker } from '@faker-js/faker'
 import { generateCPF } from 'test/utils/generate-cpf'
 
 export function makeEmployee(

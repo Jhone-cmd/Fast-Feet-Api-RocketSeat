@@ -1,4 +1,4 @@
-import { type Either, left, right } from 'src/core/function/either'
+import { type Either, left, right } from '@/core/function/either'
 import type { Encrypter } from '../cryptography/encrypter'
 import type { HashComparer } from '../cryptography/hash-comparer'
 import type { EmployeeRepository } from '../repositories/employee-repository'

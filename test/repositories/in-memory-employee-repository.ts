@@ -1,6 +1,6 @@
 import type { PaginationParams } from '@/core/repositories/pagination-params'
-import type { EmployeeRepository } from 'src/domain/fast-feet/application/repositories/employee-repository'
-import type { Employee } from 'src/domain/fast-feet/enterprise/entities/employee'
+import type { EmployeeRepository } from '@/domain/fast-feet/application/repositories/employee-repository'
+import type { Employee } from '@/domain/fast-feet/enterprise/entities/employee'
 
 export class InMemoryEmployeeRepository implements EmployeeRepository {
   public items: Employee[] = []
