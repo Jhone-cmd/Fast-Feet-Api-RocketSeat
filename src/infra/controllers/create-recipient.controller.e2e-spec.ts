@@ -5,7 +5,7 @@ import request from 'supertest'
 import { AppModule } from '../app.module'
 import { PrismaService } from '../prisma/prisma.service'
 
-describe('Fetch Deliverymans (E2E)', () => {
+describe('Create Recipient (E2E)', () => {
   let app: INestApplication
   let prisma: PrismaService
   let jwt: JwtService
@@ -21,47 +21,36 @@ describe('Fetch Deliverymans (E2E)', () => {
     await app.init()
   })
 
-  test('[GET] /accounts/deliverymans', async () => {
+  test('[POST] /accounts/recipients', async () => {
     const admin = await prisma.accounts.create({
       data: {
         name: 'admin',
         email: 'admin@email.com',
         cpf: '12345678900',
-        password: '123456',
+        password: '126456',
         role: 'ADMIN',
       },
     })
-
     const accessToken = jwt.sign({ sub: admin.id })
 
-    await prisma.accounts.createMany({
-      data: [
-        {
-          name: 'deliveryman1',
-          email: 'deliveryman1@email.com',
-          cpf: '12345678901',
-          password: '123456',
-        },
-        {
-          name: 'deliveryman2',
-          email: 'deliveryman2@email.com',
-          cpf: '12345678902',
-          password: '123456',
-        },
-      ],
-    })
-
     const response = await request(app.getHttpServer())
-      .get('/accounts/deliverymans')
+      .post('/accounts/recipients')
       .set('Authorization', `Bearer ${accessToken}`)
-      .send()
+      .send({
+        name: 'recipient-1',
+        cpf: '12345678901',
+        phone: '7798888-7777',
+        address: 'Rua nada Bairro Grande',
+      })
 
-    expect(response.statusCode).toBe(200)
-    expect(response.body).toEqual({
-      deliverymans: [
-        expect.objectContaining({ cpf: '12345678901' }),
-        expect.objectContaining({ cpf: '12345678902' }),
-      ],
+    expect(response.statusCode).toBe(201)
+
+    const recipientOnDatabase = await prisma.recipients.findUnique({
+      where: {
+        cpf: '12345678901',
+      },
     })
+
+    expect(recipientOnDatabase).toBeTruthy()
   })
 })

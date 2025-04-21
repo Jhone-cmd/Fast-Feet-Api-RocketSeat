@@ -22,10 +22,11 @@ export class FetchRecipientsController {
   @Get()
   @UseGuards(JwtAuthGuard)
   async handle(@Query('page', queryValidationPipe) page: PageQueryParamSchema) {
-    const perPage = 1
+    const perPage = 20
+
     const recipients = await this.prisma.recipients.findMany({
       take: perPage,
-      skip: (perPage - 1) * perPage,
+      skip: (page - 1) * perPage,
       orderBy: {
         createdAt: 'desc',
       },

@@ -24,7 +24,7 @@ export type CreateRecipientBodySchema = z.infer<
   typeof createRecipientBodySchema
 >
 
-@Controller('/accounts/recipient')
+@Controller('/accounts/recipients')
 export class CreateRecipientController {
   constructor(private prisma: PrismaService) {}
 

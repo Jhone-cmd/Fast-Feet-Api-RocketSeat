@@ -5,7 +5,7 @@ import request from 'supertest'
 import { AppModule } from '../app.module'
 import { PrismaService } from '../prisma/prisma.service'
 
-describe('Fetch Deliverymans (E2E)', () => {
+describe('Fetch Recipients (E2E)', () => {
   let app: INestApplication
   let prisma: PrismaService
   let jwt: JwtService
@@ -21,7 +21,7 @@ describe('Fetch Deliverymans (E2E)', () => {
     await app.init()
   })
 
-  test('[GET] /accounts/deliverymans', async () => {
+  test('[GET] /accounts/recipients', async () => {
     const admin = await prisma.accounts.create({
       data: {
         name: 'admin',
@@ -34,31 +34,31 @@ describe('Fetch Deliverymans (E2E)', () => {
 
     const accessToken = jwt.sign({ sub: admin.id })
 
-    await prisma.accounts.createMany({
+    await prisma.recipients.createMany({
       data: [
         {
-          name: 'deliveryman1',
-          email: 'deliveryman1@email.com',
+          name: 'recipient-1',
           cpf: '12345678901',
-          password: '123456',
+          phone: '7798888-7777',
+          address: 'Rua nada Bairro Grande',
         },
         {
-          name: 'deliveryman2',
-          email: 'deliveryman2@email.com',
+          name: 'recipient-2',
           cpf: '12345678902',
-          password: '123456',
+          phone: '7798888-7777',
+          address: 'Rua nada Bairro Grande',
         },
       ],
     })
 
     const response = await request(app.getHttpServer())
-      .get('/accounts/deliverymans')
+      .get('/accounts/recipients')
       .set('Authorization', `Bearer ${accessToken}`)
       .send()
 
     expect(response.statusCode).toBe(200)
     expect(response.body).toEqual({
-      deliverymans: [
+      recipients: [
         expect.objectContaining({ cpf: '12345678901' }),
         expect.objectContaining({ cpf: '12345678902' }),
       ],
