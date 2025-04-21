@@ -1,15 +1,15 @@
 import { UniqueEntityId } from '@/core/entities/unique-entity-id'
 import { makeEmployee } from 'test/factories/make-employee'
 import { InMemoryEmployeeRepository } from 'test/repositories/in-memory-employee-repository'
-import { FetchDeliveryManUseCase } from './fetch-deliveryman'
+import { FetchDeliveryMansUseCase } from './fetch-deliverymans'
 
 let inMemoryEmployeeRepository: InMemoryEmployeeRepository
-let sut: FetchDeliveryManUseCase
+let sut: FetchDeliveryMansUseCase
 
 describe('Fetch Deliveryman', () => {
   beforeEach(() => {
     inMemoryEmployeeRepository = new InMemoryEmployeeRepository()
-    sut = new FetchDeliveryManUseCase(inMemoryEmployeeRepository)
+    sut = new FetchDeliveryMansUseCase(inMemoryEmployeeRepository)
   })
 
   it('should be able to fetch deliveryman', async () => {

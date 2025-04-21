@@ -2,23 +2,23 @@ import { type Either, right } from '@/core/function/either'
 import type { Employee } from '../../enterprise/entities/employee'
 import type { EmployeeRepository } from '../repositories/employee-repository'
 
-export interface FetchDeliveryManUseCaseRequest {
+export interface FetchDeliveryMansUseCaseRequest {
   page: number
 }
 
-type FetchDeliveryManUseCaseResponse = Either<
+type FetchDeliveryMansUseCaseResponse = Either<
   null,
   {
     deliveryMan: Employee[]
   }
 >
 
-export class FetchDeliveryManUseCase {
+export class FetchDeliveryMansUseCase {
   constructor(private employeeRepository: EmployeeRepository) {}
 
   async execute({
     page,
-  }: FetchDeliveryManUseCaseRequest): Promise<FetchDeliveryManUseCaseResponse> {
+  }: FetchDeliveryMansUseCaseRequest): Promise<FetchDeliveryMansUseCaseResponse> {
     const deliveryMan = await this.employeeRepository.findManyDeliveryMan({
       page,
     })
