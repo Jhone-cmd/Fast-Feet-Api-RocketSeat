@@ -28,7 +28,7 @@ export class FetchDeliveryMansController {
       take: perPage,
       skip: (page - 1) * perPage,
       where: {
-        role: 'DELIVERYMAN',
+        role: 'deliveryman',
       },
       orderBy: {
         createdAt: 'desc',

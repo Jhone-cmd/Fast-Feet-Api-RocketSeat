@@ -14,8 +14,8 @@ datasource db {
 }
 
 enum Role {
-  ADMIN
-  DELIVERYMAN
+  admin
+  deliveryman
 }
 
 enum Status {
@@ -31,7 +31,7 @@ model Accounts {
   email    String @unique
   cpf      String @unique
   password String
-  role     Role   @default(DELIVERYMAN)
+  role     Role   @default(deliveryman)
 
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime? @updatedAt @map("updated_at")

@@ -28,7 +28,7 @@ describe('Create Order (E2E)', () => {
         email: 'admin@email.com',
         cpf: '12345678900',
         password: '126456',
-        role: 'ADMIN',
+        role: 'admin',
       },
     })
     const accessToken = jwt.sign({ sub: admin.id })

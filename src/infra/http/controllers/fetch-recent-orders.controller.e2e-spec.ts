@@ -28,7 +28,7 @@ describe('Fetch Recent Orders (E2E)', () => {
         email: 'admin@email.com',
         cpf: '12345678900',
         password: '123456',
-        role: 'ADMIN',
+        role: 'admin',
       },
     })
 

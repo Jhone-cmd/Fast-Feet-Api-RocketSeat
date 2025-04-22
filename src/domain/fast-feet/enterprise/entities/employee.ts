@@ -11,7 +11,7 @@ export interface EmployeeProps {
   password: string
   role: Role
   createdAt: Date
-  updatedAt?: Date
+  updatedAt?: Date | null
 }
 
 export class Employee extends Entity<EmployeeProps> {

@@ -26,7 +26,7 @@ describe('Authenticate (E2E)', () => {
         email: 'admin@email.com',
         cpf: '12345678900',
         password: await hash('123456', 8),
-        role: 'ADMIN',
+        role: 'admin',
       },
     })
 
