@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common'
-import { PrismaService } from '../prisma/prisma.service'
+import { DatabaseModule } from '../database/database.module'
 import { AuthenticateController } from './controllers/authenticate.controller'
 import { CreateAccountController } from './controllers/create-account.controller'
 import { CreateOrderController } from './controllers/create-order.controller'
@@ -9,6 +9,7 @@ import { FetchRecentOrdersController } from './controllers/fetch-recent-orders.c
 import { FetchRecipientsController } from './controllers/fetch-recipients.controller'
 
 @Module({
+  imports: [DatabaseModule],
   controllers: [
     CreateAccountController,
     AuthenticateController,
@@ -18,6 +19,5 @@ import { FetchRecipientsController } from './controllers/fetch-recipients.contro
     FetchRecipientsController,
     FetchRecentOrdersController,
   ],
-  providers: [PrismaService],
 })
 export class HttpModule {}
