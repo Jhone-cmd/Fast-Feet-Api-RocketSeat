@@ -2,10 +2,10 @@ import { INestApplication } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { Test } from '@nestjs/testing'
 import request from 'supertest'
-import { AppModule } from '../app.module'
-import { PrismaService } from '../prisma/prisma.service'
+import { AppModule } from '../../app.module'
+import { PrismaService } from '../../prisma/prisma.service'
 
-describe('Create Order (E2E)', () => {
+describe('Fetch Recent Orders (E2E)', () => {
   let app: INestApplication
   let prisma: PrismaService
   let jwt: JwtService
@@ -21,17 +21,16 @@ describe('Create Order (E2E)', () => {
     await app.init()
   })
 
-  test('[POST] /recipients/:recipientId/orders', async () => {
+  test('[GET] /orders', async () => {
     const admin = await prisma.accounts.create({
       data: {
         name: 'admin',
         email: 'admin@email.com',
         cpf: '12345678900',
-        password: '126456',
+        password: '123456',
         role: 'ADMIN',
       },
     })
-    const accessToken = jwt.sign({ sub: admin.id })
 
     const recipient = await prisma.recipients.create({
       data: {
@@ -42,23 +41,38 @@ describe('Create Order (E2E)', () => {
       },
     })
 
-    const response = await request(app.getHttpServer())
-      .post(`/recipients/${recipient.id.toString()}/orders`)
-      .set('Authorization', `Bearer ${accessToken}`)
-      .send({
-        name: 'Create Order 1',
-        latitude: -16.0167985,
-        longitude: -48.0722519,
-      })
+    const accessToken = jwt.sign({ sub: admin.id })
 
-    expect(response.statusCode).toBe(201)
-
-    const orderOnDatabase = await prisma.orders.findFirst({
-      where: {
-        slug: 'create-order-1',
-      },
+    await prisma.orders.createMany({
+      data: [
+        {
+          name: 'Create Order 1',
+          slug: 'create-order-1',
+          recipient_id: recipient.id.toString(),
+          latitude: -16.0167985,
+          longitude: -48.0722519,
+        },
+        {
+          name: 'Create Order 2',
+          slug: 'create-order-2',
+          recipient_id: recipient.id.toString(),
+          latitude: -16.0167985,
+          longitude: -48.0722519,
+        },
+      ],
     })
 
-    expect(orderOnDatabase).toBeTruthy()
+    const response = await request(app.getHttpServer())
+      .get('/orders')
+      .set('Authorization', `Bearer ${accessToken}`)
+      .send()
+
+    expect(response.statusCode).toBe(200)
+    expect(response.body).toEqual({
+      orders: [
+        expect.objectContaining({ slug: 'create-order-1' }),
+        expect.objectContaining({ slug: 'create-order-2' }),
+      ],
+    })
   })
 })

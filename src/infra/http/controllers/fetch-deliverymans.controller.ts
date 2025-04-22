@@ -1,8 +1,8 @@
 import { Controller, Get, Query, UseGuards } from '@nestjs/common'
 import { z } from 'zod'
-import { JwtAuthGuard } from '../auth/jwt-auth.guard'
+import { JwtAuthGuard } from '../../auth/jwt-auth.guard'
+import { PrismaService } from '../../prisma/prisma.service'
 import { ZodValidationPipe } from '../pipes/zod-validation-pipe'
-import { PrismaService } from '../prisma/prisma.service'
 
 const pageQueryParamSchema = z
   .string()
@@ -15,8 +15,8 @@ const queryValidationPipe = new ZodValidationPipe(pageQueryParamSchema)
 
 type PageQueryParamSchema = z.infer<typeof pageQueryParamSchema>
 
-@Controller('/accounts/recipients')
-export class FetchRecipientsController {
+@Controller('/accounts/deliverymans')
+export class FetchDeliveryMansController {
   constructor(private prisma: PrismaService) {}
 
   @Get()
@@ -24,14 +24,17 @@ export class FetchRecipientsController {
   async handle(@Query('page', queryValidationPipe) page: PageQueryParamSchema) {
     const perPage = 20
 
-    const recipients = await this.prisma.recipients.findMany({
+    const deliverymans = await this.prisma.accounts.findMany({
       take: perPage,
       skip: (page - 1) * perPage,
+      where: {
+        role: 'DELIVERYMAN',
+      },
       orderBy: {
         createdAt: 'desc',
       },
     })
 
-    return { recipients }
+    return { deliverymans }
   }
 }

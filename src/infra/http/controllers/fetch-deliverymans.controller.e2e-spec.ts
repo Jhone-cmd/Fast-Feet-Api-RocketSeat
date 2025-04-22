@@ -2,10 +2,10 @@ import { INestApplication } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { Test } from '@nestjs/testing'
 import request from 'supertest'
-import { AppModule } from '../app.module'
-import { PrismaService } from '../prisma/prisma.service'
+import { AppModule } from '../../app.module'
+import { PrismaService } from '../../prisma/prisma.service'
 
-describe('Fetch Recent Orders (E2E)', () => {
+describe('Fetch Deliverymans (E2E)', () => {
   let app: INestApplication
   let prisma: PrismaService
   let jwt: JwtService
@@ -21,7 +21,7 @@ describe('Fetch Recent Orders (E2E)', () => {
     await app.init()
   })
 
-  test('[GET] /orders', async () => {
+  test('[GET] /accounts/deliverymans', async () => {
     const admin = await prisma.accounts.create({
       data: {
         name: 'admin',
@@ -32,46 +32,35 @@ describe('Fetch Recent Orders (E2E)', () => {
       },
     })
 
-    const recipient = await prisma.recipients.create({
-      data: {
-        name: 'recipient-1',
-        cpf: '12345678901',
-        phone: '7798888-7777',
-        address: 'Rua nada Bairro Grande',
-      },
-    })
-
     const accessToken = jwt.sign({ sub: admin.id })
 
-    await prisma.orders.createMany({
+    await prisma.accounts.createMany({
       data: [
         {
-          name: 'Create Order 1',
-          slug: 'create-order-1',
-          recipient_id: recipient.id.toString(),
-          latitude: -16.0167985,
-          longitude: -48.0722519,
+          name: 'deliveryman1',
+          email: 'deliveryman1@email.com',
+          cpf: '12345678901',
+          password: '123456',
         },
         {
-          name: 'Create Order 2',
-          slug: 'create-order-2',
-          recipient_id: recipient.id.toString(),
-          latitude: -16.0167985,
-          longitude: -48.0722519,
+          name: 'deliveryman2',
+          email: 'deliveryman2@email.com',
+          cpf: '12345678902',
+          password: '123456',
         },
       ],
     })
 
     const response = await request(app.getHttpServer())
-      .get('/orders')
+      .get('/accounts/deliverymans')
       .set('Authorization', `Bearer ${accessToken}`)
       .send()
 
     expect(response.statusCode).toBe(200)
     expect(response.body).toEqual({
-      orders: [
-        expect.objectContaining({ slug: 'create-order-1' }),
-        expect.objectContaining({ slug: 'create-order-2' }),
+      deliverymans: [
+        expect.objectContaining({ cpf: '12345678901' }),
+        expect.objectContaining({ cpf: '12345678902' }),
       ],
     })
   })
