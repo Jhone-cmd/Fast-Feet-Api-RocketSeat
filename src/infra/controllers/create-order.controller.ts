@@ -1,4 +1,11 @@
-import { Body, Controller, Param, Post, UseGuards } from '@nestjs/common'
+import {
+  Body,
+  Controller,
+  HttpCode,
+  Param,
+  Post,
+  UseGuards,
+} from '@nestjs/common'
 import { z } from 'zod'
 import { JwtAuthGuard } from '../auth/jwt-auth.guard'
 import { ZodValidationPipe } from '../pipes/zod-validation-pipe'
@@ -21,6 +28,7 @@ export class CreateOrderController {
   constructor(private prisma: PrismaService) {}
 
   @Post()
+  @HttpCode(201)
   @UseGuards(JwtAuthGuard)
   async handle(
     @Body(bodyValidationSchema) body: CreateOrderBodySchema,
