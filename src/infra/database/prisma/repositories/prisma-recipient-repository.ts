@@ -2,25 +2,73 @@ import { PaginationParams } from '@/core/repositories/pagination-params'
 import { RecipientRepository } from '@/domain/fast-feet/application/repositories/recipient-repository'
 import { Recipient } from '@/domain/fast-feet/enterprise/entities/recipient'
 import { Injectable } from '@nestjs/common'
+import { PrismaRecipientMapper } from '../mappers/prisma-recipient-mapper'
+import { PrismaService } from '../prisma.service'
 
 @Injectable()
 export class PrismaRecipientRepository implements RecipientRepository {
-  create(recipient: Recipient): Promise<void> {
-    throw new Error('Method not implemented.')
+  constructor(private prisma: PrismaService) {}
+
+  async create(recipient: Recipient): Promise<void> {
+    const data = PrismaRecipientMapper.toPrisma(recipient)
+    await this.prisma.recipients.create({
+      data,
+    })
   }
-  findByCPF(cpf: string): Promise<Recipient | null> {
-    throw new Error('Method not implemented.')
+
+  async findByCPF(cpf: string): Promise<Recipient | null> {
+    const recipient = await this.prisma.recipients.findUnique({
+      where: {
+        cpf,
+      },
+    })
+
+    if (!recipient) return null
+
+    return PrismaRecipientMapper.toDomain(recipient)
   }
-  findManyRecipient(params: PaginationParams): Promise<Recipient[]> {
-    throw new Error('Method not implemented.')
+
+  async findManyRecipient({ page }: PaginationParams): Promise<Recipient[]> {
+    const perPage = 20
+    const recipients = await this.prisma.recipients.findMany({
+      take: perPage,
+      skip: (page - 1) * perPage,
+      orderBy: {
+        createdAt: 'desc',
+      },
+    })
+
+    return recipients.map(PrismaRecipientMapper.toDomain)
   }
-  findById(id: string): Promise<Recipient | null> {
-    throw new Error('Method not implemented.')
+
+  async findById(id: string): Promise<Recipient | null> {
+    const recipient = await this.prisma.recipients.findUnique({
+      where: {
+        id,
+      },
+    })
+
+    if (!recipient) return null
+
+    return PrismaRecipientMapper.toDomain(recipient)
   }
-  delete(recipient: Recipient): Promise<void> {
-    throw new Error('Method not implemented.')
+
+  async delete(recipient: Recipient): Promise<void> {
+    const data = PrismaRecipientMapper.toPrisma(recipient)
+    await this.prisma.recipients.delete({
+      where: {
+        id: data.id,
+      },
+    })
   }
-  save(recipient: Recipient): Promise<void> {
-    throw new Error('Method not implemented.')
+
+  async save(recipient: Recipient): Promise<void> {
+    const data = PrismaRecipientMapper.toPrisma(recipient)
+    await this.prisma.recipients.update({
+      where: {
+        id: data.id,
+      },
+      data,
+    })
   }
 }

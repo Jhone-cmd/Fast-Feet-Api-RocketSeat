@@ -8,7 +8,7 @@ export interface RecipientProps {
   phone: string
   cpf: CPF
   createdAt: Date
-  updatedAt?: Date
+  updatedAt?: Date | null
 }
 
 export class Recipient extends Entity<RecipientProps> {
