@@ -63,14 +63,28 @@ model Orders {
 
   status Status @default(waiting)
 
-  deliveryman_id String?
-  recipient_id   String
+  deliverymanId String? @map("deliveryman_id")
+  recipientId   String  @map("recipient_id")
 
-  deliveryman Accounts?  @relation(fields: [deliveryman_id], references: [id])
-  recipient   Recipients @relation(fields: [recipient_id], references: [id])
+  deliveryman Accounts?  @relation(fields: [deliverymanId], references: [id])
+  recipient   Recipients @relation(fields: [recipientId], references: [id])
 
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime? @updatedAt @map("updated_at")
 
+  attachments Attachments[]
+
   @@map("orders")
+}
+
+model Attachments {
+  id    String @id @default(uuid())
+  title String
+  url   String
+
+  ordersId String? @map("order_id")
+
+  order Orders? @relation(fields: [ordersId], references: [id])
+
+  @@map("attachments")
 }
