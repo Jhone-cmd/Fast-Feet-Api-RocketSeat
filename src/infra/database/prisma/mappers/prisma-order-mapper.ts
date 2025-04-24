@@ -9,9 +9,9 @@ export class PrismaOrderMapper {
       {
         name: raw.name,
         slug: Slug.create(raw.slug),
-        recipientId: new UniqueEntityId(raw.recipient_id),
-        deliverymanId: raw.deliveryman_id
-          ? new UniqueEntityId(raw.deliveryman_id)
+        recipientId: new UniqueEntityId(raw.recipientId),
+        deliverymanId: raw.deliverymanId
+          ? new UniqueEntityId(raw.deliverymanId)
           : null,
         status: raw.status,
         latitude: raw.latitude.toNumber(),
@@ -28,8 +28,8 @@ export class PrismaOrderMapper {
       id: order.id.toString(),
       name: order.name,
       slug: order.slug.toString(),
-      recipient_id: order.recipientId.toString(),
-      deliveryman_id: order.deliverymanId?.toString(),
+      recipientId: order.recipientId.toString(),
+      deliverymanId: order.deliverymanId?.toString(),
       status: order.status,
       latitude: order.latitude,
       longitude: order.longitude,
