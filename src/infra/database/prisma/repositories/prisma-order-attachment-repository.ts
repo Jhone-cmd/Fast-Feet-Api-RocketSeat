@@ -11,23 +11,31 @@ export class PrismaOrderAttachmentRepository
   constructor(private prisma: PrismaService) {}
 
   async create(attachment: OrderAttachment): Promise<void> {
+    if (!attachment) {
+      return
+    }
+
     const data = PrismaOrderAttachmentMapper.toPrisma(attachment)
-    await this.prisma.attachments.create({
-      data,
-    })
+    await this.prisma.attachments.update(data)
   }
 
   async delete(attachment: OrderAttachment): Promise<void> {
-    const data = PrismaOrderAttachmentMapper.toPrisma(attachment)
+    if (!attachment) {
+      return
+    }
+
+    const { data } = PrismaOrderAttachmentMapper.toPrisma(attachment)
+    const id = data.id?.toString()
+
     await this.prisma.attachments.delete({
       where: {
-        id: data.id,
+        id,
       },
     })
   }
 
   async findByOrderId(orderId: string): Promise<OrderAttachment | null> {
-    const orderAttachment = await this.prisma.attachments.findUnique({
+    const orderAttachment = await this.prisma.attachments.findFirst({
       where: {
         orderId,
       },

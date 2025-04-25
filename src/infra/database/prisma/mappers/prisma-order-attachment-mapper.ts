@@ -16,12 +16,17 @@ export class PrismaOrderAttachmentMapper {
     )
   }
 
-  static toPrisma(
-    orderAttachment: OrderAttachment
-  ): Prisma.AttachmentsUncheckedUpdateInput {
+  static toPrisma({
+    attachmentId,
+    orderId,
+  }: OrderAttachment): Prisma.AttachmentsUpdateArgs {
     return {
-      id: orderAttachment.attachmentId.toString(),
-      orderId: orderAttachment.orderId.toString(),
+      where: {
+        id: attachmentId.toString(),
+      },
+      data: {
+        orderId: orderId.toString(),
+      },
     }
   }
 }
