@@ -45,7 +45,7 @@ export class CreateOrderController {
         status,
         latitude,
         longitude,
-        recipient_id: recipientId,
+        recipientId: recipientId,
       },
     })
   }

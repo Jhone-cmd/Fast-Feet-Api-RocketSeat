@@ -24,7 +24,7 @@ export class PrismaEmployeeMapper {
       id: account.id.toString(),
       name: account.name,
       email: account.email,
-      cpf: account.cpf.toString(),
+      cpf: account.cpf.value.toString(),
       password: account.password,
       role: account.role,
     }

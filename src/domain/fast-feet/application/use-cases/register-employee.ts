@@ -4,8 +4,8 @@ import type { Role } from '../../enterprise/entities/types/role'
 import { CPF } from '../../enterprise/entities/value-objects/cpf'
 import type { HashGenerator } from '../cryptography/hash-generator'
 import type { EmployeeRepository } from '../repositories/employee-repository'
+import { AccountAlreadyExists } from './errors/account-already-exists'
 import { InvalidCPF } from './errors/invalid-cpf'
-import { UserAlreadyExists } from './errors/user-already-exists'
 import { WrongJOB } from './errors/wrong-job'
 
 export interface EmployeeRequest {
@@ -16,7 +16,7 @@ export interface EmployeeRequest {
   role: string
 }
 
-type EmployeeResponse = Either<UserAlreadyExists, { employee: Employee }>
+type EmployeeResponse = Either<AccountAlreadyExists, { employee: Employee }>
 export class RegisterEmployeeUseCase {
   constructor(
     private employeeRepository: EmployeeRepository,
@@ -34,7 +34,7 @@ export class RegisterEmployeeUseCase {
       await this.employeeRepository.findByEmail(email)
 
     if (employeeWithSameEmail) {
-      return left(new UserAlreadyExists(email))
+      return left(new AccountAlreadyExists(email))
     }
 
     const cpfFormatted = new CPF(cpf)
@@ -49,7 +49,7 @@ export class RegisterEmployeeUseCase {
     )
 
     if (employeeWithSameCPF) {
-      return left(new UserAlreadyExists(cpfFormatted.value))
+      return left(new AccountAlreadyExists(cpfFormatted.value))
     }
 
     const isValidResponsibility = Employee.isValidRole(role)

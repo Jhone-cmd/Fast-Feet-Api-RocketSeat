@@ -2,8 +2,8 @@ import { type Either, left, right } from '@/core/function/either'
 import { Recipient } from '../../enterprise/entities/recipient'
 import { CPF } from '../../enterprise/entities/value-objects/cpf'
 import type { RecipientRepository } from '../repositories/recipient-repository'
+import { AccountAlreadyExists } from './errors/account-already-exists'
 import { InvalidCPF } from './errors/invalid-cpf'
-import { UserAlreadyExists } from './errors/user-already-exists'
 
 export interface CreateRecipientUseCaseRequest {
   name: string
@@ -13,7 +13,7 @@ export interface CreateRecipientUseCaseRequest {
 }
 
 type CreateRecipientUseCaseResponse = Either<
-  UserAlreadyExists,
+  AccountAlreadyExists,
   { recipient: Recipient }
 >
 
@@ -38,7 +38,7 @@ export class CreateRecipientUseCase {
     )
 
     if (recipientWithSameCPF) {
-      return left(new UserAlreadyExists(cpfFormatted.value))
+      return left(new AccountAlreadyExists(cpfFormatted.value))
     }
 
     const recipient = Recipient.create({

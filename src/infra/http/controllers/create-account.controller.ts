@@ -1,4 +1,7 @@
+import { AccountAlreadyExists } from '@/domain/fast-feet/application/use-cases/errors/account-already-exists'
+import { PrismaService } from '@/infra/database/prisma/prisma.service'
 import {
+  BadRequestException,
   Body,
   ConflictException,
   Controller,
@@ -6,9 +9,8 @@ import {
   Post,
   UsePipes,
 } from '@nestjs/common'
-import { hash } from 'bcryptjs'
 import { z } from 'zod'
-import { PrismaService } from '../../database/prisma/prisma.service'
+import { NestCreateAccountUseCase } from '../nest-use-cases/nest-create-account-use-case'
 import { ZodValidationPipe } from '../pipes/zod-validation-pipe'
 
 const createAccountBodySchema = z.object({
@@ -16,38 +18,41 @@ const createAccountBodySchema = z.object({
   email: z.string().email(),
   cpf: z.string().length(11),
   password: z.string(),
+  role: z.enum(['admin', 'deliveryman']).default('deliveryman'),
 })
 
 type CreateAccountBodySchema = z.infer<typeof createAccountBodySchema>
 
 @Controller('/accounts')
 export class CreateAccountController {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private nestCreateAccount: NestCreateAccountUseCase,
+    private prisma: PrismaService
+  ) {}
 
   @Post()
   @HttpCode(201)
   @UsePipes(new ZodValidationPipe(createAccountBodySchema))
   async handle(@Body() body: CreateAccountBodySchema) {
-    const { name, email, cpf, password } = body
+    const { name, email, cpf, password, role } = body
 
-    const AccountSameWithExistEmail = await this.prisma.accounts.findUnique({
-      where: {
-        email,
-      },
+    const result = await this.nestCreateAccount.execute({
+      name,
+      email,
+      cpf,
+      password,
+      role,
     })
 
-    if (AccountSameWithExistEmail) {
-      throw new ConflictException('Email already exists')
+    if (result.isLeft()) {
+      const error = result.value
+
+      switch (error.constructor) {
+        case AccountAlreadyExists:
+          throw new ConflictException(error.message)
+        default:
+          throw new BadRequestException(error.message)
+      }
     }
-
-    const hashPassword = await hash(password, 8)
-    await this.prisma.accounts.create({
-      data: {
-        name,
-        email,
-        cpf,
-        password: hashPassword,
-      },
-    })
   }
 }

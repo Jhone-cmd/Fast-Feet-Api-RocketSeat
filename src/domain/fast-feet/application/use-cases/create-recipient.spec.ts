@@ -1,7 +1,7 @@
 import { InMemoryRecipientRepository } from 'test/repositories/in-memory-recipient-repository'
 import { generateCPF } from 'test/utils/generate-cpf'
 import { CreateRecipientUseCase } from './create-recipient'
-import { UserAlreadyExists } from './errors/user-already-exists'
+import { AccountAlreadyExists } from './errors/account-already-exists'
 
 let inMemoryRecipientRepository: InMemoryRecipientRepository
 let sut: CreateRecipientUseCase
@@ -43,6 +43,6 @@ describe('Create Recipient', () => {
     })
 
     expect(result.isLeft()).toBeTruthy()
-    expect(result.value).toBeInstanceOf(UserAlreadyExists)
+    expect(result.value).toBeInstanceOf(AccountAlreadyExists)
   })
 })

@@ -30,7 +30,8 @@
         "complexity": {
           "noStaticOnlyClass": "off",
           "noThisInStatic": "off",
-          "noForEach": "off"
+          "noForEach": "off",
+          "noUselessConstructor": "off"
         }
       }
     },

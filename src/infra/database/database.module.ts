@@ -1,3 +1,4 @@
+import { EmployeeRepository } from '@/domain/fast-feet/application/repositories/employee-repository'
 import { Module } from '@nestjs/common'
 import { PrismaService } from './prisma/prisma.service'
 import { PrismaAttachmentRepository } from './prisma/repositories/prisma-attachment-repository'
@@ -8,14 +9,17 @@ import { PrismaRecipientRepository } from './prisma/repositories/prisma-recipien
 @Module({
   providers: [
     PrismaService,
-    PrismaEmployeeRepository,
+    {
+      provide: EmployeeRepository,
+      useClass: PrismaEmployeeRepository,
+    },
     PrismaRecipientRepository,
     PrismaOrderRepository,
     PrismaAttachmentRepository,
   ],
   exports: [
     PrismaService,
-    PrismaEmployeeRepository,
+    EmployeeRepository,
     PrismaRecipientRepository,
     PrismaOrderRepository,
     PrismaAttachmentRepository,

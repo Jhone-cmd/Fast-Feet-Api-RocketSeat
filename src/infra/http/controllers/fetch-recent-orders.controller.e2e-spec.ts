@@ -48,14 +48,14 @@ describe('Fetch Recent Orders (E2E)', () => {
         {
           name: 'Create Order 1',
           slug: 'create-order-1',
-          recipient_id: recipient.id.toString(),
+          recipientId: recipient.id.toString(),
           latitude: -16.0167985,
           longitude: -48.0722519,
         },
         {
           name: 'Create Order 2',
           slug: 'create-order-2',
-          recipient_id: recipient.id.toString(),
+          recipientId: recipient.id.toString(),
           latitude: -16.0167985,
           longitude: -48.0722519,
         },

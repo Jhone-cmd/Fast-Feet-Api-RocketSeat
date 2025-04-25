@@ -1,7 +1,7 @@
 import { FakerHasher } from 'test/cryptography/faker-hasher'
 import { InMemoryEmployeeRepository } from 'test/repositories/in-memory-employee-repository'
 import { generateCPF } from 'test/utils/generate-cpf'
-import { UserAlreadyExists } from './errors/user-already-exists'
+import { AccountAlreadyExists } from './errors/account-already-exists'
 import { RegisterEmployeeUseCase } from './register-employee'
 
 let inMemoryEmployeeRepository: InMemoryEmployeeRepository
@@ -49,7 +49,7 @@ describe('Register Employee', () => {
     })
 
     expect(result.isLeft()).toBeTruthy()
-    expect(result.value).toBeInstanceOf(UserAlreadyExists)
+    expect(result.value).toBeInstanceOf(AccountAlreadyExists)
   })
 
   it('should not be able register an employee with same cpf', async () => {
@@ -70,7 +70,7 @@ describe('Register Employee', () => {
     })
 
     expect(result.isLeft()).toBeTruthy()
-    expect(result.value).toBeInstanceOf(UserAlreadyExists)
+    expect(result.value).toBeInstanceOf(AccountAlreadyExists)
   })
 
   it('should hash password upon registration', async () => {

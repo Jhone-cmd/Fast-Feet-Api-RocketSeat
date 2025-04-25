@@ -2,7 +2,7 @@ import { Entity } from '@/core/entities/entity'
 import type { UniqueEntityId } from '@/core/entities/unique-entity-id'
 import type { Optional } from '@/core/types/optional'
 import type { Role } from './types/role'
-import type { CPF } from './value-objects/cpf'
+import { CPF } from './value-objects/cpf'
 
 export interface EmployeeProps {
   name: string
@@ -35,6 +35,11 @@ export class Employee extends Entity<EmployeeProps> {
 
   get cpf() {
     return this.props.cpf
+  }
+
+  set cpf(cpf: CPF) {
+    this.props.cpf = cpf
+    this.touch()
   }
 
   get password() {
