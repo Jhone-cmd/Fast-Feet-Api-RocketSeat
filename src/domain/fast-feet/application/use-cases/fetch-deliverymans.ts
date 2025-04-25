@@ -9,7 +9,7 @@ export interface FetchDeliveryMansUseCaseRequest {
 type FetchDeliveryMansUseCaseResponse = Either<
   null,
   {
-    deliveryMan: Employee[]
+    deliveryMans: Employee[]
   }
 >
 
@@ -19,9 +19,9 @@ export class FetchDeliveryMansUseCase {
   async execute({
     page,
   }: FetchDeliveryMansUseCaseRequest): Promise<FetchDeliveryMansUseCaseResponse> {
-    const deliveryMan = await this.employeeRepository.findManyDeliveryMan({
+    const deliveryMans = await this.employeeRepository.findManyDeliveryMan({
       page,
     })
-    return right({ deliveryMan })
+    return right({ deliveryMans })
   }
 }

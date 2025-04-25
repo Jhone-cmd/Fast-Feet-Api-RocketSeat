@@ -47,7 +47,7 @@ describe('Fetch Deliveryman', () => {
       page: 1,
     })
 
-    expect(result.value?.deliveryMan).toEqual([
+    expect(result.value?.deliveryMans).toEqual([
       expect.objectContaining({ createdAt: new Date(2025, 1, 15) }),
       expect.objectContaining({ createdAt: new Date(2025, 1, 12) }),
       expect.objectContaining({ createdAt: new Date(2025, 1, 10) }),
@@ -67,6 +67,6 @@ describe('Fetch Deliveryman', () => {
       page: 2,
     })
 
-    expect(result.value?.deliveryMan).toHaveLength(2)
+    expect(result.value?.deliveryMans).toHaveLength(2)
   })
 })

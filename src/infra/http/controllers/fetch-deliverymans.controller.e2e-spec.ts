@@ -58,10 +58,14 @@ describe('Fetch Deliverymans (E2E)', () => {
 
     expect(response.statusCode).toBe(200)
     expect(response.body).toEqual({
-      deliverymans: [
-        expect.objectContaining({ cpf: '12345678901' }),
-        expect.objectContaining({ cpf: '12345678902' }),
-      ],
+      deliveryMans: expect.arrayContaining([
+        expect.objectContaining({
+          props: expect.objectContaining({ email: 'deliveryman1@email.com' }),
+        }),
+        expect.objectContaining({
+          props: expect.objectContaining({ email: 'deliveryman2@email.com' }),
+        }),
+      ]),
     })
   })
 })

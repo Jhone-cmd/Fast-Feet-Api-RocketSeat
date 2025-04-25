@@ -9,6 +9,7 @@ import { FetchDeliveryMansController } from './controllers/fetch-deliverymans.co
 import { FetchRecentOrdersController } from './controllers/fetch-recent-orders.controller'
 import { FetchRecipientsController } from './controllers/fetch-recipients.controller'
 import { NestCreateAccountUseCase } from './nest-use-cases/nest-create-account-use-case'
+import { NestFetchDeliverymansUseCase } from './nest-use-cases/nest-fetch-deliverymans-use-case'
 
 @Module({
   imports: [DatabaseModule, CryptographyModule],
@@ -21,6 +22,6 @@ import { NestCreateAccountUseCase } from './nest-use-cases/nest-create-account-u
     FetchRecipientsController,
     FetchRecentOrdersController,
   ],
-  providers: [NestCreateAccountUseCase],
+  providers: [NestCreateAccountUseCase, NestFetchDeliverymansUseCase],
 })
 export class HttpModule {}

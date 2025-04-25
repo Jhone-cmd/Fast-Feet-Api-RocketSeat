@@ -1,7 +1,13 @@
-import { Controller, Get, Query, UseGuards } from '@nestjs/common'
+import {
+  BadRequestException,
+  Controller,
+  Get,
+  Query,
+  UseGuards,
+} from '@nestjs/common'
 import { z } from 'zod'
 import { JwtAuthGuard } from '../../auth/jwt-auth.guard'
-import { PrismaService } from '../../database/prisma/prisma.service'
+import { NestFetchDeliverymansUseCase } from '../nest-use-cases/nest-fetch-deliverymans-use-case'
 import { ZodValidationPipe } from '../pipes/zod-validation-pipe'
 
 const pageQueryParamSchema = z
@@ -17,24 +23,18 @@ type PageQueryParamSchema = z.infer<typeof pageQueryParamSchema>
 
 @Controller('/accounts/deliverymans')
 export class FetchDeliveryMansController {
-  constructor(private prisma: PrismaService) {}
+  constructor(private nestFetchDeliverymans: NestFetchDeliverymansUseCase) {}
 
   @Get()
   @UseGuards(JwtAuthGuard)
   async handle(@Query('page', queryValidationPipe) page: PageQueryParamSchema) {
-    const perPage = 20
+    const result = await this.nestFetchDeliverymans.execute({ page })
 
-    const deliverymans = await this.prisma.accounts.findMany({
-      take: perPage,
-      skip: (page - 1) * perPage,
-      where: {
-        role: 'deliveryman',
-      },
-      orderBy: {
-        createdAt: 'desc',
-      },
-    })
+    if (result.isLeft()) {
+      throw new BadRequestException()
+    }
+    const deliveryMans = result.value.deliveryMans
 
-    return { deliverymans }
+    return { deliveryMans }
   }
 }
