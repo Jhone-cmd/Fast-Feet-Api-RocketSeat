@@ -1,7 +1,13 @@
-import { Controller, Get, Query, UseGuards } from '@nestjs/common'
+import {
+  BadRequestException,
+  Controller,
+  Get,
+  Query,
+  UseGuards,
+} from '@nestjs/common'
 import { z } from 'zod'
 import { JwtAuthGuard } from '../../auth/jwt-auth.guard'
-import { PrismaService } from '../../database/prisma/prisma.service'
+import { NestFetchRecentOrdersUseCase } from '../nest-use-cases/nest-fetch-recent-orders-use-case'
 import { ZodValidationPipe } from '../pipes/zod-validation-pipe'
 
 const pageQueryParamSchema = z
@@ -17,19 +23,18 @@ type PageQueryParamSchema = z.infer<typeof pageQueryParamSchema>
 
 @Controller('/orders')
 export class FetchRecentOrdersController {
-  constructor(private prisma: PrismaService) {}
+  constructor(private nestFetchRecentOrders: NestFetchRecentOrdersUseCase) {}
 
   @Get()
   @UseGuards(JwtAuthGuard)
   async handle(@Query('page', queryValidationPipe) page: PageQueryParamSchema) {
-    const perPage = 20
-    const orders = await this.prisma.orders.findMany({
-      take: perPage,
-      skip: (page - 1) * perPage,
-      orderBy: {
-        createdAt: 'desc',
-      },
-    })
+    const result = await this.nestFetchRecentOrders.execute({ page })
+
+    if (result.isLeft()) {
+      throw new BadRequestException()
+    }
+
+    const orders = result.value.orders
 
     return { orders }
   }
