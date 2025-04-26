@@ -26,6 +26,7 @@ describe('Create Order', () => {
 
     const result = await sut.execute({
       name: 'Carga de auto valor',
+      status: 'waiting',
       recipientId: recipient.id.toString(),
       latitude: 0,
       longitude: 0,
@@ -41,6 +42,7 @@ describe('Create Order', () => {
   it('should not be able create order without recipient', async () => {
     const result = await sut.execute({
       name: 'Carga de auto valor',
+      status: 'waiting',
       recipientId: '',
       latitude: 0,
       longitude: 0,

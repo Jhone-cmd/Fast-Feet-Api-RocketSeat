@@ -6,7 +6,7 @@ import { FetchDeliveryMansUseCase } from './fetch-deliverymans'
 let inMemoryEmployeeRepository: InMemoryEmployeeRepository
 let sut: FetchDeliveryMansUseCase
 
-describe('Fetch Deliveryman', () => {
+describe('Fetch Deliverymans', () => {
   beforeEach(() => {
     inMemoryEmployeeRepository = new InMemoryEmployeeRepository()
     sut = new FetchDeliveryMansUseCase(inMemoryEmployeeRepository)

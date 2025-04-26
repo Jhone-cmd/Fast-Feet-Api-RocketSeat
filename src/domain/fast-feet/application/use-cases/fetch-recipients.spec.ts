@@ -6,7 +6,7 @@ import { FetchRecipientsUseCase } from './fetch-recipients'
 let inMemoryRecipientRepository: InMemoryRecipientRepository
 let sut: FetchRecipientsUseCase
 
-describe('Fetch Recipient', () => {
+describe('Fetch Recipients', () => {
   beforeEach(() => {
     inMemoryRecipientRepository = new InMemoryRecipientRepository()
     sut = new FetchRecipientsUseCase(inMemoryRecipientRepository)

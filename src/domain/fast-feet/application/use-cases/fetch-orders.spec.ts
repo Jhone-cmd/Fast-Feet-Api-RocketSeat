@@ -1,15 +1,15 @@
 import { UniqueEntityId } from '@/core/entities/unique-entity-id'
 import { makeOrder } from 'test/factories/make-order'
 import { InMemoryOrderRepository } from 'test/repositories/in-memory-order-repository'
-import { FetchOrderUseCase } from './fetch-order'
+import { FetchOrdersUseCase } from './fetch-orders'
 
 let inMemoryOrderRepository: InMemoryOrderRepository
-let sut: FetchOrderUseCase
+let sut: FetchOrdersUseCase
 
-describe('Fetch Order', () => {
+describe('Fetch Orders', () => {
   beforeEach(() => {
     inMemoryOrderRepository = new InMemoryOrderRepository()
-    sut = new FetchOrderUseCase(inMemoryOrderRepository)
+    sut = new FetchOrdersUseCase(inMemoryOrderRepository)
   })
 
   it('should be able to fetch order', async () => {
@@ -44,7 +44,7 @@ describe('Fetch Order', () => {
       page: 1,
     })
 
-    expect(result.value?.order).toEqual([
+    expect(result.value?.orders).toEqual([
       expect.objectContaining({ createdAt: new Date(2025, 1, 15) }),
       expect.objectContaining({ createdAt: new Date(2025, 1, 12) }),
       expect.objectContaining({ createdAt: new Date(2025, 1, 10) }),
@@ -60,6 +60,6 @@ describe('Fetch Order', () => {
       page: 2,
     })
 
-    expect(result.value?.order).toHaveLength(2)
+    expect(result.value?.orders).toHaveLength(2)
   })
 })

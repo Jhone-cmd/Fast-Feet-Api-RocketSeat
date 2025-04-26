@@ -1,4 +1,6 @@
+import { ResourceNotFound } from '@/core/errors/error/resource-not-found'
 import {
+  BadRequestException,
   Body,
   Controller,
   HttpCode,
@@ -8,7 +10,7 @@ import {
 } from '@nestjs/common'
 import { z } from 'zod'
 import { JwtAuthGuard } from '../../auth/jwt-auth.guard'
-import { PrismaService } from '../../database/prisma/prisma.service'
+import { NestCreateOrderUseCase } from '../nest-use-cases/nest-create-order-use-case'
 import { ZodValidationPipe } from '../pipes/zod-validation-pipe'
 
 const createOrderBodySchema = z.object({
@@ -25,7 +27,7 @@ const bodyValidationSchema = new ZodValidationPipe(createOrderBodySchema)
 type CreateOrderBodySchema = z.infer<typeof createOrderBodySchema>
 @Controller('/recipients/:recipientId/orders')
 export class CreateOrderController {
-  constructor(private prisma: PrismaService) {}
+  constructor(private nestCreateOrder: NestCreateOrderUseCase) {}
 
   @Post()
   @HttpCode(201)
@@ -36,29 +38,23 @@ export class CreateOrderController {
   ) {
     const { name, status, latitude, longitude } = body
 
-    const slug = this.convertToSlug(name)
-
-    await this.prisma.orders.create({
-      data: {
-        name,
-        slug,
-        status,
-        latitude,
-        longitude,
-        recipientId: recipientId,
-      },
+    const result = await this.nestCreateOrder.execute({
+      name,
+      status,
+      latitude,
+      longitude,
+      recipientId,
     })
-  }
 
-  private convertToSlug(name: string): string {
-    return name
-      .normalize('NFKD')
-      .toLowerCase()
-      .trim()
-      .replace(/\s+/g, '-')
-      .replace(/[^\w-]/g, '')
-      .replace(/--+/g, '-')
-      .replace(/_/g, '-')
-      .replace(/-$/g, '')
+    if (result.isLeft()) {
+      const error = result.value
+
+      switch (error.constructor) {
+        case ResourceNotFound:
+          throw new BadRequestException(error.message)
+        default:
+          throw new BadRequestException()
+      }
+    }
   }
 }

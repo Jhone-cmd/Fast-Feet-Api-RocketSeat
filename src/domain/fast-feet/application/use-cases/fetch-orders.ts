@@ -2,22 +2,22 @@ import { type Either, right } from '@/core/function/either'
 import type { Order } from '../../enterprise/entities/order'
 import type { OrderRepository } from '../repositories/order-repository'
 
-export interface FetchOrderUseCaseRequest {
+export interface FetchOrdersUseCaseRequest {
   page: number
 }
 
-type FetchOrderUseCaseResponse = Either<null, { order: Order[] }>
+type FetchOrdersUseCaseResponse = Either<null, { orders: Order[] }>
 
-export class FetchOrderUseCase {
+export class FetchOrdersUseCase {
   constructor(private orderRepository: OrderRepository) {}
 
   async execute({
     page,
-  }: FetchOrderUseCaseRequest): Promise<FetchOrderUseCaseResponse> {
-    const order = await this.orderRepository.findManyOrder({
+  }: FetchOrdersUseCaseRequest): Promise<FetchOrdersUseCaseResponse> {
+    const orders = await this.orderRepository.findManyOrder({
       page,
     })
 
-    return right({ order })
+    return right({ orders })
   }
 }

@@ -27,7 +27,7 @@ export class PrismaOrderMapper {
     return {
       id: order.id.toString(),
       name: order.name,
-      slug: order.slug.toString(),
+      slug: order.slug.value.toString(),
       recipientId: order.recipientId.toString(),
       deliverymanId: order.deliverymanId?.toString(),
       status: order.status,

@@ -27,7 +27,7 @@ POST {{baseUrl}}/sessions
 Content-Type: application/json
 
 { 
-    "cpf": "12345678900",
+    "cpf": "12345678901",
 	"password": "123456"
 }
 
@@ -40,7 +40,7 @@ Authorization: Bearer {{authToken}}
 
 {
     "name": "john doe2",
-    "cpf": "12345678901",
+    "cpf": "12345678902",
 	"phone": "7798888-7777",
     "address": "Rua nada Bairro Grande"
 }
@@ -55,7 +55,7 @@ Authorization: Bearer {{authToken}}
 ###
 
 # @name create_order
-POST {{baseUrl}}/recipients/20465089-a6c7-4a53-94eb-596a2b053d41/orders
+POST {{baseUrl}}/recipients/826452ce-e640-4f6f-8fd8-6708e836e59c/orders
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
 

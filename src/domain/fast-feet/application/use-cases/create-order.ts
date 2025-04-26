@@ -2,11 +2,13 @@ import { UniqueEntityId } from '@/core/entities/unique-entity-id'
 import { ResourceNotFound } from '@/core/errors/error/resource-not-found'
 import { type Either, left, right } from '@/core/function/either'
 import { Order } from '../../enterprise/entities/order'
+import { OrderStatus } from '../../enterprise/entities/types/order-status'
 import type { OrderRepository } from '../repositories/order-repository'
 import type { RecipientRepository } from '../repositories/recipient-repository'
 
 export interface CreateOrderUseCaseRequest {
   name: string
+  status: OrderStatus
   recipientId: string
   latitude: number
   longitude: number
@@ -22,6 +24,7 @@ export class CreateOrderUseCase {
 
   async execute({
     name,
+    status,
     recipientId,
     latitude,
     longitude,
@@ -35,7 +38,7 @@ export class CreateOrderUseCase {
     const order = Order.create({
       name,
       recipientId: new UniqueEntityId(recipientId),
-      status: 'waiting',
+      status,
       latitude,
       longitude,
     })
