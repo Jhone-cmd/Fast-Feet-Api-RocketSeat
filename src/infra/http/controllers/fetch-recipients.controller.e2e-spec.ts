@@ -58,10 +58,14 @@ describe('Fetch Recipients (E2E)', () => {
 
     expect(response.statusCode).toBe(200)
     expect(response.body).toEqual({
-      recipients: [
-        expect.objectContaining({ cpf: '12345678901' }),
-        expect.objectContaining({ cpf: '12345678902' }),
-      ],
+      recipients: expect.arrayContaining([
+        expect.objectContaining({
+          props: expect.objectContaining({ name: 'recipient-1' }),
+        }),
+        expect.objectContaining({
+          props: expect.objectContaining({ name: 'recipient-2' }),
+        }),
+      ]),
     })
   })
 })

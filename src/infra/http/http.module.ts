@@ -11,6 +11,7 @@ import { FetchRecipientsController } from './controllers/fetch-recipients.contro
 import { NestCreateAccountUseCase } from './nest-use-cases/nest-create-account-use-case'
 import { NestCreateRecipientUseCase } from './nest-use-cases/nest-create-recipient-use-case'
 import { NestFetchDeliverymansUseCase } from './nest-use-cases/nest-fetch-deliverymans-use-case'
+import { NestFetchRecipientsUseCase } from './nest-use-cases/nest-fetch-recipients-use-case'
 
 @Module({
   imports: [DatabaseModule, CryptographyModule],
@@ -27,6 +28,7 @@ import { NestFetchDeliverymansUseCase } from './nest-use-cases/nest-fetch-delive
     NestCreateAccountUseCase,
     NestFetchDeliverymansUseCase,
     NestCreateRecipientUseCase,
+    NestFetchRecipientsUseCase,
   ],
 })
 export class HttpModule {}

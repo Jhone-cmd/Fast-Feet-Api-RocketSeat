@@ -1,7 +1,13 @@
-import { Controller, Get, Query, UseGuards } from '@nestjs/common'
+import {
+  BadRequestException,
+  Controller,
+  Get,
+  Query,
+  UseGuards,
+} from '@nestjs/common'
 import { z } from 'zod'
 import { JwtAuthGuard } from '../../auth/jwt-auth.guard'
-import { PrismaService } from '../../database/prisma/prisma.service'
+import { NestFetchRecipientsUseCase } from '../nest-use-cases/nest-fetch-recipients-use-case'
 import { ZodValidationPipe } from '../pipes/zod-validation-pipe'
 
 const pageQueryParamSchema = z
@@ -17,20 +23,18 @@ type PageQueryParamSchema = z.infer<typeof pageQueryParamSchema>
 
 @Controller('/accounts/recipients')
 export class FetchRecipientsController {
-  constructor(private prisma: PrismaService) {}
+  constructor(private nestFetchRecipients: NestFetchRecipientsUseCase) {}
 
   @Get()
   @UseGuards(JwtAuthGuard)
   async handle(@Query('page', queryValidationPipe) page: PageQueryParamSchema) {
-    const perPage = 20
+    const result = await this.nestFetchRecipients.execute({ page })
 
-    const recipients = await this.prisma.recipients.findMany({
-      take: perPage,
-      skip: (page - 1) * perPage,
-      orderBy: {
-        createdAt: 'desc',
-      },
-    })
+    if (result.isLeft()) {
+      throw new BadRequestException()
+    }
+
+    const recipients = result.value.recipients
 
     return { recipients }
   }

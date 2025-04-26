@@ -1,15 +1,15 @@
 import { UniqueEntityId } from '@/core/entities/unique-entity-id'
 import { makeRecipient } from 'test/factories/make-recipient'
 import { InMemoryRecipientRepository } from 'test/repositories/in-memory-recipient-repository'
-import { FetchRecipientUseCase } from './fetch-recipient'
+import { FetchRecipientsUseCase } from './fetch-recipients'
 
 let inMemoryRecipientRepository: InMemoryRecipientRepository
-let sut: FetchRecipientUseCase
+let sut: FetchRecipientsUseCase
 
 describe('Fetch Recipient', () => {
   beforeEach(() => {
     inMemoryRecipientRepository = new InMemoryRecipientRepository()
-    sut = new FetchRecipientUseCase(inMemoryRecipientRepository)
+    sut = new FetchRecipientsUseCase(inMemoryRecipientRepository)
   })
 
   it('should be able to fetch recipient', async () => {
@@ -44,7 +44,7 @@ describe('Fetch Recipient', () => {
       page: 1,
     })
 
-    expect(result.value?.recipient).toEqual([
+    expect(result.value?.recipients).toEqual([
       expect.objectContaining({ createdAt: new Date(2025, 1, 15) }),
       expect.objectContaining({ createdAt: new Date(2025, 1, 12) }),
       expect.objectContaining({ createdAt: new Date(2025, 1, 10) }),
@@ -60,6 +60,6 @@ describe('Fetch Recipient', () => {
       page: 2,
     })
 
-    expect(result.value?.recipient).toHaveLength(2)
+    expect(result.value?.recipients).toHaveLength(2)
   })
 })

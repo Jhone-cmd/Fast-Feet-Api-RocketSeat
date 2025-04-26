@@ -43,8 +43,6 @@ describe('Create Recipient (E2E)', () => {
         address: 'Rua nada Bairro Grande',
       })
 
-    console.log(response.body)
-
     expect(response.statusCode).toBe(201)
 
     const recipientOnDatabase = await prisma.recipients.findUnique({
