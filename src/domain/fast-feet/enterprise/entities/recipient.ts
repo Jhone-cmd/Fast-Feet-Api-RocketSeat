@@ -34,6 +34,11 @@ export class Recipient extends Entity<RecipientProps> {
     return this.props.cpf
   }
 
+  set cpf(cpf: CPF) {
+    this.props.cpf = cpf
+    this.touch()
+  }
+
   get phone() {
     return this.props.phone
   }

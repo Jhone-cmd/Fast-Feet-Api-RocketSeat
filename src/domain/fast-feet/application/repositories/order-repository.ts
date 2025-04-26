@@ -2,11 +2,11 @@ import type { FindNearbyOrdersParams } from '@/core/repositories/find-nearby-ord
 import type { PaginationParams } from '@/core/repositories/pagination-params'
 import type { Order } from '../../enterprise/entities/order'
 
-export interface OrderRepository {
-  create(order: Order): Promise<void>
-  findManyOrder(params: PaginationParams): Promise<Order[]>
-  findById(id: string): Promise<Order | null>
-  findNearbyOrders(params: FindNearbyOrdersParams): Promise<Order[]>
-  save(order: Order): Promise<void>
-  delete(order: Order): Promise<void>
+export abstract class OrderRepository {
+  abstract create(order: Order): Promise<void>
+  abstract findManyOrder(params: PaginationParams): Promise<Order[]>
+  abstract findById(id: string): Promise<Order | null>
+  abstract findNearbyOrders(params: FindNearbyOrdersParams): Promise<Order[]>
+  abstract save(order: Order): Promise<void>
+  abstract delete(order: Order): Promise<void>
 }

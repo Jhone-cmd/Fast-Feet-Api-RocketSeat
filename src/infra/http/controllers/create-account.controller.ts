@@ -1,5 +1,4 @@
 import { AccountAlreadyExists } from '@/domain/fast-feet/application/use-cases/errors/account-already-exists'
-import { PrismaService } from '@/infra/database/prisma/prisma.service'
 import {
   BadRequestException,
   Body,
@@ -25,10 +24,7 @@ type CreateAccountBodySchema = z.infer<typeof createAccountBodySchema>
 
 @Controller('/accounts')
 export class CreateAccountController {
-  constructor(
-    private nestCreateAccount: NestCreateAccountUseCase,
-    private prisma: PrismaService
-  ) {}
+  constructor(private nestCreateAccount: NestCreateAccountUseCase) {}
 
   @Post()
   @HttpCode(201)

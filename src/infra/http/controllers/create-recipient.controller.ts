@@ -1,4 +1,6 @@
+import { RecipientAlreadyExists } from '@/domain/fast-feet/application/use-cases/errors/recipient-already-exists'
 import {
+  BadRequestException,
   Body,
   ConflictException,
   Controller,
@@ -8,7 +10,7 @@ import {
 } from '@nestjs/common'
 import { z } from 'zod'
 import { JwtAuthGuard } from '../../auth/jwt-auth.guard'
-import { PrismaService } from '../../database/prisma/prisma.service'
+import { NestCreateRecipientUseCase } from '../nest-use-cases/nest-create-recipient-use-case'
 import { ZodValidationPipe } from '../pipes/zod-validation-pipe'
 
 const createRecipientBodySchema = z.object({
@@ -26,7 +28,7 @@ export type CreateRecipientBodySchema = z.infer<
 
 @Controller('/accounts/recipients')
 export class CreateRecipientController {
-  constructor(private prisma: PrismaService) {}
+  constructor(private nestCreateRecipient: NestCreateRecipientUseCase) {}
 
   @Post()
   @HttpCode(201)
@@ -34,17 +36,22 @@ export class CreateRecipientController {
   async handle(@Body(bodyValidationSchema) body: CreateRecipientBodySchema) {
     const { name, cpf, phone, address } = body
 
-    const [account, recipient] = await Promise.all([
-      this.prisma.accounts.findUnique({ where: { cpf } }),
-      this.prisma.recipients.findUnique({ where: { cpf } }),
-    ])
-
-    if (account || recipient) {
-      throw new ConflictException('CPF already exists.')
-    }
-
-    await this.prisma.recipients.create({
-      data: { name, cpf, phone, address },
+    const result = await this.nestCreateRecipient.execute({
+      name,
+      cpf,
+      phone,
+      address,
     })
+
+    if (result.isLeft()) {
+      const error = result.value
+
+      switch (error.constructor) {
+        case RecipientAlreadyExists:
+          throw new ConflictException(error.message)
+        default:
+          throw new BadRequestException(error.message)
+      }
+    }
   }
 }

@@ -1,15 +1,21 @@
+import { InMemoryEmployeeRepository } from 'test/repositories/in-memory-employee-repository'
 import { InMemoryRecipientRepository } from 'test/repositories/in-memory-recipient-repository'
 import { generateCPF } from 'test/utils/generate-cpf'
 import { CreateRecipientUseCase } from './create-recipient'
-import { AccountAlreadyExists } from './errors/account-already-exists'
+import { RecipientAlreadyExists } from './errors/recipient-already-exists'
 
 let inMemoryRecipientRepository: InMemoryRecipientRepository
+let inMemoryEmployeeRepository: InMemoryEmployeeRepository
 let sut: CreateRecipientUseCase
 
 describe('Create Recipient', () => {
   beforeEach(() => {
     inMemoryRecipientRepository = new InMemoryRecipientRepository()
-    sut = new CreateRecipientUseCase(inMemoryRecipientRepository)
+    inMemoryEmployeeRepository = new InMemoryEmployeeRepository()
+    sut = new CreateRecipientUseCase(
+      inMemoryRecipientRepository,
+      inMemoryEmployeeRepository
+    )
   })
 
   it('should be able to create a recipient', async () => {
@@ -43,6 +49,6 @@ describe('Create Recipient', () => {
     })
 
     expect(result.isLeft()).toBeTruthy()
-    expect(result.value).toBeInstanceOf(AccountAlreadyExists)
+    expect(result.value).toBeInstanceOf(RecipientAlreadyExists)
   })
 })

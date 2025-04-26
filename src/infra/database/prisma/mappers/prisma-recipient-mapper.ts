@@ -22,7 +22,7 @@ export class PrismaRecipientMapper {
     return {
       id: recipient.id.toString(),
       name: recipient.name,
-      cpf: recipient.cpf.toString(),
+      cpf: recipient.cpf.value.toString(),
       phone: recipient.phone,
       address: recipient.address,
     }
