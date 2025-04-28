@@ -9,6 +9,7 @@ import { z } from 'zod'
 import { JwtAuthGuard } from '../../auth/jwt-auth.guard'
 import { NestFetchRecipientsUseCase } from '../nest-use-cases/nest-fetch-recipients-use-case'
 import { ZodValidationPipe } from '../pipes/zod-validation-pipe'
+import { RecipientPresenter } from '../presenters/recipient-presenter'
 
 const pageQueryParamSchema = z
   .string()
@@ -36,6 +37,6 @@ export class FetchRecipientsController {
 
     const recipients = result.value.recipients
 
-    return { recipients }
+    return { recipients: recipients.map(RecipientPresenter.toHttp) }
   }
 }
