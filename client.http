@@ -54,12 +54,12 @@ Authorization: Bearer {{authToken}}
 ###
 
 # @name create_order
-POST {{baseUrl}}/recipients/826452ce-e640-4f6f-8fd8-6708e836e59c/orders
+POST {{baseUrl}}/recipients/92bcb889-6b39-4f75-9960-296871c7e8b6/orders
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
 {
-    "name": "Create Order 1",
+    "name": "Create Order 2",
 	"latitude": -16.0167985,
     "longitude": -48.0722519
 }
