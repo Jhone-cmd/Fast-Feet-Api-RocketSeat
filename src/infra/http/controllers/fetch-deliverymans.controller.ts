@@ -9,6 +9,7 @@ import { z } from 'zod'
 import { JwtAuthGuard } from '../../auth/jwt-auth.guard'
 import { NestFetchDeliverymansUseCase } from '../nest-use-cases/nest-fetch-deliverymans-use-case'
 import { ZodValidationPipe } from '../pipes/zod-validation-pipe'
+import { DeliveryManPresenter } from '../presenters/deliveryman-presenter'
 
 const pageQueryParamSchema = z
   .string()
@@ -35,6 +36,6 @@ export class FetchDeliveryMansController {
     }
     const deliveryMans = result.value.deliveryMans
 
-    return { deliveryMans }
+    return { deliverymans: deliveryMans.map(DeliveryManPresenter.toHttp) }
   }
 }

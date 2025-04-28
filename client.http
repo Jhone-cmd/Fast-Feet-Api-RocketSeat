@@ -14,14 +14,6 @@ Content-Type: application/json
 
 ###
 
-# @name fetch_deliveryman
-GET  {{baseUrl}}/accounts/deliverymans
-Content-Type: application/json
-Authorization: Bearer {{authToken}}
-
-
-###
-
 # @name authenticate
 POST {{baseUrl}}/sessions
 Content-Type: application/json
@@ -30,6 +22,13 @@ Content-Type: application/json
     "cpf": "12345678901",
 	"password": "123456"
 }
+
+###
+
+# @name fetch_deliveryman
+GET  {{baseUrl}}/accounts/deliverymans
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
 
 ###
 
