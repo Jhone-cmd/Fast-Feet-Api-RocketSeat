@@ -1,0 +1,81 @@
+import { INestApplication } from '@nestjs/common'
+import { JwtService } from '@nestjs/jwt'
+import { Test } from '@nestjs/testing'
+import request from 'supertest'
+import { AppModule } from '../../app.module'
+import { PrismaService } from '../../database/prisma/prisma.service'
+
+describe('Fetch Nearby Orders (E2E)', () => {
+  let app: INestApplication
+  let prisma: PrismaService
+  let jwt: JwtService
+
+  beforeEach(async () => {
+    const moduleRef = await Test.createTestingModule({
+      imports: [AppModule],
+    }).compile()
+
+    app = moduleRef.createNestApplication()
+    prisma = moduleRef.get(PrismaService)
+    jwt = moduleRef.get(JwtService)
+    await app.init()
+  })
+
+  test('[GET] /orders/nearby', async () => {
+    const admin = await prisma.accounts.create({
+      data: {
+        name: 'admin',
+        email: 'admin@email.com',
+        cpf: '12345678900',
+        password: '123456',
+        role: 'admin',
+      },
+    })
+
+    const recipient = await prisma.recipients.create({
+      data: {
+        name: 'recipient-1',
+        cpf: '12345678901',
+        phone: '7798888-7777',
+        address: 'Rua nada Bairro Grande',
+      },
+    })
+
+    const accessToken = jwt.sign({ sub: admin.id })
+
+    await prisma.orders.createMany({
+      data: [
+        {
+          name: 'Create Order 1',
+          slug: 'create-order-1',
+          recipientId: recipient.id.toString(),
+          latitude: -16.0167985,
+          longitude: -48.0722519,
+        },
+        {
+          name: 'Create Order 2',
+          slug: 'create-order-2',
+          recipientId: recipient.id.toString(),
+          latitude: -16.0167985,
+          longitude: -48.0722519,
+        },
+      ],
+    })
+
+    const response = await request(app.getHttpServer())
+      .get('/orders/nearby')
+      .set('Authorization', `Bearer ${accessToken}`)
+      .send({
+        userLatitude: -16.0167985,
+        userLongitude: -48.0722519,
+      })
+
+    expect(response.statusCode).toBe(200)
+    expect(response.body).toEqual({
+      orders: [
+        expect.objectContaining({ name: 'Create Order 1' }),
+        expect.objectContaining({ name: 'Create Order 2' }),
+      ],
+    })
+  })
+})

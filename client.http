@@ -54,7 +54,7 @@ Authorization: Bearer {{authToken}}
 ###
 
 # @name create_order
-POST {{baseUrl}}/recipients/92bcb889-6b39-4f75-9960-296871c7e8b6/orders
+POST {{baseUrl}}/recipients/de9ae93d-f097-4917-a185-72723b9a2f35/orders
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
@@ -70,6 +70,18 @@ Authorization: Bearer {{authToken}}
 GET  {{baseUrl}}/orders
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
+
+###
+
+# @name fetch_nearby_orders
+GET  {{baseUrl}}/orders/nearby
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+    "userLatitude": -16.0167985,
+    "userLongitude": -48.0722519
+}
 
 ###
 
