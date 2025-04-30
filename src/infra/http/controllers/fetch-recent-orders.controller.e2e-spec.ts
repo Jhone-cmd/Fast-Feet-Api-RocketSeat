@@ -69,14 +69,10 @@ describe('Fetch Recent Orders (E2E)', () => {
 
     expect(response.statusCode).toBe(200)
     expect(response.body).toEqual({
-      orders: expect.arrayContaining([
-        expect.objectContaining({
-          props: expect.objectContaining({ name: 'Create Order 1' }),
-        }),
-        expect.objectContaining({
-          props: expect.objectContaining({ name: 'Create Order 2' }),
-        }),
-      ]),
+      orders: [
+        expect.objectContaining({ slug: 'create-order-1' }),
+        expect.objectContaining({ slug: 'create-order-2' }),
+      ],
     })
   })
 })
