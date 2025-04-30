@@ -70,11 +70,13 @@ describe('Fetch Nearby Orders (E2E)', () => {
         userLongitude: -48.0722519,
       })
 
+    console.log(response.body)
+
     expect(response.statusCode).toBe(200)
     expect(response.body).toEqual({
       orders: [
-        expect.objectContaining({ name: 'Create Order 1' }),
-        expect.objectContaining({ name: 'Create Order 2' }),
+        expect.objectContaining({ slug: 'create-order-1' }),
+        expect.objectContaining({ slug: 'create-order-2' }),
       ],
     })
   })

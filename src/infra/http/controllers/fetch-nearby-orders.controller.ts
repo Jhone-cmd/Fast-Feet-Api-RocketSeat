@@ -1,8 +1,16 @@
 import { JwtAuthGuard } from '@/infra/auth/jwt-auth.guard'
-import { PrismaService } from '@/infra/database/prisma/prisma.service'
-import { Body, Controller, Get, Query, UseGuards } from '@nestjs/common'
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Get,
+  Query,
+  UseGuards,
+} from '@nestjs/common'
 import { z } from 'zod'
+import { NestFetchNearbyOrdersUseCase } from '../nest-use-cases/nest-fetch-nearby-orders-use-case'
 import { ZodValidationPipe } from '../pipes/zod-validation-pipe'
+import { OrderPresenter } from '../presenters/order-presenter'
 
 const fetchNearbyOrdersBodySchema = z.object({
   userLatitude: z.coerce.number(),
@@ -24,7 +32,7 @@ type PageQueryParamSchema = z.infer<typeof pageQueryParamSchema>
 
 @Controller('/orders/nearby')
 export class FetchNearbyOrdersController {
-  constructor(private prisma: PrismaService) {}
+  constructor(private nestFetchNearbyOrders: NestFetchNearbyOrdersUseCase) {}
 
   @Get()
   @UseGuards(JwtAuthGuard)
@@ -34,20 +42,18 @@ export class FetchNearbyOrdersController {
   ) {
     const { userLatitude, userLongitude } = body
 
-    const perPage = 20
-
-    const orders = await this.prisma.orders.findMany({
-      where: {
-        latitude: userLatitude,
-        longitude: userLongitude,
-      },
-      orderBy: {
-        createdAt: 'desc',
-      },
-      take: perPage,
-      skip: (page - 1) * perPage,
+    const result = await this.nestFetchNearbyOrders.execute({
+      userLatitude,
+      userLongitude,
+      page,
     })
 
-    return { orders }
+    if (result.isLeft()) {
+      throw new BadRequestException()
+    }
+
+    const orders = result.value.orders
+
+    return { orders: orders.map(OrderPresenter.toHttp) }
   }
 }
