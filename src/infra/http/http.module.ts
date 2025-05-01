@@ -5,6 +5,7 @@ import { AuthenticateController } from './controllers/authenticate.controller'
 import { CreateAccountController } from './controllers/create-account.controller'
 import { CreateOrderController } from './controllers/create-order.controller'
 import { CreateRecipientController } from './controllers/create-recipient.controller'
+import { EditDeliveryManController } from './controllers/edit-deliveryman.controller'
 import { FetchDeliveryMansController } from './controllers/fetch-deliverymans.controller'
 import { FetchNearbyOrdersController } from './controllers/fetch-nearby-orders.controller'
 import { FetchRecentOrdersController } from './controllers/fetch-recent-orders.controller'
@@ -28,6 +29,7 @@ import { NestFetchRecipientsUseCase } from './nest-use-cases/nest-fetch-recipien
     FetchRecipientsController,
     FetchRecentOrdersController,
     FetchNearbyOrdersController,
+    EditDeliveryManController,
   ],
   providers: [
     NestCreateAccountUseCase,

@@ -6,8 +6,9 @@ import type { HashGenerator } from '../cryptography/hash-generator'
 import type { EmployeeRepository } from '../repositories/employee-repository'
 
 export interface EditDeliveryManUseCaseRequest {
-  adminId: string
   deliveryManId: string
+  name: string
+  email: string
   password: string
 }
 
@@ -23,13 +24,14 @@ export class EditDeliveryManUseCase {
   ) {}
 
   async execute({
-    adminId,
     deliveryManId,
+    name,
+    email,
     password,
   }: EditDeliveryManUseCaseRequest): Promise<EditDeliveryManUseCaseResponse> {
-    const admin = await this.employeeRepository.permission(adminId)
+    // const admin = await this.employeeRepository.permission(adminId)
 
-    if (!admin) return left(new NotAllowed())
+    // if (!admin) return left(new NotAllowed())
 
     const deliveryMan = await this.employeeRepository.findById(deliveryManId)
 
@@ -37,6 +39,8 @@ export class EditDeliveryManUseCase {
 
     const newPassword = await this.hashGenerator.hash(password)
 
+    deliveryMan.name = name
+    deliveryMan.email = email
     deliveryMan.password = newPassword
 
     await this.employeeRepository.save(deliveryMan)
