@@ -7,9 +7,9 @@ import type { EmployeeRepository } from '../repositories/employee-repository'
 
 export interface EditDeliveryManUseCaseRequest {
   deliveryManId: string
-  name: string
-  email: string
-  password: string
+  name?: string
+  email?: string
+  password?: string
 }
 
 type EditDeliveryManUseCaseResponse = Either<
@@ -37,10 +37,12 @@ export class EditDeliveryManUseCase {
 
     if (!deliveryMan) return left(new ResourceNotFound())
 
-    const newPassword = await this.hashGenerator.hash(password)
+    const newPassword = password
+      ? await this.hashGenerator.hash(password)
+      : deliveryMan.password
 
-    deliveryMan.name = name
-    deliveryMan.email = email
+    deliveryMan.name = name ? name : deliveryMan.name
+    deliveryMan.email = email ? email : deliveryMan.email
     deliveryMan.password = newPassword
 
     await this.employeeRepository.save(deliveryMan)

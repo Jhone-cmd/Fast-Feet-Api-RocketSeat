@@ -49,8 +49,6 @@ describe('Edit Deliveryman (E2E)', () => {
         email: 'deliveryman2@email.com',
       })
 
-    console.log(response.body)
-
     expect(response.statusCode).toBe(204)
     const accountOnDatabase = await prisma.accounts.findUnique({
       where: {

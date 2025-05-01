@@ -13,6 +13,7 @@ import { FetchRecipientsController } from './controllers/fetch-recipients.contro
 import { NestCreateAccountUseCase } from './nest-use-cases/nest-create-account-use-case'
 import { NestCreateOrderUseCase } from './nest-use-cases/nest-create-order-use-case'
 import { NestCreateRecipientUseCase } from './nest-use-cases/nest-create-recipient-use-case'
+import { NestEditDeliveryManUseCase } from './nest-use-cases/nest-edit-deliveryman-use-case'
 import { NestFetchDeliverymansUseCase } from './nest-use-cases/nest-fetch-deliverymans-use-case'
 import { NestFetchNearbyOrdersUseCase } from './nest-use-cases/nest-fetch-nearby-orders-use-case'
 import { NestFetchRecentOrdersUseCase } from './nest-use-cases/nest-fetch-recent-orders-use-case'
@@ -39,6 +40,7 @@ import { NestFetchRecipientsUseCase } from './nest-use-cases/nest-fetch-recipien
     NestCreateOrderUseCase,
     NestFetchRecentOrdersUseCase,
     NestFetchNearbyOrdersUseCase,
+    NestEditDeliveryManUseCase,
   ],
 })
 export class HttpModule {}

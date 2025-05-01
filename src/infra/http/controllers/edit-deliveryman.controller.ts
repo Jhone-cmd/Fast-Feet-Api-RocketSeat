@@ -1,6 +1,7 @@
+import { ResourceNotFound } from '@/core/errors/error/resource-not-found'
 import { JwtAuthGuard } from '@/infra/auth/jwt-auth.guard'
-import { PrismaService } from '@/infra/database/prisma/prisma.service'
 import {
+  BadRequestException,
   Body,
   Controller,
   HttpCode,
@@ -8,8 +9,8 @@ import {
   Put,
   UseGuards,
 } from '@nestjs/common'
-import { hash } from 'bcryptjs'
 import { z } from 'zod'
+import { NestEditDeliveryManUseCase } from '../nest-use-cases/nest-edit-deliveryman-use-case'
 import { ZodValidationPipe } from '../pipes/zod-validation-pipe'
 
 const editDeliveryManBodySchema = z.object({
@@ -24,7 +25,7 @@ type EditDeliveryManBodySchema = z.infer<typeof editDeliveryManBodySchema>
 
 @Controller('/accounts/:deliverymanId/edit')
 export class EditDeliveryManController {
-  constructor(private prisma: PrismaService) {}
+  constructor(private nestEditDeliveryMan: NestEditDeliveryManUseCase) {}
 
   @Put()
   @HttpCode(204)
@@ -35,17 +36,22 @@ export class EditDeliveryManController {
   ) {
     const { name, email, password } = body
 
-    const newPassword = password ? await hash(password, 8) : password
-
-    await this.prisma.accounts.update({
-      where: {
-        id: deliverymanId,
-      },
-      data: {
-        name,
-        email,
-        password: newPassword,
-      },
+    const result = await this.nestEditDeliveryMan.execute({
+      deliveryManId: deliverymanId,
+      name,
+      email,
+      password,
     })
+
+    if (result.isLeft()) {
+      const error = result.value
+
+      switch (error.constructor) {
+        case ResourceNotFound:
+          throw new BadRequestException(error.message)
+        default:
+          throw new BadRequestException()
+      }
+    }
   }
 }
