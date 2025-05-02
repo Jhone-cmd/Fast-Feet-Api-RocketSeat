@@ -1,3 +1,4 @@
+import { UniqueEntityId } from '@/core/entities/unique-entity-id'
 import { NotAllowed } from '@/core/errors/error/not-allowed'
 import { ResourceNotFound } from '@/core/errors/error/resource-not-found'
 import { type Either, left, right } from '@/core/function/either'
@@ -5,8 +6,8 @@ import type { OrderStatus } from '../../enterprise/entities/types/order-status'
 import type { OrderRepository } from '../repositories/order-repository'
 
 export interface EditOrderUseCaseRequest {
-  recipientId: string
   orderId: string
+  deliveryManId: string
   name?: string
   status?: OrderStatus
 }
@@ -18,7 +19,7 @@ export class EditOrderUseCase {
 
   async execute({
     orderId,
-    recipientId,
+    deliveryManId,
     name,
     status,
   }: EditOrderUseCaseRequest): Promise<EditOrderUseCaseResponse> {
@@ -26,12 +27,11 @@ export class EditOrderUseCase {
 
     if (!order) return left(new ResourceNotFound())
 
-    if (recipientId !== order.recipientId.toString()) {
-      return left(new NotAllowed())
-    }
-
     order.name = name ? name : order.name
     order.status = status ? status : order.status
+    order.deliverymanId = deliveryManId
+      ? new UniqueEntityId(deliveryManId)
+      : order.deliverymanId
 
     await this.orderRepository.save(order)
 
