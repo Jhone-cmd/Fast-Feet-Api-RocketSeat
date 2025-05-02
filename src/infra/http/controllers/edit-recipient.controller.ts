@@ -1,6 +1,7 @@
+import { ResourceNotFound } from '@/core/errors/error/resource-not-found'
 import { JwtAuthGuard } from '@/infra/auth/jwt-auth.guard'
-import { PrismaService } from '@/infra/database/prisma/prisma.service'
 import {
+  BadRequestException,
   Body,
   Controller,
   HttpCode,
@@ -9,21 +10,22 @@ import {
   UseGuards,
 } from '@nestjs/common'
 import { z } from 'zod'
+import { NestEditRecipientUseCase } from '../nest-use-cases/nest-edit-recipient-use-case'
 import { ZodValidationPipe } from '../pipes/zod-validation-pipe'
 
 const editRecipientBodySchema = z.object({
   name: z.string().optional(),
-  phone: z.string().optional(),
   address: z.string().optional(),
+  phone: z.string().optional(),
 })
 
 const bodyValidationPipe = new ZodValidationPipe(editRecipientBodySchema)
 
 type EditRecipientBodySchema = z.infer<typeof editRecipientBodySchema>
 
-@Controller('/accounts/:recipientId/edit')
+@Controller('/recipients/:recipientId/edit')
 export class EditRecipientController {
-  constructor(private prisma: PrismaService) {}
+  constructor(private nestEditRecipient: NestEditRecipientUseCase) {}
 
   @Put()
   @HttpCode(204)
@@ -34,15 +36,22 @@ export class EditRecipientController {
   ) {
     const { name, address, phone } = body
 
-    await this.prisma.recipients.update({
-      where: {
-        id: recipientId,
-      },
-      data: {
-        name,
-        address,
-        phone,
-      },
+    const result = await this.nestEditRecipient.execute({
+      recipientId,
+      name,
+      address,
+      phone,
     })
+
+    if (result.isLeft()) {
+      const error = result.value
+
+      switch (error.constructor) {
+        case ResourceNotFound:
+          throw new BadRequestException(error.message)
+        default:
+          throw new BadRequestException()
+      }
+    }
   }
 }

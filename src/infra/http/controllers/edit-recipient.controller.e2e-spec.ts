@@ -21,7 +21,7 @@ describe('Edit Recipient (E2E)', () => {
     await app.init()
   })
 
-  test('[PUT] /accounts/:recipientId/edit', async () => {
+  test('[PUT] /recipients/:recipientId/edit', async () => {
     const admin = await prisma.accounts.create({
       data: {
         name: 'admin',
@@ -35,15 +35,15 @@ describe('Edit Recipient (E2E)', () => {
 
     const recipient = await prisma.recipients.create({
       data: {
-        name: 'recipient-1',
+        name: 'deliveryman',
+        address: 'Rua Nova',
         cpf: '12345678901',
-        address: 'Rua nova',
-        phone: '55 88 98888-7777',
+        phone: '8897777-6666',
       },
     })
 
     const response = await request(app.getHttpServer())
-      .put(`/accounts/${recipient.id}/edit`)
+      .put(`/recipients/${recipient.id}/edit`)
       .set('Authorization', `Bearer ${accessToken}`)
       .send({
         name: 'recipient',
