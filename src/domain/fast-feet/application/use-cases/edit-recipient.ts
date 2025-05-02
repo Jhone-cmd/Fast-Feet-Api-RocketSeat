@@ -5,9 +5,9 @@ import type { RecipientRepository } from '../repositories/recipient-repository'
 
 export interface EditRecipientUseCaseRequest {
   recipientId: string
-  name: string
-  address: string
-  phone: string
+  name?: string
+  address?: string
+  phone?: string
 }
 
 type EditRecipientUseCaseResponse = Either<
@@ -28,9 +28,9 @@ export class EditRecipientUseCase {
 
     if (!recipient) return left(new ResourceNotFound())
 
-    recipient.name = name
-    recipient.address = address
-    recipient.phone = phone
+    recipient.name = name ? name : recipient.name
+    recipient.address = address ? address : recipient.address
+    recipient.phone = phone ? phone : recipient.phone
 
     await this.recipientRepository.save(recipient)
 

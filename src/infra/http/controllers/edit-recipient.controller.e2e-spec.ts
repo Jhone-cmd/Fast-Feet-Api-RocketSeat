@@ -5,7 +5,7 @@ import request from 'supertest'
 import { AppModule } from '../../app.module'
 import { PrismaService } from '../../database/prisma/prisma.service'
 
-describe('Edit Deliveryman (E2E)', () => {
+describe('Edit Recipient (E2E)', () => {
   let app: INestApplication
   let prisma: PrismaService
   let jwt: JwtService
@@ -21,7 +21,7 @@ describe('Edit Deliveryman (E2E)', () => {
     await app.init()
   })
 
-  test('[PUT] /accounts/:deliverymanId/edit', async () => {
+  test('[PUT] /accounts/:recipientId/edit', async () => {
     const admin = await prisma.accounts.create({
       data: {
         name: 'admin',
@@ -33,29 +33,29 @@ describe('Edit Deliveryman (E2E)', () => {
     })
     const accessToken = jwt.sign({ sub: admin.id })
 
-    const deliveryman = await prisma.accounts.create({
+    const recipient = await prisma.recipients.create({
       data: {
-        name: 'deliveryman',
-        email: 'deliveryman@email.com',
+        name: 'recipient-1',
         cpf: '12345678901',
-        password: '126456',
+        address: 'Rua nova',
+        phone: '55 88 98888-7777',
       },
     })
 
     const response = await request(app.getHttpServer())
-      .put(`/accounts/${deliveryman.id}/edit`)
+      .put(`/accounts/${recipient.id}/edit`)
       .set('Authorization', `Bearer ${accessToken}`)
       .send({
-        email: 'deliveryman2@email.com',
+        name: 'recipient',
       })
 
     expect(response.statusCode).toBe(204)
-    const accountOnDatabase = await prisma.accounts.findUnique({
+    const recipientOnDatabase = await prisma.recipients.findFirst({
       where: {
-        email: 'deliveryman2@email.com',
+        name: 'recipient',
       },
     })
 
-    expect(accountOnDatabase).toBeTruthy()
+    expect(recipientOnDatabase).toBeTruthy()
   })
 })
