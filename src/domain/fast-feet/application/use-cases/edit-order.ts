@@ -7,7 +7,7 @@ import type { OrderRepository } from '../repositories/order-repository'
 
 export interface EditOrderUseCaseRequest {
   orderId: string
-  deliveryManId: string
+  deliveryManId?: string
   name?: string
   status?: OrderStatus
 }
