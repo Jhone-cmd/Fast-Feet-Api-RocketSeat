@@ -6,6 +6,7 @@ import { CreateAccountController } from './controllers/create-account.controller
 import { CreateOrderController } from './controllers/create-order.controller'
 import { CreateRecipientController } from './controllers/create-recipient.controller'
 import { DeleteDeliveryManController } from './controllers/delete-deliveryman.controller'
+import { DeleteRecipientController } from './controllers/delete-recipient.controller'
 import { EditDeliveryManController } from './controllers/edit-deliveryman.controller'
 import { EditOrderController } from './controllers/edit-order.controller'
 import { EditRecipientController } from './controllers/edit-recipient.controller'
@@ -40,6 +41,7 @@ import { NestFetchRecipientsUseCase } from './nest-use-cases/nest-fetch-recipien
     EditRecipientController,
     EditOrderController,
     DeleteDeliveryManController,
+    DeleteRecipientController,
   ],
   providers: [
     NestCreateAccountUseCase,
