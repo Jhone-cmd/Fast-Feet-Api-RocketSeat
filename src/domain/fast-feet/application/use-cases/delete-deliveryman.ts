@@ -4,7 +4,6 @@ import { type Either, left, right } from '@/core/function/either'
 import type { EmployeeRepository } from '../repositories/employee-repository'
 
 export interface DeleteDeliveryManUseCaseRequest {
-  adminId: string
   deliveryManId: string
 }
 
@@ -17,12 +16,11 @@ export class DeleteDeliveryManUseCase {
   constructor(private employeeRepository: EmployeeRepository) {}
 
   async execute({
-    adminId,
     deliveryManId,
   }: DeleteDeliveryManUseCaseRequest): Promise<DeleteDeliveryManUseCaseResponse> {
-    const admin = await this.employeeRepository.permission(adminId)
+    // const admin = await this.employeeRepository.permission(adminId)
 
-    if (!admin) return left(new NotAllowed())
+    // if (!admin) return left(new NotAllowed())
 
     const deliveryMan = await this.employeeRepository.findById(deliveryManId)
 

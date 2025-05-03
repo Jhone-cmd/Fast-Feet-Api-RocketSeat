@@ -21,7 +21,7 @@ describe('Delete Deliveryman (E2E)', () => {
     await app.init()
   })
 
-  test('[DELETE] /accounts/:deliverymanId', async () => {
+  test('[DELETE] /accounts/:deliveryManId', async () => {
     const admin = await prisma.accounts.create({
       data: {
         name: 'admin',
