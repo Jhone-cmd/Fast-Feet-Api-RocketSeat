@@ -4,7 +4,6 @@ import { type Either, left, right } from '@/core/function/either'
 import type { OrderRepository } from '../repositories/order-repository'
 
 export interface DeleteOrderUseCaseRequest {
-  recipientId: string
   orderId: string
 }
 
@@ -15,15 +14,10 @@ export class DeleteOrderUseCase {
 
   async execute({
     orderId,
-    recipientId,
   }: DeleteOrderUseCaseRequest): Promise<DeleteOrderUseCaseResponse> {
     const order = await this.orderRepository.findById(orderId)
 
     if (!order) return left(new ResourceNotFound())
-
-    if (recipientId !== order.recipientId.toString()) {
-      return left(new NotAllowed())
-    }
 
     await this.orderRepository.delete(order)
 
