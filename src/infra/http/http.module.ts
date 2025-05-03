@@ -18,6 +18,7 @@ import { NestCreateAccountUseCase } from './nest-use-cases/nest-create-account-u
 import { NestCreateOrderUseCase } from './nest-use-cases/nest-create-order-use-case'
 import { NestCreateRecipientUseCase } from './nest-use-cases/nest-create-recipient-use-case'
 import { NestDeleteDeliveryManUseCase } from './nest-use-cases/nest-delete-deliveryman-use-case'
+import { NestDeleteRecipientUseCase } from './nest-use-cases/nest-delete-recipient-use-case'
 import { NestEditDeliveryManUseCase } from './nest-use-cases/nest-edit-deliveryman-use-case'
 import { NestEditOrderUseCase } from './nest-use-cases/nest-edit-order-use-case'
 import { NestEditRecipientUseCase } from './nest-use-cases/nest-edit-recipient-use-case'
@@ -55,6 +56,7 @@ import { NestFetchRecipientsUseCase } from './nest-use-cases/nest-fetch-recipien
     NestEditRecipientUseCase,
     NestEditOrderUseCase,
     NestDeleteDeliveryManUseCase,
+    NestDeleteRecipientUseCase,
   ],
 })
 export class HttpModule {}
