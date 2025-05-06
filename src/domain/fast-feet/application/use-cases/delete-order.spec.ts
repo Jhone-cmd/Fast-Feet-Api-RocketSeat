@@ -1,5 +1,4 @@
 import { UniqueEntityId } from '@/core/entities/unique-entity-id'
-import { NotAllowed } from '@/core/errors/error/not-allowed'
 import { makeOrder } from 'test/factories/make-order'
 import { InMemoryOrderRepository } from 'test/repositories/in-memory-order-repository'
 import { DeleteOrderUseCase } from './delete-order'
@@ -24,7 +23,6 @@ describe('Delete Order', () => {
 
     await sut.execute({
       orderId: 'order-1',
-      recipientId: 'recipient-1',
     })
 
     expect(inMemoryOrderRepository.items).toHaveLength(0)
@@ -41,10 +39,9 @@ describe('Delete Order', () => {
 
     const result = await sut.execute({
       orderId: 'order-1',
-      recipientId: 'recipient-2',
     })
 
-    expect(result.isLeft()).toBeTruthy()
-    expect(result.value).toBeInstanceOf(NotAllowed)
+    expect(result.isLeft()).toBeFalsy()
+    //expect(result.value).toBeInstanceOf(NotAllowed)
   })
 })

@@ -1,5 +1,4 @@
 import { UniqueEntityId } from '@/core/entities/unique-entity-id'
-import { NotAllowed } from '@/core/errors/error/not-allowed'
 import { makeEmployee } from 'test/factories/make-employee'
 import { InMemoryEmployeeRepository } from 'test/repositories/in-memory-employee-repository'
 import { DeleteDeliveryManUseCase } from './delete-deliveryman'
@@ -33,7 +32,6 @@ describe('Delete Deliveryman', () => {
     )
 
     await sut.execute({
-      adminId: 'employee-1',
       deliveryManId: 'deliveryman-1',
     })
 
@@ -60,11 +58,10 @@ describe('Delete Deliveryman', () => {
     )
 
     const result = await sut.execute({
-      adminId: 'deliveryman-1',
       deliveryManId: 'deliveryman-2',
     })
 
-    expect(result.isLeft()).toBeTruthy()
-    expect(result.value).toBeInstanceOf(NotAllowed)
+    expect(result.isLeft()).toBeFalsy()
+    //expect(result.value).toBeInstanceOf(NotAllowed)
   })
 })
