@@ -23,7 +23,7 @@ const bodyValidationPipe = new ZodValidationPipe(editDeliveryManBodySchema)
 
 type EditDeliveryManBodySchema = z.infer<typeof editDeliveryManBodySchema>
 
-@Controller('/accounts/:deliverymanId/edit')
+@Controller('/accounts/:deliverymanId')
 export class EditDeliveryManController {
   constructor(private nestEditDeliveryMan: NestEditDeliveryManUseCase) {}
 

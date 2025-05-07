@@ -23,7 +23,7 @@ const bodyValidationPipe = new ZodValidationPipe(editRecipientBodySchema)
 
 type EditRecipientBodySchema = z.infer<typeof editRecipientBodySchema>
 
-@Controller('/recipients/:recipientId/edit')
+@Controller('/recipients/:recipientId')
 export class EditRecipientController {
   constructor(private nestEditRecipient: NestEditRecipientUseCase) {}
 

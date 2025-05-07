@@ -25,7 +25,7 @@ const bodyValidationPipe = new ZodValidationPipe(editOrderBodySchema)
 
 type EditOrderBodySchema = z.infer<typeof editOrderBodySchema>
 
-@Controller('/orders/:orderId/edit')
+@Controller('/orders/:orderId')
 export class EditOrderController {
   constructor(private nestEditOrder: NestEditOrderUseCase) {}
 
