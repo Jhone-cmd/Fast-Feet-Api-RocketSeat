@@ -1,7 +1,10 @@
+import { CPF } from '@/domain/fast-feet/enterprise/entities/value-objects/cpf'
+import { DatabaseModule } from '@/infra/database/database.module'
 import { INestApplication } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { Test } from '@nestjs/testing'
 import request from 'supertest'
+import { AccountFactory } from 'test/factories/make-employee'
 import { AppModule } from '../../app.module'
 import { PrismaService } from '../../database/prisma/prisma.service'
 
@@ -9,47 +12,36 @@ describe('Fetch Deliverymans (E2E)', () => {
   let app: INestApplication
   let prisma: PrismaService
   let jwt: JwtService
+  let accountFactory: AccountFactory
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
-      imports: [AppModule],
+      imports: [AppModule, DatabaseModule],
+      providers: [AccountFactory],
     }).compile()
 
     app = moduleRef.createNestApplication()
     prisma = moduleRef.get(PrismaService)
     jwt = moduleRef.get(JwtService)
+    accountFactory = moduleRef.get(AccountFactory)
     await app.init()
   })
 
   test('[GET] /accounts/deliverymans', async () => {
-    const admin = await prisma.accounts.create({
-      data: {
-        name: 'admin',
-        email: 'admin@email.com',
-        cpf: '12345678900',
-        password: '123456',
-        role: 'admin',
-      },
-    })
+    const admin = await accountFactory.makePrismaEmployee({ role: 'admin' })
 
-    const accessToken = jwt.sign({ sub: admin.id })
+    const accessToken = jwt.sign({ sub: admin.id.toString() })
 
-    await prisma.accounts.createMany({
-      data: [
-        {
-          name: 'deliveryman1',
-          email: 'deliveryman1@email.com',
-          cpf: '12345678901',
-          password: '123456',
-        },
-        {
-          name: 'deliveryman2',
-          email: 'deliveryman2@email.com',
-          cpf: '12345678902',
-          password: '123456',
-        },
-      ],
-    })
+    await Promise.all([
+      accountFactory.makePrismaEmployee({
+        cpf: new CPF('12345678901'),
+        role: 'deliveryman',
+      }),
+      accountFactory.makePrismaEmployee({
+        cpf: new CPF('12345678902'),
+        role: 'deliveryman',
+      }),
+    ])
 
     const response = await request(app.getHttpServer())
       .get('/accounts/deliverymans')
@@ -58,10 +50,10 @@ describe('Fetch Deliverymans (E2E)', () => {
 
     expect(response.statusCode).toBe(200)
     expect(response.body).toEqual({
-      deliverymans: [
+      deliverymans: expect.arrayContaining([
         expect.objectContaining({ cpf: '12345678901' }),
         expect.objectContaining({ cpf: '12345678902' }),
-      ],
+      ]),
     })
   })
 })

@@ -1,7 +1,10 @@
+import { DatabaseModule } from '@/infra/database/database.module'
 import { INestApplication } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { Test } from '@nestjs/testing'
 import request from 'supertest'
+import { AccountFactory } from 'test/factories/make-employee'
+import { RecipientFactory } from 'test/factories/make-recipient'
 import { AppModule } from '../../app.module'
 import { PrismaService } from '../../database/prisma/prisma.service'
 
@@ -9,47 +12,32 @@ describe('Fetch Recipients (E2E)', () => {
   let app: INestApplication
   let prisma: PrismaService
   let jwt: JwtService
+  let accountFactory: AccountFactory
+  let recipientFactory: RecipientFactory
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
-      imports: [AppModule],
+      imports: [AppModule, DatabaseModule],
+      providers: [AccountFactory, RecipientFactory],
     }).compile()
 
     app = moduleRef.createNestApplication()
     prisma = moduleRef.get(PrismaService)
     jwt = moduleRef.get(JwtService)
+    accountFactory = moduleRef.get(AccountFactory)
+    recipientFactory = moduleRef.get(RecipientFactory)
     await app.init()
   })
 
   test('[GET] /accounts/recipients', async () => {
-    const admin = await prisma.accounts.create({
-      data: {
-        name: 'admin',
-        email: 'admin@email.com',
-        cpf: '12345678900',
-        password: '123456',
-        role: 'admin',
-      },
-    })
+    const admin = await accountFactory.makePrismaEmployee({ role: 'admin' })
 
-    const accessToken = jwt.sign({ sub: admin.id })
+    const accessToken = jwt.sign({ sub: admin.id.toString() })
 
-    await prisma.recipients.createMany({
-      data: [
-        {
-          name: 'recipient-1',
-          cpf: '12345678901',
-          phone: '7798888-7777',
-          address: 'Rua nada Bairro Grande',
-        },
-        {
-          name: 'recipient-2',
-          cpf: '12345678902',
-          phone: '7798888-7777',
-          address: 'Rua nada Bairro Grande',
-        },
-      ],
-    })
+    await Promise.all([
+      recipientFactory.makePrismaRecipient({ name: 'recipient-1' }),
+      recipientFactory.makePrismaRecipient({ name: 'recipient-2' }),
+    ])
 
     const response = await request(app.getHttpServer())
       .get('/accounts/recipients')
@@ -58,10 +46,10 @@ describe('Fetch Recipients (E2E)', () => {
 
     expect(response.statusCode).toBe(200)
     expect(response.body).toEqual({
-      recipients: [
+      recipients: expect.arrayContaining([
         expect.objectContaining({ name: 'recipient-1' }),
         expect.objectContaining({ name: 'recipient-2' }),
-      ],
+      ]),
     })
   })
 })

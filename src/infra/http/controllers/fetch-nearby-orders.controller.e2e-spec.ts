@@ -1,7 +1,12 @@
+import { Slug } from '@/domain/fast-feet/enterprise/entities/value-objects/slug'
+import { DatabaseModule } from '@/infra/database/database.module'
 import { INestApplication } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { Test } from '@nestjs/testing'
 import request from 'supertest'
+import { AccountFactory } from 'test/factories/make-employee'
+import { OrderFactory } from 'test/factories/make-order'
+import { RecipientFactory } from 'test/factories/make-recipient'
 import { AppModule } from '../../app.module'
 import { PrismaService } from '../../database/prisma/prisma.service'
 
@@ -9,58 +14,46 @@ describe('Fetch Nearby Orders (E2E)', () => {
   let app: INestApplication
   let prisma: PrismaService
   let jwt: JwtService
+  let accountFactory: AccountFactory
+  let recipientFactory: RecipientFactory
+  let orderFactory: OrderFactory
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
-      imports: [AppModule],
+      imports: [AppModule, DatabaseModule],
+      providers: [AccountFactory, RecipientFactory, OrderFactory],
     }).compile()
 
     app = moduleRef.createNestApplication()
     prisma = moduleRef.get(PrismaService)
     jwt = moduleRef.get(JwtService)
+    accountFactory = moduleRef.get(AccountFactory)
+    recipientFactory = moduleRef.get(RecipientFactory)
+    orderFactory = moduleRef.get(OrderFactory)
     await app.init()
   })
 
   test('[GET] /orders/nearby', async () => {
-    const admin = await prisma.accounts.create({
-      data: {
-        name: 'admin',
-        email: 'admin@email.com',
-        cpf: '12345678900',
-        password: '123456',
-        role: 'admin',
-      },
-    })
+    const admin = await accountFactory.makePrismaEmployee({ role: 'admin' })
 
-    const recipient = await prisma.recipients.create({
-      data: {
-        name: 'recipient-1',
-        cpf: '12345678901',
-        phone: '7798888-7777',
-        address: 'Rua nada Bairro Grande',
-      },
-    })
+    const accessToken = jwt.sign({ sub: admin.id.toString() })
 
-    const accessToken = jwt.sign({ sub: admin.id })
+    const recipient = await recipientFactory.makePrismaRecipient()
 
-    await prisma.orders.createMany({
-      data: [
-        {
-          name: 'Create Order 1',
-          slug: 'create-order-1',
-          recipientId: recipient.id.toString(),
-          latitude: -16.0167985,
-          longitude: -48.0722519,
-        },
-        {
-          name: 'Create Order 2',
-          slug: 'create-order-2',
-          recipientId: recipient.id.toString(),
-          latitude: -16.0167985,
-          longitude: -48.0722519,
-        },
-      ],
-    })
+    await Promise.all([
+      orderFactory.makePrismaOrder({
+        slug: Slug.createFromText('create-order-1'),
+        recipientId: recipient.id,
+        latitude: -16.0167985,
+        longitude: -48.0722519,
+      }),
+      orderFactory.makePrismaOrder({
+        slug: Slug.createFromText('create-order-2'),
+        recipientId: recipient.id,
+        latitude: -16.0167985,
+        longitude: -48.0722519,
+      }),
+    ])
 
     const response = await request(app.getHttpServer())
       .get('/orders/nearby')
@@ -72,10 +65,10 @@ describe('Fetch Nearby Orders (E2E)', () => {
 
     expect(response.statusCode).toBe(200)
     expect(response.body).toEqual({
-      orders: [
+      orders: expect.arrayContaining([
         expect.objectContaining({ slug: 'create-order-1' }),
         expect.objectContaining({ slug: 'create-order-2' }),
-      ],
+      ]),
     })
   })
 })
