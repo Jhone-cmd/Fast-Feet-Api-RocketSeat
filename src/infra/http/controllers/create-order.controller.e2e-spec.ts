@@ -1,7 +1,10 @@
+import { DatabaseModule } from '@/infra/database/database.module'
 import { INestApplication } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { Test } from '@nestjs/testing'
 import request from 'supertest'
+import { AccountFactory } from 'test/factories/make-employee'
+import { RecipientFactory } from 'test/factories/make-recipient'
 import { AppModule } from '../../app.module'
 import { PrismaService } from '../../database/prisma/prisma.service'
 
@@ -9,38 +12,29 @@ describe('Create Order (E2E)', () => {
   let app: INestApplication
   let prisma: PrismaService
   let jwt: JwtService
+  let accountFactory: AccountFactory
+  let recipientFactory: RecipientFactory
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
-      imports: [AppModule],
+      imports: [AppModule, DatabaseModule],
+      providers: [AccountFactory, RecipientFactory],
     }).compile()
 
     app = moduleRef.createNestApplication()
     prisma = moduleRef.get(PrismaService)
     jwt = moduleRef.get(JwtService)
+    accountFactory = moduleRef.get(AccountFactory)
+    recipientFactory = moduleRef.get(RecipientFactory)
     await app.init()
   })
 
   test('[POST] /recipients/:recipientId/orders', async () => {
-    const admin = await prisma.accounts.create({
-      data: {
-        name: 'admin',
-        email: 'admin@email.com',
-        cpf: '12345678900',
-        password: '126456',
-        role: 'admin',
-      },
-    })
-    const accessToken = jwt.sign({ sub: admin.id })
+    const admin = await accountFactory.makePrismaEmployee()
 
-    const recipient = await prisma.recipients.create({
-      data: {
-        name: 'recipient-1',
-        cpf: '12345678901',
-        phone: '7798888-7777',
-        address: 'Rua nada Bairro Grande',
-      },
-    })
+    const accessToken = jwt.sign({ sub: admin.id.toString() })
+
+    const recipient = await recipientFactory.makePrismaRecipient()
 
     const response = await request(app.getHttpServer())
       .post(`/recipients/${recipient.id.toString()}/orders`)
