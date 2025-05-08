@@ -2,10 +2,13 @@ import { NotAllowed } from '@/core/errors/error/not-allowed'
 import { ResourceNotFound } from '@/core/errors/error/resource-not-found'
 import { type Either, left, right } from '@/core/function/either'
 import type { Employee } from '../../enterprise/entities/employee'
+import { Rule } from '../../enterprise/entities/types/rule'
+import { EmployeeRule } from '../../enterprise/entities/value-objects/employee-rule'
 import type { HashGenerator } from '../cryptography/hash-generator'
 import type { EmployeeRepository } from '../repositories/employee-repository'
 
 export interface EditDeliveryManUseCaseRequest {
+  adminId: string
   deliveryManId: string
   name?: string
   email?: string
@@ -24,14 +27,19 @@ export class EditDeliveryManUseCase {
   ) {}
 
   async execute({
+    adminId,
     deliveryManId,
     name,
     email,
     password,
   }: EditDeliveryManUseCaseRequest): Promise<EditDeliveryManUseCaseResponse> {
-    // const admin = await this.employeeRepository.permission(adminId)
+    const employee = await this.employeeRepository.findById(adminId)
 
-    // if (!admin) return left(new NotAllowed())
+    const admin = EmployeeRule.isValidRule(employee?.rule as Rule)
+
+    if (!admin) {
+      return left(new NotAllowed())
+    }
 
     const deliveryMan = await this.employeeRepository.findById(deliveryManId)
 

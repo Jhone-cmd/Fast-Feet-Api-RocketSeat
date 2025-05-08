@@ -1,4 +1,5 @@
 import { UniqueEntityId } from '@/core/entities/unique-entity-id'
+import { NotAllowed } from '@/core/errors/error/not-allowed'
 import { FakerHasher } from 'test/cryptography/faker-hasher'
 import { makeEmployee } from 'test/factories/make-employee'
 import { InMemoryEmployeeRepository } from 'test/repositories/in-memory-employee-repository'
@@ -19,7 +20,7 @@ describe('Edit Deliveryman', () => {
     await inMemoryEmployeeRepository.create(
       makeEmployee(
         {
-          role: 'admin',
+          rule: 'admin',
         },
         new UniqueEntityId('employee-1')
       )
@@ -28,13 +29,14 @@ describe('Edit Deliveryman', () => {
     await inMemoryEmployeeRepository.create(
       makeEmployee(
         {
-          role: 'deliveryman',
+          rule: 'deliveryman',
         },
         new UniqueEntityId('deliveryman-1')
       )
     )
 
     const result = await sut.execute({
+      adminId: 'employee-1',
       deliveryManId: 'deliveryman-1',
       name: 'new name',
       email: 'newname@email.com',
@@ -51,29 +53,21 @@ describe('Edit Deliveryman', () => {
     await inMemoryEmployeeRepository.create(
       makeEmployee(
         {
-          role: 'deliveryman',
+          rule: 'deliveryman',
         },
         new UniqueEntityId('deliveryman-1')
       )
     )
 
-    await inMemoryEmployeeRepository.create(
-      makeEmployee(
-        {
-          role: 'deliveryman',
-        },
-        new UniqueEntityId('deliveryman-2')
-      )
-    )
-
     const result = await sut.execute({
-      deliveryManId: 'deliveryman-2',
+      adminId: 'employee-2',
+      deliveryManId: 'deliveryman-1',
       name: 'new name',
       email: 'newname@email.com',
       password: '123456789',
     })
 
-    expect(result.isLeft()).toBeFalsy()
-    //expect(result.value).toBeInstanceOf(NotAllowed)
+    expect(result.isLeft()).toBeTruthy()
+    expect(result.value).toBeInstanceOf(NotAllowed)
   })
 })
