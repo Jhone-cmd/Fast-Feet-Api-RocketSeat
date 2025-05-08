@@ -16,7 +16,7 @@ describe('Fetch Deliverymans', () => {
     await inMemoryEmployeeRepository.create(
       makeEmployee(
         {
-          role: 'deliveryman',
+          rule: 'deliveryman',
           createdAt: new Date(2025, 1, 12),
         },
         new UniqueEntityId('employee-1')
@@ -26,7 +26,7 @@ describe('Fetch Deliverymans', () => {
     await inMemoryEmployeeRepository.create(
       makeEmployee(
         {
-          role: 'deliveryman',
+          rule: 'deliveryman',
           createdAt: new Date(2025, 1, 10),
         },
         new UniqueEntityId('employee-2')
@@ -36,7 +36,7 @@ describe('Fetch Deliverymans', () => {
     await inMemoryEmployeeRepository.create(
       makeEmployee(
         {
-          role: 'deliveryman',
+          rule: 'deliveryman',
           createdAt: new Date(2025, 1, 15),
         },
         new UniqueEntityId('employee-3')
@@ -58,7 +58,7 @@ describe('Fetch Deliverymans', () => {
     for (let i = 1; i <= 22; i++) {
       await inMemoryEmployeeRepository.create(
         makeEmployee({
-          role: 'deliveryman',
+          rule: 'deliveryman',
         })
       )
     }

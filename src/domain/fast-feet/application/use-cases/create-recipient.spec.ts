@@ -1,3 +1,6 @@
+import { UniqueEntityId } from '@/core/entities/unique-entity-id'
+import { NotAllowed } from '@/core/errors/error/not-allowed'
+import { makeEmployee } from 'test/factories/make-employee'
 import { InMemoryEmployeeRepository } from 'test/repositories/in-memory-employee-repository'
 import { InMemoryRecipientRepository } from 'test/repositories/in-memory-recipient-repository'
 import { generateCPF } from 'test/utils/generate-cpf'
@@ -19,7 +22,17 @@ describe('Create Recipient', () => {
   })
 
   it('should be able to create a recipient', async () => {
+    await inMemoryEmployeeRepository.create(
+      makeEmployee(
+        {
+          rule: 'admin',
+        },
+        new UniqueEntityId('employee-1')
+      )
+    )
+
     const result = await sut.execute({
+      adminId: 'employee-1',
       name: 'john doe',
       address: 'Rua Nova Cidade',
       phone: '61988776655',
@@ -34,7 +47,17 @@ describe('Create Recipient', () => {
   })
 
   it('should not be able register a recipient with same cpf', async () => {
+    await inMemoryEmployeeRepository.create(
+      makeEmployee(
+        {
+          rule: 'admin',
+        },
+        new UniqueEntityId('employee-1')
+      )
+    )
+
     await sut.execute({
+      adminId: 'employee-1',
       name: 'john doe',
       address: 'Rua Nova Cidade',
       phone: '61988776655',
@@ -42,6 +65,7 @@ describe('Create Recipient', () => {
     })
 
     const result = await sut.execute({
+      adminId: 'employee-1',
       name: 'john doe',
       address: 'Rua Nova Cidade',
       phone: '61988776655',
@@ -50,5 +74,18 @@ describe('Create Recipient', () => {
 
     expect(result.isLeft()).toBeTruthy()
     expect(result.value).toBeInstanceOf(RecipientAlreadyExists)
+  })
+
+  it('should not be able to create an order without admin permission', async () => {
+    const result = await sut.execute({
+      adminId: 'employee-2',
+      name: 'john doe',
+      address: 'Rua Nova Cidade',
+      phone: '61988776655',
+      cpf: generateCPF(),
+    })
+
+    expect(result.isLeft()).toBeTruthy()
+    expect(result.value).toBeInstanceOf(NotAllowed)
   })
 })

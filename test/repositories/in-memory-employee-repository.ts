@@ -34,19 +34,11 @@ export class InMemoryEmployeeRepository implements EmployeeRepository {
 
   async findManyDeliveryMan({ page }: PaginationParams): Promise<Employee[]> {
     const deliveryMan = this.items
-      .filter(item => item.role === 'deliveryman')
+      .filter(item => item.rule === 'deliveryman')
       .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
       .slice((page - 1) * 20, page * 20)
 
     return deliveryMan
-  }
-
-  async permission(id: string): Promise<boolean> {
-    const employee = this.items.find(item => item.id.toString() === id)
-
-    if (employee?.role === 'deliveryman') return false
-
-    return true
   }
 
   async save(employee: Employee): Promise<void> {

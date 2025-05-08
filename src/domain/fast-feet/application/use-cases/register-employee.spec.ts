@@ -21,7 +21,7 @@ describe('Register Employee', () => {
       email: 'johndoe@email.com',
       cpf: generateCPF(),
       password: '123456',
-      role: 'admin',
+      rule: 'admin',
     })
 
     expect(inMemoryEmployeeRepository.items).toHaveLength(1)
@@ -37,7 +37,7 @@ describe('Register Employee', () => {
       email: 'johndoe@email.com',
       cpf: generateCPF(),
       password: '123456',
-      role: 'admin',
+      rule: 'admin',
     })
 
     const result = await sut.execute({
@@ -45,7 +45,7 @@ describe('Register Employee', () => {
       email: 'johndoe@email.com',
       cpf: generateCPF(),
       password: '123456',
-      role: 'admin',
+      rule: 'admin',
     })
 
     expect(result.isLeft()).toBeTruthy()
@@ -58,7 +58,7 @@ describe('Register Employee', () => {
       email: 'johndoe@email.com',
       cpf: '12345678910',
       password: '123456',
-      role: 'admin',
+      rule: 'admin',
     })
 
     const result = await sut.execute({
@@ -66,7 +66,7 @@ describe('Register Employee', () => {
       email: 'johndoe2@email.com',
       cpf: '12345678910',
       password: '123456',
-      role: 'admin',
+      rule: 'admin',
     })
 
     expect(result.isLeft()).toBeTruthy()
@@ -79,7 +79,7 @@ describe('Register Employee', () => {
       email: 'johndoe@email.com',
       cpf: generateCPF(),
       password: '123456',
-      role: 'admin',
+      rule: 'admin',
     })
 
     const hashedPassword = await fakerHasher.hash('123456')

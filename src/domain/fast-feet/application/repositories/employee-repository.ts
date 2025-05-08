@@ -7,7 +7,6 @@ export abstract class EmployeeRepository {
   abstract findByCPF(cpf: string): Promise<Employee | null>
   abstract findById(id: string): Promise<Employee | null>
   abstract findManyDeliveryMan(params: PaginationParams): Promise<Employee[]>
-  abstract permission(id: string): Promise<boolean>
   abstract delete(employee: Employee): Promise<void>
   abstract save(employee: Employee): Promise<void>
 }

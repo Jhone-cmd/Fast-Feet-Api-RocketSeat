@@ -1,7 +1,7 @@
 import { Entity } from '@/core/entities/entity'
 import type { UniqueEntityId } from '@/core/entities/unique-entity-id'
 import type { Optional } from '@/core/types/optional'
-import type { Role } from './types/role'
+import type { Rule } from './types/rule'
 import { CPF } from './value-objects/cpf'
 
 export interface EmployeeProps {
@@ -9,7 +9,7 @@ export interface EmployeeProps {
   email: string
   cpf: CPF
   password: string
-  role: Role
+  rule: Rule
   createdAt: Date
   updatedAt?: Date | null
 }
@@ -51,12 +51,12 @@ export class Employee extends Entity<EmployeeProps> {
     this.touch()
   }
 
-  get role() {
-    return this.props.role
+  get rule() {
+    return this.props.rule
   }
 
-  set role(role: Role) {
-    this.props.role = role
+  set rule(rule: Rule) {
+    this.props.rule = rule
     this.touch()
   }
 
@@ -84,10 +84,5 @@ export class Employee extends Entity<EmployeeProps> {
       id
     )
     return employee
-  }
-
-  static isValidRole(role: string): role is 'admin' | 'deliveryman' {
-    const responsibility: string[] = ['admin', 'deliveryman']
-    return responsibility.includes(role)
   }
 }

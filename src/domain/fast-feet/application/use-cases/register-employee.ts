@@ -1,7 +1,8 @@
 import { type Either, left, right } from '@/core/function/either'
 import { Employee } from '../../enterprise/entities/employee'
-import type { Role } from '../../enterprise/entities/types/role'
+import type { Rule } from '../../enterprise/entities/types/rule'
 import { CPF } from '../../enterprise/entities/value-objects/cpf'
+import { EmployeeRule } from '../../enterprise/entities/value-objects/employee-rule'
 import type { HashGenerator } from '../cryptography/hash-generator'
 import type { EmployeeRepository } from '../repositories/employee-repository'
 import { AccountAlreadyExists } from './errors/account-already-exists'
@@ -13,7 +14,7 @@ export interface EmployeeRequest {
   email: string
   cpf: string
   password: string
-  role: string
+  rule: string
 }
 
 type EmployeeResponse = Either<AccountAlreadyExists, { employee: Employee }>
@@ -28,7 +29,7 @@ export class RegisterEmployeeUseCase {
     email,
     cpf,
     password,
-    role,
+    rule,
   }: EmployeeRequest): Promise<EmployeeResponse> {
     const employeeWithSameEmail =
       await this.employeeRepository.findByEmail(email)
@@ -52,10 +53,10 @@ export class RegisterEmployeeUseCase {
       return left(new AccountAlreadyExists(cpfFormatted.value))
     }
 
-    const isValidResponsibility = Employee.isValidRole(role)
+    const isValidResponsibility = EmployeeRule.isValidRule(rule)
 
     if (!isValidResponsibility) {
-      return left(new WrongJOB(role))
+      return left(new WrongJOB(rule))
     }
 
     const passwordHash = await this.hashGenerator.hash(password)
@@ -65,7 +66,7 @@ export class RegisterEmployeeUseCase {
       email,
       cpf: cpfFormatted,
       password: passwordHash,
-      role: role as Role,
+      rule: rule as Rule,
     })
 
     await this.employeeRepository.create(employee)
