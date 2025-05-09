@@ -33,7 +33,7 @@ describe('Edit Order (E2E)', () => {
   })
 
   test('[PUT] /orders/:orderId', async () => {
-    const admin = await accountFactory.makePrismaEmployee({ role: 'admin' })
+    const admin = await accountFactory.makePrismaEmployee({ rule: 'admin' })
     const accessToken = jwt.sign({ sub: admin.id.toString() })
 
     const deliveryMan = await accountFactory.makePrismaEmployee()

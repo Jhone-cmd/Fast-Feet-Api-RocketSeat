@@ -1,7 +1,7 @@
 import { UniqueEntityId } from '@/core/entities/unique-entity-id'
 import { Employee } from '@/domain/fast-feet/enterprise/entities/employee'
 import { CPF } from '@/domain/fast-feet/enterprise/entities/value-objects/cpf'
-import { Prisma, Accounts as PrismaEmployee } from '@prisma/client'
+import { Prisma, Accounts as PrismaEmployee, Rule } from '@prisma/client'
 
 export class PrismaEmployeeMapper {
   static toDomain(raw: PrismaEmployee): Employee {
@@ -11,7 +11,7 @@ export class PrismaEmployeeMapper {
         email: raw.email,
         cpf: new CPF(raw.cpf),
         password: raw.password,
-        rule: raw.rule,
+        rule: raw.rule as Rule,
         createdAt: raw.createdAt,
         updatedAt: raw.updatedAt,
       },

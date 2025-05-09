@@ -20,7 +20,7 @@ export function makeEmployee(
       email: faker.internet.email(),
       password: faker.internet.password(),
       cpf: new CPF(generateCPF()),
-      role: 'admin',
+      rule: 'deliveryman',
       ...override,
     },
     id

@@ -1,5 +1,8 @@
+import { NotAllowed } from '@/core/errors/error/not-allowed'
 import { ResourceNotFound } from '@/core/errors/error/resource-not-found'
+import { CurrentAccount } from '@/infra/auth/current-account-decorator'
 import { JwtAuthGuard } from '@/infra/auth/jwt-auth.guard'
+import { AccountPayload } from '@/infra/auth/jwt.strategy'
 import {
   BadRequestException,
   Body,
@@ -7,6 +10,7 @@ import {
   HttpCode,
   Param,
   Put,
+  UnauthorizedException,
   UseGuards,
 } from '@nestjs/common'
 import { z } from 'zod'
@@ -32,11 +36,15 @@ export class EditRecipientController {
   @UseGuards(JwtAuthGuard)
   async handle(
     @Body(bodyValidationPipe) body: EditRecipientBodySchema,
-    @Param('recipientId') recipientId: string
+    @Param('recipientId') recipientId: string,
+    @CurrentAccount() account: AccountPayload
   ) {
+    const adminId = account.sub
+
     const { name, address, phone } = body
 
     const result = await this.nestEditRecipient.execute({
+      adminId,
       recipientId,
       name,
       address,
@@ -49,6 +57,8 @@ export class EditRecipientController {
       switch (error.constructor) {
         case ResourceNotFound:
           throw new BadRequestException(error.message)
+        case NotAllowed:
+          throw new UnauthorizedException(error.message)
         default:
           throw new BadRequestException()
       }

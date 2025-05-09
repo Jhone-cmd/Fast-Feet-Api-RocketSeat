@@ -1,5 +1,8 @@
+import { NotAllowed } from '@/core/errors/error/not-allowed'
 import { ResourceNotFound } from '@/core/errors/error/resource-not-found'
+import { CurrentAccount } from '@/infra/auth/current-account-decorator'
 import { JwtAuthGuard } from '@/infra/auth/jwt-auth.guard'
+import { AccountPayload } from '@/infra/auth/jwt.strategy'
 import {
   BadRequestException,
   Body,
@@ -7,6 +10,7 @@ import {
   HttpCode,
   Param,
   Put,
+  UnauthorizedException,
   UseGuards,
 } from '@nestjs/common'
 import { z } from 'zod'
@@ -32,11 +36,15 @@ export class EditDeliveryManController {
   @UseGuards(JwtAuthGuard)
   async handle(
     @Body(bodyValidationPipe) body: EditDeliveryManBodySchema,
-    @Param('deliverymanId') deliverymanId: string
+    @Param('deliverymanId') deliverymanId: string,
+    @CurrentAccount() account: AccountPayload
   ) {
+    const adminId = account.sub
+
     const { name, email, password } = body
 
     const result = await this.nestEditDeliveryMan.execute({
+      adminId,
       deliveryManId: deliverymanId,
       name,
       email,
@@ -49,6 +57,8 @@ export class EditDeliveryManController {
       switch (error.constructor) {
         case ResourceNotFound:
           throw new BadRequestException(error.message)
+        case NotAllowed:
+          throw new UnauthorizedException(error.message)
         default:
           throw new BadRequestException()
       }
