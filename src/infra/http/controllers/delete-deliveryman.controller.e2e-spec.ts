@@ -27,7 +27,7 @@ describe('Delete Deliveryman (E2E)', () => {
   })
 
   test('[DELETE] /accounts/:deliveryManId', async () => {
-    const admin = await accountFactory.makePrismaEmployee({ role: 'admin' })
+    const admin = await accountFactory.makePrismaEmployee({ rule: 'admin' })
     const accessToken = jwt.sign({ sub: admin.id.toString() })
 
     const deliveryman = await accountFactory.makePrismaEmployee()

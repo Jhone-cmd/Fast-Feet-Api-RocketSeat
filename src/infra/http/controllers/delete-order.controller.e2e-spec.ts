@@ -33,7 +33,7 @@ describe('Delete Order (E2E)', () => {
   })
 
   test('[DELETE] /orders/:orderId', async () => {
-    const admin = await accountFactory.makePrismaEmployee({ role: 'admin' })
+    const admin = await accountFactory.makePrismaEmployee({ rule: 'admin' })
     const accessToken = jwt.sign({ sub: admin.id.toString() })
 
     const recipient = await recipientFactory.makePrismaRecipient()
