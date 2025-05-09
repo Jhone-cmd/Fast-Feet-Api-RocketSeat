@@ -1,4 +1,7 @@
+import { NotAllowed } from '@/core/errors/error/not-allowed'
 import { ResourceNotFound } from '@/core/errors/error/resource-not-found'
+import { CurrentAccount } from '@/infra/auth/current-account-decorator'
+import { AccountPayload } from '@/infra/auth/jwt.strategy'
 import {
   BadRequestException,
   Body,
@@ -6,6 +9,7 @@ import {
   HttpCode,
   Param,
   Post,
+  UnauthorizedException,
   UseGuards,
 } from '@nestjs/common'
 import { z } from 'zod'
@@ -34,11 +38,15 @@ export class CreateOrderController {
   @UseGuards(JwtAuthGuard)
   async handle(
     @Body(bodyValidationSchema) body: CreateOrderBodySchema,
-    @Param('recipientId') recipientId: string
+    @Param('recipientId') recipientId: string,
+    @CurrentAccount() account: AccountPayload
   ) {
+    const adminId = account.sub
+
     const { name, status, latitude, longitude } = body
 
     const result = await this.nestCreateOrder.execute({
+      adminId,
       name,
       status,
       latitude,
@@ -52,6 +60,8 @@ export class CreateOrderController {
       switch (error.constructor) {
         case ResourceNotFound:
           throw new BadRequestException(error.message)
+        case NotAllowed:
+          throw new UnauthorizedException(error.message)
         default:
           throw new BadRequestException()
       }

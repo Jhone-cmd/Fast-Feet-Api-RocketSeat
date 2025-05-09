@@ -17,7 +17,7 @@ const createAccountBodySchema = z.object({
   email: z.string().email(),
   cpf: z.string().length(11),
   password: z.string(),
-  role: z.enum(['admin', 'deliveryman']).default('deliveryman'),
+  rule: z.enum(['admin', 'deliveryman']).default('deliveryman'),
 })
 
 type CreateAccountBodySchema = z.infer<typeof createAccountBodySchema>
@@ -30,14 +30,14 @@ export class CreateAccountController {
   @HttpCode(201)
   @UsePipes(new ZodValidationPipe(createAccountBodySchema))
   async handle(@Body() body: CreateAccountBodySchema) {
-    const { name, email, cpf, password, role } = body
+    const { name, email, cpf, password, rule } = body
 
     const result = await this.nestCreateAccount.execute({
       name,
       email,
       cpf,
       password,
-      role,
+      rule,
     })
 
     if (result.isLeft()) {

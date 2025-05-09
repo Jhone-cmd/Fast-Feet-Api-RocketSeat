@@ -30,7 +30,7 @@ describe('Create Order (E2E)', () => {
   })
 
   test('[POST] /recipients/:recipientId/orders', async () => {
-    const admin = await accountFactory.makePrismaEmployee({ role: 'admin' })
+    const admin = await accountFactory.makePrismaEmployee({ rule: 'admin' })
 
     const accessToken = jwt.sign({ sub: admin.id.toString() })
 

@@ -1,4 +1,7 @@
+import { NotAllowed } from '@/core/errors/error/not-allowed'
 import { RecipientAlreadyExists } from '@/domain/fast-feet/application/use-cases/errors/recipient-already-exists'
+import { CurrentAccount } from '@/infra/auth/current-account-decorator'
+import { AccountPayload } from '@/infra/auth/jwt.strategy'
 import {
   BadRequestException,
   Body,
@@ -6,6 +9,7 @@ import {
   Controller,
   HttpCode,
   Post,
+  UnauthorizedException,
   UseGuards,
 } from '@nestjs/common'
 import { z } from 'zod'
@@ -33,10 +37,16 @@ export class CreateRecipientController {
   @Post()
   @HttpCode(201)
   @UseGuards(JwtAuthGuard)
-  async handle(@Body(bodyValidationSchema) body: CreateRecipientBodySchema) {
+  async handle(
+    @Body(bodyValidationSchema) body: CreateRecipientBodySchema,
+    @CurrentAccount() account: AccountPayload
+  ) {
+    const adminId = account.sub
+
     const { name, cpf, phone, address } = body
 
     const result = await this.nestCreateRecipient.execute({
+      adminId,
       name,
       cpf,
       phone,
@@ -49,6 +59,8 @@ export class CreateRecipientController {
       switch (error.constructor) {
         case RecipientAlreadyExists:
           throw new ConflictException(error.message)
+        case NotAllowed:
+          throw new UnauthorizedException(error.message)
         default:
           throw new BadRequestException(error.message)
       }
