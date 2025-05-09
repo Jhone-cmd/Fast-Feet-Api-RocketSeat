@@ -7,7 +7,7 @@ export class DeliveryManPresenter {
       name: deliveryman.name,
       email: deliveryman.email,
       cpf: deliveryman.cpf.value.toString(),
-      role: deliveryman.role,
+      rule: deliveryman.rule,
     }
   }
 }

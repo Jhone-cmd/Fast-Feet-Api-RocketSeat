@@ -11,7 +11,7 @@ export class PrismaEmployeeMapper {
         email: raw.email,
         cpf: new CPF(raw.cpf),
         password: raw.password,
-        role: raw.role,
+        rule: raw.rule,
         createdAt: raw.createdAt,
         updatedAt: raw.updatedAt,
       },
@@ -26,7 +26,7 @@ export class PrismaEmployeeMapper {
       email: account.email,
       cpf: account.cpf.value.toString(),
       password: account.password,
-      role: account.role,
+      rule: account.rule,
     }
   }
 }
