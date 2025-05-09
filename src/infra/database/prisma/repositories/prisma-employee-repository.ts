@@ -52,7 +52,7 @@ export class PrismaEmployeeRepository implements EmployeeRepository {
     const perPage = 20
     const deliverymans = await this.prisma.accounts.findMany({
       where: {
-        role: 'deliveryman',
+        rule: 'deliveryman',
       },
       take: perPage,
       skip: (page - 1) * perPage,
@@ -62,20 +62,6 @@ export class PrismaEmployeeRepository implements EmployeeRepository {
     })
 
     return deliverymans.map(PrismaEmployeeMapper.toDomain)
-  }
-
-  async permission(id: string): Promise<boolean> {
-    const account = await this.prisma.accounts.findUnique({
-      where: {
-        id,
-      },
-    })
-
-    if (account?.role === 'admin') {
-      return true
-    }
-
-    return false
   }
 
   async delete(employee: Employee): Promise<void> {

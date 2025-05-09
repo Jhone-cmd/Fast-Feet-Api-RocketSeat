@@ -13,7 +13,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum Role {
+enum Rule {
   admin
   deliveryman
 }
@@ -31,7 +31,7 @@ model Accounts {
   email    String @unique
   cpf      String @unique
   password String
-  role     Role   @default(deliveryman)
+  rule     Rule   @default(deliveryman)
 
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime? @updatedAt @map("updated_at")
