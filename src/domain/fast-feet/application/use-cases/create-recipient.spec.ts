@@ -77,8 +77,12 @@ describe('Create Recipient', () => {
   })
 
   it('should not be able to create an order without admin permission', async () => {
+    await inMemoryEmployeeRepository.create(
+      makeEmployee({}, new UniqueEntityId('employee-1'))
+    )
+
     const result = await sut.execute({
-      adminId: 'employee-2',
+      adminId: 'employee-1',
       name: 'john doe',
       address: 'Rua Nova Cidade',
       phone: '61988776655',

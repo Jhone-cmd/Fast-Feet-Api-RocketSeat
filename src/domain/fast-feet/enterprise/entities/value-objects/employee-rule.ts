@@ -8,4 +8,12 @@ export class EmployeeRule {
     const responsibility: string[] = ['admin', 'deliveryman']
     return responsibility.includes(rule)
   }
+
+  static isAdmin(rule: string): boolean {
+    if (rule === 'admin') {
+      return true
+    }
+
+    return false
+  }
 }

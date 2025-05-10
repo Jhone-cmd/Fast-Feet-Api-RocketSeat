@@ -1,4 +1,5 @@
 import { NotAllowed } from '@/core/errors/error/not-allowed'
+import { ResourceNotFound } from '@/core/errors/error/resource-not-found'
 import { type Either, left, right } from '@/core/function/either'
 import { Recipient } from '../../enterprise/entities/recipient'
 import { Rule } from '../../enterprise/entities/types/rule'
@@ -18,7 +19,7 @@ export interface CreateRecipientUseCaseRequest {
 }
 
 type CreateRecipientUseCaseResponse = Either<
-  RecipientAlreadyExists | NotAllowed,
+  RecipientAlreadyExists | NotAllowed | ResourceNotFound,
   { recipient: Recipient }
 >
 
@@ -37,7 +38,9 @@ export class CreateRecipientUseCase {
   }: CreateRecipientUseCaseRequest): Promise<CreateRecipientUseCaseResponse> {
     const employee = await this.employeeRepository.findById(adminId)
 
-    const admin = EmployeeRule.isValidRule(employee?.rule as Rule)
+    if (!employee) return left(new ResourceNotFound())
+
+    const admin = EmployeeRule.isAdmin(employee.rule as Rule)
 
     if (!admin) {
       return left(new NotAllowed())

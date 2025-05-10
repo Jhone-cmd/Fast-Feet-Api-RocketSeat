@@ -59,6 +59,9 @@ describe('Edit Deliveryman', () => {
   })
 
   it('should not be able to edit a recipient without admin permission', async () => {
+    await inMemoryEmployeeRepository.create(
+      makeEmployee({}, new UniqueEntityId('employee-1'))
+    )
     await inMemoryRecipientRepository.create(
       makeRecipient(
         {
@@ -71,7 +74,7 @@ describe('Edit Deliveryman', () => {
     )
 
     const result = await sut.execute({
-      adminId: 'employee-2',
+      adminId: 'employee-1',
       recipientId: 'recipient-1',
       name: 'John Doe 2',
       address: 'Rua Nova - Cidade Alegre',
