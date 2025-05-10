@@ -24,7 +24,9 @@ export class DeleteDeliveryManUseCase {
   }: DeleteDeliveryManUseCaseRequest): Promise<DeleteDeliveryManUseCaseResponse> {
     const employee = await this.employeeRepository.findById(adminId)
 
-    const admin = EmployeeRule.isValidRule(employee?.rule as Rule)
+    if (!employee) return left(new ResourceNotFound())
+
+    const admin = EmployeeRule.isAdmin(employee.rule as Rule)
 
     if (!admin) {
       return left(new NotAllowed())
