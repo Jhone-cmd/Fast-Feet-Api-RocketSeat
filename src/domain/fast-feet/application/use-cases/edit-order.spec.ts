@@ -53,6 +53,10 @@ describe('Edit order', () => {
   })
 
   it('should not be able to edit an recipient without admin permission', async () => {
+    await inMemoryEmployeeRepository.create(
+      makeEmployee({}, new UniqueEntityId('employee-1'))
+    )
+
     const newOrder = makeOrder(
       {
         recipientId: new UniqueEntityId('recipient-1'),
@@ -63,7 +67,7 @@ describe('Edit order', () => {
     await inMemoryOrderRepository.create(newOrder)
 
     const result = await sut.execute({
-      adminId: 'employee-2',
+      adminId: 'employee-1',
       orderId: 'order-1',
     })
 

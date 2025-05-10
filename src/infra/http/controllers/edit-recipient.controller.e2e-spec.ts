@@ -31,7 +31,7 @@ describe('Edit Recipient (E2E)', () => {
 
   test('[PUT] /recipients/:recipientId', async () => {
     const admin = await accountFactory.makePrismaEmployee({
-      rule: 'deliveryman',
+      rule: 'admin',
     })
 
     const accessToken = jwt.sign({ sub: admin.id.toString() })

@@ -42,6 +42,10 @@ describe('Delete Deliveryman', () => {
 
   it('should not be able to delete a deliveryman without admin permission', async () => {
     await inMemoryEmployeeRepository.create(
+      makeEmployee({}, new UniqueEntityId('employee-1'))
+    )
+
+    await inMemoryEmployeeRepository.create(
       makeEmployee(
         {
           rule: 'deliveryman',
@@ -51,7 +55,7 @@ describe('Delete Deliveryman', () => {
     )
 
     const result = await sut.execute({
-      adminId: 'employee-2',
+      adminId: 'employee-1',
       deliveryManId: 'deliveryman-1',
     })
 
