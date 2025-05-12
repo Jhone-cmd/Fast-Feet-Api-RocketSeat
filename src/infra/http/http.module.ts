@@ -15,6 +15,7 @@ import { FetchDeliveryMansController } from './controllers/fetch-deliverymans.co
 import { FetchNearbyOrdersController } from './controllers/fetch-nearby-orders.controller'
 import { FetchRecentOrdersController } from './controllers/fetch-recent-orders.controller'
 import { FetchRecipientsController } from './controllers/fetch-recipients.controller'
+import { UploadCreateAttachmentController } from './controllers/upload-create-attachment.controller'
 import { NestCreateAccountUseCase } from './nest-use-cases/nest-create-account-use-case'
 import { NestCreateOrderUseCase } from './nest-use-cases/nest-create-order-use-case'
 import { NestCreateRecipientUseCase } from './nest-use-cases/nest-create-recipient-use-case'
@@ -46,6 +47,7 @@ import { NestFetchRecipientsUseCase } from './nest-use-cases/nest-fetch-recipien
     DeleteDeliveryManController,
     DeleteRecipientController,
     DeleteOrderController,
+    UploadCreateAttachmentController,
   ],
   providers: [
     NestCreateAccountUseCase,
