@@ -29,6 +29,7 @@ import { NestFetchDeliverymansUseCase } from './nest-use-cases/nest-fetch-delive
 import { NestFetchNearbyOrdersUseCase } from './nest-use-cases/nest-fetch-nearby-orders-use-case'
 import { NestFetchRecentOrdersUseCase } from './nest-use-cases/nest-fetch-recent-orders-use-case'
 import { NestFetchRecipientsUseCase } from './nest-use-cases/nest-fetch-recipients-use-case'
+import { NestUploadAndCreateAttachmentUseCase } from './nest-use-cases/nest-upload-create-attachment-use-case'
 
 @Module({
   imports: [DatabaseModule, CryptographyModule],
@@ -63,6 +64,7 @@ import { NestFetchRecipientsUseCase } from './nest-use-cases/nest-fetch-recipien
     NestDeleteDeliveryManUseCase,
     NestDeleteRecipientUseCase,
     NestDeleteOrderUseCase,
+    NestUploadAndCreateAttachmentUseCase,
   ],
 })
 export class HttpModule {}

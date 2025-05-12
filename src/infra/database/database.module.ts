@@ -1,3 +1,4 @@
+import { AttachmentRepository } from '@/domain/fast-feet/application/repositories/attachment-repository'
 import { EmployeeRepository } from '@/domain/fast-feet/application/repositories/employee-repository'
 import { OrderRepository } from '@/domain/fast-feet/application/repositories/order-repository'
 import { RecipientRepository } from '@/domain/fast-feet/application/repositories/recipient-repository'
@@ -24,14 +25,17 @@ import { PrismaRecipientRepository } from './prisma/repositories/prisma-recipien
       useClass: PrismaOrderRepository,
     },
 
-    PrismaAttachmentRepository,
+    {
+      provide: AttachmentRepository,
+      useClass: PrismaAttachmentRepository,
+    },
   ],
   exports: [
     PrismaService,
     EmployeeRepository,
     RecipientRepository,
     OrderRepository,
-    PrismaAttachmentRepository,
+    AttachmentRepository,
   ],
 })
 export class DatabaseModule {}
