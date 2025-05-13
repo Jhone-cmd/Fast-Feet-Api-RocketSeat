@@ -4,8 +4,10 @@ import {
 } from '@/domain/fast-feet/application/storage/uploader'
 import { EnvService } from '@/infra/env/env.service'
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3'
+import { Injectable } from '@nestjs/common'
 import { randomUUID } from 'node:crypto'
 
+@Injectable()
 export class R2Storage implements Uploader {
   private client: S3Client
 
