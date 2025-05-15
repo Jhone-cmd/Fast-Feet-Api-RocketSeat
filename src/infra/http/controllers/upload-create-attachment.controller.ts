@@ -1,4 +1,5 @@
 import { InvalidAttachmentType } from '@/domain/fast-feet/application/use-cases/errors/invalid-attachment-type'
+import { JwtAuthGuard } from '@/infra/auth/jwt-auth.guard'
 import {
   BadRequestException,
   Controller,
@@ -8,6 +9,7 @@ import {
   ParseFilePipe,
   Post,
   UploadedFile,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common'
 import { FileInterceptor } from '@nestjs/platform-express'
@@ -20,6 +22,7 @@ export class UploadCreateAttachmentController {
   ) {}
 
   @Post()
+  @UseGuards(JwtAuthGuard)
   @HttpCode(201)
   @UseInterceptors(FileInterceptor('file'))
   async handle(
@@ -49,5 +52,9 @@ export class UploadCreateAttachmentController {
           throw new BadRequestException()
       }
     }
+
+    const { attachment } = result.value
+
+    return { attachmentId: attachment.id.toString() }
   }
 }

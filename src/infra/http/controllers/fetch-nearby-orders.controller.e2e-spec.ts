@@ -34,7 +34,7 @@ describe('Fetch Nearby Orders (E2E)', () => {
   })
 
   test('[GET] /orders/nearby', async () => {
-    const admin = await accountFactory.makePrismaEmployee({ role: 'admin' })
+    const admin = await accountFactory.makePrismaEmployee({ rule: 'admin' })
 
     const accessToken = jwt.sign({ sub: admin.id.toString() })
 

@@ -28,18 +28,18 @@ describe('Fetch Deliverymans (E2E)', () => {
   })
 
   test('[GET] /accounts/deliverymans', async () => {
-    const admin = await accountFactory.makePrismaEmployee({ role: 'admin' })
+    const admin = await accountFactory.makePrismaEmployee({ rule: 'admin' })
 
     const accessToken = jwt.sign({ sub: admin.id.toString() })
 
     await Promise.all([
       accountFactory.makePrismaEmployee({
         cpf: new CPF('12345678901'),
-        role: 'deliveryman',
+        rule: 'deliveryman',
       }),
       accountFactory.makePrismaEmployee({
         cpf: new CPF('12345678902'),
-        role: 'deliveryman',
+        rule: 'deliveryman',
       }),
     ])
 

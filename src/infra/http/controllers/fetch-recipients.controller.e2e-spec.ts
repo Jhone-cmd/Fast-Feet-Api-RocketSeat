@@ -30,7 +30,7 @@ describe('Fetch Recipients (E2E)', () => {
   })
 
   test('[GET] /accounts/recipients', async () => {
-    const admin = await accountFactory.makePrismaEmployee({ role: 'admin' })
+    const admin = await accountFactory.makePrismaEmployee({ rule: 'admin' })
 
     const accessToken = jwt.sign({ sub: admin.id.toString() })
 
