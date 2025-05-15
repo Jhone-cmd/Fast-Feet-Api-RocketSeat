@@ -1,4 +1,6 @@
+import { InvalidAttachmentType } from '@/domain/fast-feet/application/use-cases/errors/invalid-attachment-type'
 import {
+  BadRequestException,
   Controller,
   FileTypeValidator,
   HttpCode,
@@ -30,5 +32,22 @@ export class UploadCreateAttachmentController {
       })
     )
     file: Express.Multer.File
-  ) {}
+  ) {
+    const result = await this.nestUploadAndCreateAttachment.execute({
+      fileName: file.originalname,
+      fileType: file.mimetype,
+      body: file.buffer,
+    })
+
+    if (result.isLeft()) {
+      const error = result.value
+
+      switch (error.constructor) {
+        case InvalidAttachmentType:
+          throw new BadRequestException(error.message)
+        default:
+          throw new BadRequestException()
+      }
+    }
+  }
 }
