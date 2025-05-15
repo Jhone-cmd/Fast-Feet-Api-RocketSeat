@@ -1,19 +1,16 @@
 import { UniqueEntityId } from '@/core/entities/unique-entity-id'
 import { NotAllowed } from '@/core/errors/error/not-allowed'
-import { FakerHasher } from 'test/cryptography/faker-hasher'
 import { makeEmployee } from 'test/factories/make-employee'
 import { InMemoryEmployeeRepository } from 'test/repositories/in-memory-employee-repository'
 import { EditDeliveryManUseCase } from './edit-deliveryman'
 
 let inMemoryEmployeeRepository: InMemoryEmployeeRepository
-let fakerHasher: FakerHasher
 let sut: EditDeliveryManUseCase
 
 describe('Edit Deliveryman', () => {
   beforeEach(() => {
     inMemoryEmployeeRepository = new InMemoryEmployeeRepository()
-    fakerHasher = new FakerHasher()
-    sut = new EditDeliveryManUseCase(inMemoryEmployeeRepository, fakerHasher)
+    sut = new EditDeliveryManUseCase(inMemoryEmployeeRepository)
   })
 
   it('should be able to edit a deliveryman', async () => {
@@ -40,12 +37,11 @@ describe('Edit Deliveryman', () => {
       deliveryManId: 'deliveryman-1',
       name: 'new name',
       email: 'newname@email.com',
-      password: '123456789',
     })
 
     expect(result.isRight()).toBeTruthy()
     expect(inMemoryEmployeeRepository.items[1]).toMatchObject({
-      password: '123456789-hashed',
+      email: 'newname@email.com',
     })
   })
 
@@ -68,7 +64,6 @@ describe('Edit Deliveryman', () => {
       deliveryManId: 'deliveryman-1',
       name: 'new name',
       email: 'newname@email.com',
-      password: '123456789',
     })
 
     expect(result.isLeft()).toBeTruthy()
