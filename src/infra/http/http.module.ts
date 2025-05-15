@@ -30,6 +30,7 @@ import { NestFetchDeliverymansUseCase } from './nest-use-cases/nest-fetch-delive
 import { NestFetchNearbyOrdersUseCase } from './nest-use-cases/nest-fetch-nearby-orders-use-case'
 import { NestFetchRecentOrdersUseCase } from './nest-use-cases/nest-fetch-recent-orders-use-case'
 import { NestFetchRecipientsUseCase } from './nest-use-cases/nest-fetch-recipients-use-case'
+import { NestOnChangePasswordUseCase } from './nest-use-cases/nest-on-change-password-use-case'
 import { NestUploadAndCreateAttachmentUseCase } from './nest-use-cases/nest-upload-create-attachment-use-case'
 import { StorageModule } from './storage/storage.module'
 
@@ -68,6 +69,7 @@ import { StorageModule } from './storage/storage.module'
     NestDeleteRecipientUseCase,
     NestDeleteOrderUseCase,
     NestUploadAndCreateAttachmentUseCase,
+    NestOnChangePasswordUseCase,
   ],
 })
 export class HttpModule {}
