@@ -15,6 +15,7 @@ import { FetchDeliveryMansController } from './controllers/fetch-deliverymans.co
 import { FetchNearbyOrdersController } from './controllers/fetch-nearby-orders.controller'
 import { FetchRecentOrdersController } from './controllers/fetch-recent-orders.controller'
 import { FetchRecipientsController } from './controllers/fetch-recipients.controller'
+import { OnChangePasswordController } from './controllers/on-change-password.controller'
 import { UploadCreateAttachmentController } from './controllers/upload-create-attachment.controller'
 import { NestCreateAccountUseCase } from './nest-use-cases/nest-create-account-use-case'
 import { NestCreateOrderUseCase } from './nest-use-cases/nest-create-order-use-case'
@@ -50,6 +51,7 @@ import { StorageModule } from './storage/storage.module'
     DeleteRecipientController,
     DeleteOrderController,
     UploadCreateAttachmentController,
+    OnChangePasswordController,
   ],
   providers: [
     NestCreateAccountUseCase,

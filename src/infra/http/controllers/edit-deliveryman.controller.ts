@@ -48,7 +48,6 @@ export class EditDeliveryManController {
       deliveryManId: deliverymanId,
       name,
       email,
-      password,
     })
 
     if (result.isLeft()) {
