@@ -6,14 +6,17 @@ import { EmployeeRule } from '../../enterprise/entities/value-objects/employee-r
 import { HashGenerator } from '../cryptography/hash-generator'
 import { EmployeeRepository } from '../repositories/employee-repository'
 
-export interface OnchangePasswordRequest {
+export interface OnchangePasswordUseCaseRequest {
   adminId: string
   deliveryManId: string
   password: string
 }
 
-type OnchangePasswordResponse = Either<ResourceNotFound | NotAllowed, null>
-export class OnchangePassword {
+type OnchangePasswordUseCaseResponse = Either<
+  ResourceNotFound | NotAllowed,
+  null
+>
+export class OnchangePasswordUseCase {
   constructor(
     private employeeRepository: EmployeeRepository,
     private hashGenerator: HashGenerator
@@ -23,7 +26,7 @@ export class OnchangePassword {
     adminId,
     deliveryManId,
     password,
-  }: OnchangePasswordRequest): Promise<OnchangePasswordResponse> {
+  }: OnchangePasswordUseCaseRequest): Promise<OnchangePasswordUseCaseResponse> {
     const employee = await this.employeeRepository.findById(adminId)
 
     if (!employee) return left(new ResourceNotFound())
