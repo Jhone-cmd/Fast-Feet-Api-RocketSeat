@@ -16,7 +16,7 @@ describe('On Change Password', () => {
     sut = new OnchangePasswordUseCase(inMemoryEmployeeRepository, fakerHasher)
   })
 
-  it('should be able to onchange password', async () => {
+  it('should be able to on change password', async () => {
     await inMemoryEmployeeRepository.create(
       makeEmployee(
         {
@@ -47,7 +47,7 @@ describe('On Change Password', () => {
     })
   })
 
-  it('should not be able to onchange password without admin permission', async () => {
+  it('should not be able to on change password without admin permission', async () => {
     await inMemoryEmployeeRepository.create(
       makeEmployee({}, new UniqueEntityId('employee-1'))
     )
