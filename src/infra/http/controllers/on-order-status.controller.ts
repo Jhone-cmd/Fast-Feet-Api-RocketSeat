@@ -1,6 +1,7 @@
+import { ResourceNotFound } from '@/core/errors/error/resource-not-found'
 import { JwtAuthGuard } from '@/infra/auth/jwt-auth.guard'
-import { PrismaService } from '@/infra/database/prisma/prisma.service'
 import {
+  BadRequestException,
   Body,
   Controller,
   HttpCode,
@@ -9,6 +10,7 @@ import {
   UseGuards,
 } from '@nestjs/common'
 import { z } from 'zod'
+import { NestOnOrderStatusUseCase } from '../nest-use-cases/nest-on-order-status-use-case'
 import { ZodValidationPipe } from '../pipes/zod-validation-pipe'
 
 const onOrderStatusBodySchema = z.object({
@@ -23,7 +25,7 @@ type OnOrderStatusBodySchema = z.infer<typeof onOrderStatusBodySchema>
 
 @Controller('/orders/:orderId/status')
 export class OnOrderStatusController {
-  constructor(private prisma: PrismaService) {}
+  constructor(private nestOnOrderStatus: NestOnOrderStatusUseCase) {}
 
   @Patch()
   @HttpCode(204)
@@ -34,13 +36,20 @@ export class OnOrderStatusController {
   ) {
     const { status } = body
 
-    await this.prisma.orders.update({
-      where: {
-        id: orderId,
-      },
-      data: {
-        status,
-      },
+    const result = await this.nestOnOrderStatus.execute({
+      orderId,
+      status,
     })
+
+    if (result.isLeft()) {
+      const error = result.value
+
+      switch (error.constructor) {
+        case ResourceNotFound:
+          throw new BadRequestException(error.message)
+        default:
+          throw new BadRequestException()
+      }
+    }
   }
 }
