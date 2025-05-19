@@ -20,9 +20,6 @@ import { ZodValidationPipe } from '../pipes/zod-validation-pipe'
 const editOrderBodySchema = z.object({
   deliveryManId: z.string().uuid().optional(),
   name: z.string().optional(),
-  status: z
-    .enum(['waiting', 'withdrawal', 'returned', 'delivered'])
-    .default('waiting'),
 })
 
 const bodyValidationPipe = new ZodValidationPipe(editOrderBodySchema)
@@ -43,14 +40,13 @@ export class EditOrderController {
   ) {
     const adminId = account.sub
 
-    const { name, status, deliveryManId } = body
+    const { name, deliveryManId } = body
 
     const result = await this.nestEditOrder.execute({
       adminId,
       orderId,
       deliveryManId,
       name,
-      status,
     })
 
     if (result.isLeft()) {

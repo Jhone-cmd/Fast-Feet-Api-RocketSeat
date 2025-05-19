@@ -49,7 +49,6 @@ describe('Edit Order (E2E)', () => {
       .set('Authorization', `Bearer ${accessToken}`)
       .send({
         deliveryManId: deliveryMan.id.toString(),
-        status: 'withdrawal',
       })
 
     expect(response.statusCode).toBe(204)

@@ -20,7 +20,6 @@ import { ZodValidationPipe } from '../pipes/zod-validation-pipe'
 const editDeliveryManBodySchema = z.object({
   name: z.string().optional(),
   email: z.string().email().optional(),
-  password: z.string().optional(),
 })
 
 const bodyValidationPipe = new ZodValidationPipe(editDeliveryManBodySchema)
@@ -41,7 +40,7 @@ export class EditDeliveryManController {
   ) {
     const adminId = account.sub
 
-    const { name, email, password } = body
+    const { name, email } = body
 
     const result = await this.nestEditDeliveryMan.execute({
       adminId,

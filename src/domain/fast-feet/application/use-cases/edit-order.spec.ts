@@ -42,13 +42,11 @@ describe('Edit order', () => {
       adminId: 'employee-1',
       orderId: 'order-1',
       name: 'new name',
-      status: 'delivered',
     })
 
     expect(result.isRight).toBeTruthy()
     expect(inMemoryOrderRepository.items[0]).toMatchObject({
       name: 'new name',
-      status: 'delivered',
     })
   })
 
