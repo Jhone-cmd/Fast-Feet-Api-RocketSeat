@@ -35,7 +35,8 @@ model Accounts {
 
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime? @updatedAt @map("updated_at")
-  orders    Orders[]
+
+  orders Orders[]
 
   @@map("accounts")
 }
@@ -49,7 +50,9 @@ model Recipients {
 
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime? @updatedAt @map("updated_at")
-  orders    Orders[]
+
+  orders        Orders[]
+  notifications Notification[]
 
   @@map("recipients")
 }
@@ -87,4 +90,15 @@ model Attachments {
   order Orders? @relation(fields: [orderId], references: [id])
 
   @@map("attachments")
+}
+
+model Notification {
+  id          String    @id @default(uuid())
+  recipientId String    @map("recipient_id")
+  title       String
+  content     String
+  readAt      DateTime? @map("read_at")
+  createdAt   DateTime  @default(now()) @map("created_at")
+
+  recipient Recipients @relation(fields: [recipientId], references: [id])
 }
