@@ -10,7 +10,7 @@ import { waitFor } from 'test/utils/wait-for'
 import { AppModule } from '../../app.module'
 import { PrismaService } from '../../database/prisma/prisma.service'
 
-describe('On Order Status (E2E)', () => {
+describe('On Order Change Status - Notification (E2E)', () => {
   let app: INestApplication
   let prisma: PrismaService
   let jwt: JwtService
@@ -51,13 +51,13 @@ describe('On Order Status (E2E)', () => {
       })
 
     await waitFor(async () => {
-      const notificationOnDatabase = await prisma.notification.findFirst({
+      const notificationOnDatabase = await prisma.notifications.findFirst({
         where: {
           recipientId: recipient.id.toString(),
         },
       })
 
-      expect(notificationOnDatabase).toBeTruthy()
+      expect(notificationOnDatabase).not.toBeNull()
     })
   })
 })

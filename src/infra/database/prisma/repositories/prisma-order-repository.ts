@@ -1,3 +1,4 @@
+import { DomainEvents } from '@/core/events/domain-events'
 import { FindNearbyOrdersParams } from '@/core/repositories/find-nearby-orders-params'
 import { PaginationParams } from '@/core/repositories/pagination-params'
 import { OrderRepository } from '@/domain/fast-feet/application/repositories/order-repository'
@@ -87,6 +88,8 @@ export class PrismaOrderRepository implements OrderRepository {
       },
       data,
     })
+
+    DomainEvents.dispatchEventsForAggregate(order.id)
   }
 
   async delete(order: Order): Promise<void> {

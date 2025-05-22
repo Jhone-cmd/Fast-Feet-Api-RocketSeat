@@ -52,7 +52,7 @@ model Recipients {
   updatedAt DateTime? @updatedAt @map("updated_at")
 
   orders        Orders[]
-  notifications Notification[]
+  notifications Notifications[]
 
   @@map("recipients")
 }
@@ -92,7 +92,7 @@ model Attachments {
   @@map("attachments")
 }
 
-model Notification {
+model Notifications {
   id          String    @id @default(uuid())
   recipientId String    @map("recipient_id")
   title       String
@@ -101,4 +101,6 @@ model Notification {
   createdAt   DateTime  @default(now()) @map("created_at")
 
   recipient Recipients @relation(fields: [recipientId], references: [id])
+
+  @@map("notifications")
 }
