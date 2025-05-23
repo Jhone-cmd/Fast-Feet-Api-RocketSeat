@@ -5,6 +5,6 @@ import { NestSendNotificationUseCase } from './nest-use-cases/nest-send-notifica
 
 @Module({
   imports: [DatabaseModule],
-  providers: [NestSendNotificationUseCase, NestOnOrderChangeStatus],
+  providers: [NestOnOrderChangeStatus, NestSendNotificationUseCase],
 })
 export class EventsModule {}

@@ -57,7 +57,7 @@ describe('On Order Change Status - Notification (E2E)', () => {
         },
       })
 
-      expect(notificationOnDatabase).not.toBeNull()
+      expect(notificationOnDatabase).toBeTruthy()
     })
   })
 })
