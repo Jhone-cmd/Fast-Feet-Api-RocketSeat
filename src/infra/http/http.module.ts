@@ -17,6 +17,7 @@ import { FetchRecentOrdersController } from './controllers/fetch-recent-orders.c
 import { FetchRecipientsController } from './controllers/fetch-recipients.controller'
 import { OnChangePasswordController } from './controllers/on-change-password.controller'
 import { OnOrderStatusController } from './controllers/on-order-status.controller'
+import { ReadNotificationController } from './controllers/read-notification.controller'
 import { UploadCreateAttachmentController } from './controllers/upload-create-attachment.controller'
 import { NestCreateAccountUseCase } from './nest-use-cases/nest-create-account-use-case'
 import { NestCreateOrderUseCase } from './nest-use-cases/nest-create-order-use-case'
@@ -33,6 +34,7 @@ import { NestFetchRecentOrdersUseCase } from './nest-use-cases/nest-fetch-recent
 import { NestFetchRecipientsUseCase } from './nest-use-cases/nest-fetch-recipients-use-case'
 import { NestOnChangePasswordUseCase } from './nest-use-cases/nest-on-change-password-use-case'
 import { NestOnOrderStatusUseCase } from './nest-use-cases/nest-on-order-status-use-case'
+import { NestReadNotificationUseCase } from './nest-use-cases/nest-read-notification-use-case'
 import { NestUploadAndCreateAttachmentUseCase } from './nest-use-cases/nest-upload-create-attachment-use-case'
 import { StorageModule } from './storage/storage.module'
 
@@ -56,6 +58,7 @@ import { StorageModule } from './storage/storage.module'
     UploadCreateAttachmentController,
     OnChangePasswordController,
     OnOrderStatusController,
+    ReadNotificationController,
   ],
   providers: [
     NestCreateAccountUseCase,
@@ -74,6 +77,7 @@ import { StorageModule } from './storage/storage.module'
     NestUploadAndCreateAttachmentUseCase,
     NestOnChangePasswordUseCase,
     NestOnOrderStatusUseCase,
+    NestReadNotificationUseCase,
   ],
 })
 export class HttpModule {}
