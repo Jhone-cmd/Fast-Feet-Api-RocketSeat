@@ -13,6 +13,7 @@ import {
   UnauthorizedException,
   UseGuards,
 } from '@nestjs/common'
+import { ApiTags } from '@nestjs/swagger'
 import { z } from 'zod'
 import { NestOnChangePasswordUseCase } from '../nest-use-cases/nest-on-change-password-use-case'
 import { ZodValidationPipe } from '../pipes/zod-validation-pipe'
@@ -25,6 +26,7 @@ const bodyValidationPipe = new ZodValidationPipe(onChangePasswordBodySchema)
 
 type OnChangePasswordBodySchema = z.infer<typeof onChangePasswordBodySchema>
 
+@ApiTags('Accounts')
 @Controller('/accounts/:deliveryManId/change-password')
 export class OnChangePasswordController {
   constructor(private nestOnChangePassword: NestOnChangePasswordUseCase) {}

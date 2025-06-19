@@ -8,6 +8,7 @@ import {
   Post,
   UsePipes,
 } from '@nestjs/common'
+import { ApiTags } from '@nestjs/swagger'
 import { z } from 'zod'
 import { NestCreateAccountUseCase } from '../nest-use-cases/nest-create-account-use-case'
 import { ZodValidationPipe } from '../pipes/zod-validation-pipe'
@@ -21,7 +22,7 @@ const createAccountBodySchema = z.object({
 })
 
 type CreateAccountBodySchema = z.infer<typeof createAccountBodySchema>
-
+@ApiTags('Accounts')
 @Controller('/accounts')
 export class CreateAccountController {
   constructor(private nestCreateAccount: NestCreateAccountUseCase) {}

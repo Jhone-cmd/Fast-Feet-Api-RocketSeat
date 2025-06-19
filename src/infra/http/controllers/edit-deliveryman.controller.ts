@@ -13,6 +13,7 @@ import {
   UnauthorizedException,
   UseGuards,
 } from '@nestjs/common'
+import { ApiTags } from '@nestjs/swagger'
 import { z } from 'zod'
 import { NestEditDeliveryManUseCase } from '../nest-use-cases/nest-edit-deliveryman-use-case'
 import { ZodValidationPipe } from '../pipes/zod-validation-pipe'
@@ -26,6 +27,7 @@ const bodyValidationPipe = new ZodValidationPipe(editDeliveryManBodySchema)
 
 type EditDeliveryManBodySchema = z.infer<typeof editDeliveryManBodySchema>
 
+@ApiTags('Accounts')
 @Controller('/accounts/:deliverymanId')
 export class EditDeliveryManController {
   constructor(private nestEditDeliveryMan: NestEditDeliveryManUseCase) {}

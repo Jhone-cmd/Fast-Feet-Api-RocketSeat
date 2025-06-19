@@ -12,8 +12,10 @@ import {
   UnauthorizedException,
   UseGuards,
 } from '@nestjs/common'
+import { ApiTags } from '@nestjs/swagger'
 import { NestDeleteDeliveryManUseCase } from '../nest-use-cases/nest-delete-deliveryman-use-case'
 
+@ApiTags('Accounts')
 @Controller('/accounts/:deliveryManId')
 export class DeleteDeliveryManController {
   constructor(private nestDeleteDeliveryMan: NestDeleteDeliveryManUseCase) {}
