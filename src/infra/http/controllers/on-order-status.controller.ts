@@ -1,4 +1,5 @@
 import { ResourceNotFound } from '@/core/errors/error/resource-not-found'
+import { NotDeliveredOrder } from '@/domain/fast-feet/application/use-cases/errors/not-delivered-order'
 import { JwtAuthGuard } from '@/infra/auth/jwt-auth.guard'
 import {
   BadRequestException,
@@ -46,6 +47,8 @@ export class OnOrderStatusController {
 
       switch (error.constructor) {
         case ResourceNotFound:
+          throw new BadRequestException(error.message)
+        case NotDeliveredOrder:
           throw new BadRequestException(error.message)
         default:
           throw new BadRequestException()

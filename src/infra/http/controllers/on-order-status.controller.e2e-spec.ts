@@ -5,6 +5,7 @@ import { Test } from '@nestjs/testing'
 import request from 'supertest'
 import { AccountFactory } from 'test/factories/make-employee'
 import { OrderFactory } from 'test/factories/make-order'
+import { OrderAttachmentFactory } from 'test/factories/make-order-attachment'
 import { RecipientFactory } from 'test/factories/make-recipient'
 import { AppModule } from '../../app.module'
 import { PrismaService } from '../../database/prisma/prisma.service'
@@ -16,11 +17,17 @@ describe('On Order Status (E2E)', () => {
   let accountFactory: AccountFactory
   let recipientFactory: RecipientFactory
   let orderFactory: OrderFactory
+  let orderAttachmentFactory: OrderAttachmentFactory
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule, DatabaseModule],
-      providers: [AccountFactory, RecipientFactory, OrderFactory],
+      providers: [
+        AccountFactory,
+        RecipientFactory,
+        OrderFactory,
+        OrderAttachmentFactory,
+      ],
     }).compile()
 
     app = moduleRef.createNestApplication()
@@ -29,6 +36,7 @@ describe('On Order Status (E2E)', () => {
     accountFactory = moduleRef.get(AccountFactory)
     recipientFactory = moduleRef.get(RecipientFactory)
     orderFactory = moduleRef.get(OrderFactory)
+    orderAttachmentFactory = moduleRef.get(OrderAttachmentFactory)
     await app.init()
   })
 
@@ -42,11 +50,25 @@ describe('On Order Status (E2E)', () => {
       recipientId: recipient.id,
     })
 
+    const orderId = order.id
+
+    const result = await request(app.getHttpServer())
+      .post('/attachments')
+      .set('Authorization', `Bearer ${accessToken}`)
+      .attach('file', './test/e2e/order.jpg')
+
+    const { attachmentId } = result.body
+
+    await orderAttachmentFactory.makePrismaOrderAttachment({
+      attachmentId,
+      orderId,
+    })
+
     const response = await request(app.getHttpServer())
       .patch(`/orders/${order.id.toString()}/status`)
       .set('Authorization', `Bearer ${accessToken}`)
       .send({
-        status: 'returned',
+        status: 'delivered',
       })
 
     expect(response.statusCode).toBe(204)
