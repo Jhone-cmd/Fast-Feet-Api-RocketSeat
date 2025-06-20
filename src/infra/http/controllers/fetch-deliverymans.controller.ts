@@ -1,13 +1,6 @@
-import {
-  BadRequestException,
-  Controller,
-  Get,
-  Query,
-  UseGuards,
-} from '@nestjs/common'
+import { BadRequestException, Controller, Get, Query } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 import { z } from 'zod'
-import { JwtAuthGuard } from '../../auth/jwt-auth.guard'
 import { NestFetchDeliverymansUseCase } from '../nest-use-cases/nest-fetch-deliverymans-use-case'
 import { ZodValidationPipe } from '../pipes/zod-validation-pipe'
 import { DeliveryManPresenter } from '../presenters/deliveryman-presenter'
@@ -29,7 +22,6 @@ export class FetchDeliveryMansController {
   constructor(private nestFetchDeliverymans: NestFetchDeliverymansUseCase) {}
 
   @Get()
-  @UseGuards(JwtAuthGuard)
   async handle(@Query('page', queryValidationPipe) page: PageQueryParamSchema) {
     const result = await this.nestFetchDeliverymans.execute({ page })
 

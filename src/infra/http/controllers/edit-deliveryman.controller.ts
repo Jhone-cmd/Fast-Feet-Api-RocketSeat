@@ -1,8 +1,3 @@
-import { NotAllowed } from '@/core/errors/error/not-allowed'
-import { ResourceNotFound } from '@/core/errors/error/resource-not-found'
-import { CurrentAccount } from '@/infra/auth/current-account-decorator'
-import { JwtAuthGuard } from '@/infra/auth/jwt-auth.guard'
-import { AccountPayload } from '@/infra/auth/jwt.strategy'
 import {
   BadRequestException,
   Body,
@@ -13,8 +8,13 @@ import {
   UnauthorizedException,
   UseGuards,
 } from '@nestjs/common'
-import { ApiTags } from '@nestjs/swagger'
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger'
 import { z } from 'zod'
+import { NotAllowed } from '@/core/errors/error/not-allowed'
+import { ResourceNotFound } from '@/core/errors/error/resource-not-found'
+import { CurrentAccount } from '@/infra/auth/current-account-decorator'
+import { AccountPayload } from '@/infra/auth/jwt.strategy'
+import { JwtAuthGuard } from '@/infra/auth/jwt-auth.guard'
 import { NestEditDeliveryManUseCase } from '../nest-use-cases/nest-edit-deliveryman-use-case'
 import { ZodValidationPipe } from '../pipes/zod-validation-pipe'
 
@@ -28,6 +28,7 @@ const bodyValidationPipe = new ZodValidationPipe(editDeliveryManBodySchema)
 type EditDeliveryManBodySchema = z.infer<typeof editDeliveryManBodySchema>
 
 @ApiTags('Accounts')
+@ApiBearerAuth()
 @Controller('/accounts/:deliverymanId')
 export class EditDeliveryManController {
   constructor(private nestEditDeliveryMan: NestEditDeliveryManUseCase) {}

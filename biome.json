@@ -1,8 +1,5 @@
 {
     "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
-    "organizeImports": {
-      "enabled": true
-    },
     "formatter": {
       "indentStyle": "space",
       "indentWidth": 2,
@@ -36,7 +33,7 @@
       }
     },
     "files": {
-      "ignore": [
+      "experimentalScannerIgnores": [
         "node_modules"
       ]
     }

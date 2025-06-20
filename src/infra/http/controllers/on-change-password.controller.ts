@@ -1,8 +1,3 @@
-import { NotAllowed } from '@/core/errors/error/not-allowed'
-import { ResourceNotFound } from '@/core/errors/error/resource-not-found'
-import { CurrentAccount } from '@/infra/auth/current-account-decorator'
-import { JwtAuthGuard } from '@/infra/auth/jwt-auth.guard'
-import { AccountPayload } from '@/infra/auth/jwt.strategy'
 import {
   BadRequestException,
   Body,
@@ -13,8 +8,13 @@ import {
   UnauthorizedException,
   UseGuards,
 } from '@nestjs/common'
-import { ApiTags } from '@nestjs/swagger'
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger'
 import { z } from 'zod'
+import { NotAllowed } from '@/core/errors/error/not-allowed'
+import { ResourceNotFound } from '@/core/errors/error/resource-not-found'
+import { CurrentAccount } from '@/infra/auth/current-account-decorator'
+import { AccountPayload } from '@/infra/auth/jwt.strategy'
+import { JwtAuthGuard } from '@/infra/auth/jwt-auth.guard'
 import { NestOnChangePasswordUseCase } from '../nest-use-cases/nest-on-change-password-use-case'
 import { ZodValidationPipe } from '../pipes/zod-validation-pipe'
 
@@ -27,6 +27,7 @@ const bodyValidationPipe = new ZodValidationPipe(onChangePasswordBodySchema)
 type OnChangePasswordBodySchema = z.infer<typeof onChangePasswordBodySchema>
 
 @ApiTags('Accounts')
+@ApiBearerAuth()
 @Controller('/accounts/:deliveryManId/change-password')
 export class OnChangePasswordController {
   constructor(private nestOnChangePassword: NestOnChangePasswordUseCase) {}
