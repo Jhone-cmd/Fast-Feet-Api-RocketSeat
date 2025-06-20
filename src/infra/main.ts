@@ -14,6 +14,10 @@ async function bootstrap() {
       \n Entregadores podem gerenciar suas entregas atribuídas, acompanhar seu progresso e garantir entregas pontuais e precisas. Esta documentação fornece informações detalhadas sobre todos os endpoints disponíveis, formatos de requisição e resposta, métodos de autenticação e regras de negócio, capacitando desenvolvedores a integrar e aproveitar de forma transparente todas as capacidades da plataforma Fast Feet.     `)
     .setVersion('1.0')
     .addBearerAuth()
+    .addGlobalResponse({
+      status: 500,
+      description: 'Internal server error',
+    })
     .build()
   const documentFactory = () => SwaggerModule.createDocument(app, config)
   SwaggerModule.setup('api/docs', app, documentFactory)

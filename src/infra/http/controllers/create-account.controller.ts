@@ -1,4 +1,3 @@
-import { AccountAlreadyExists } from '@/domain/fast-feet/application/use-cases/errors/account-already-exists'
 import {
   BadRequestException,
   Body,
@@ -8,8 +7,15 @@ import {
   Post,
   UsePipes,
 } from '@nestjs/common'
-import { ApiTags } from '@nestjs/swagger'
+import {
+  ApiBody,
+  ApiCreatedResponse,
+  ApiProperty,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger'
 import { z } from 'zod'
+import { AccountAlreadyExists } from '@/domain/fast-feet/application/use-cases/errors/account-already-exists'
 import { NestCreateAccountUseCase } from '../nest-use-cases/nest-create-account-use-case'
 import { ZodValidationPipe } from '../pipes/zod-validation-pipe'
 
@@ -28,6 +34,15 @@ export class CreateAccountController {
   constructor(private nestCreateAccount: NestCreateAccountUseCase) {}
 
   @Post()
+  @ApiBody({
+    description: 'test',
+  })
+  @ApiCreatedResponse({ description: 'Sucesso na criação da conta.' })
+  @ApiResponse({
+    status: 409,
+    description: 'Conflito ao criar uma nova conta.',
+  })
+  @ApiResponse({ status: 400, description: 'Bad Request' })
   @HttpCode(201)
   @UsePipes(new ZodValidationPipe(createAccountBodySchema))
   async handle(@Body() body: CreateAccountBodySchema) {
