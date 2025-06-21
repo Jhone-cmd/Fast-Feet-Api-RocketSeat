@@ -7,18 +7,21 @@ import {
   UsePipes,
 } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
+import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger'
 import { compare } from 'bcryptjs'
 import { z } from 'zod'
 import { PrismaService } from '../../database/prisma/prisma.service'
+import { AuthenticateProperties } from '../api-properties/authenticate-properties'
 import { ZodValidationPipe } from '../pipes/zod-validation-pipe'
 
 const authenticateBodySchema = z.object({
   cpf: z.string().length(11),
-  password: z.string(),
+  password: z.string().min(8),
 })
 
 type AuthenticateBodySchema = z.infer<typeof authenticateBodySchema>
 
+@ApiTags('Authenticate')
 @Controller('/sessions')
 export class AuthenticateController {
   constructor(
@@ -27,6 +30,28 @@ export class AuthenticateController {
   ) {}
 
   @Post()
+  @ApiBody({
+    description:
+      'Provide the CPF and password to authenticate the account and generate the access token.',
+    type: AuthenticateProperties,
+    examples: {
+      authenticateExample: {
+        summary: 'Example for a authenticate account',
+        value: {
+          cpf: '12345678900',
+          password: 'adminpassword',
+        },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'access token.',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized. Invalid Credentials',
+  })
   @HttpCode(201)
   @UsePipes(new ZodValidationPipe(authenticateBodySchema))
   async handle(@Body() body: AuthenticateBodySchema) {
