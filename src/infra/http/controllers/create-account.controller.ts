@@ -10,24 +10,25 @@ import {
 import {
   ApiBody,
   ApiCreatedResponse,
-  ApiProperty,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger'
 import { z } from 'zod'
 import { AccountAlreadyExists } from '@/domain/fast-feet/application/use-cases/errors/account-already-exists'
+import { RegisterAccountProperties } from '../api-properties/register-account-properties'
 import { NestCreateAccountUseCase } from '../nest-use-cases/nest-create-account-use-case'
 import { ZodValidationPipe } from '../pipes/zod-validation-pipe'
 
 const createAccountBodySchema = z.object({
-  name: z.string(),
+  name: z.string().min(3),
   email: z.string().email(),
   cpf: z.string().length(11),
-  password: z.string(),
+  password: z.string().min(8),
   rule: z.enum(['admin', 'deliveryman']).default('deliveryman'),
 })
 
 type CreateAccountBodySchema = z.infer<typeof createAccountBodySchema>
+
 @ApiTags('Accounts')
 @Controller('/accounts')
 export class CreateAccountController {
@@ -35,12 +36,36 @@ export class CreateAccountController {
 
   @Post()
   @ApiBody({
-    description: 'test',
+    description:
+      'Provide account details to create a new user. CPF and email must be unique.',
+    type: RegisterAccountProperties,
+    examples: {
+      deliverymanExample: {
+        summary: 'Example for a deliveryman account',
+        value: {
+          name: 'deliveryman',
+          email: 'deliveryman@example.com',
+          cpf: '01234567890',
+          password: 'deliverymanpassword',
+          rule: 'deliveryman',
+        },
+      },
+      adminExample: {
+        summary: 'Example for an admin account',
+        value: {
+          name: 'admin',
+          email: 'admin@example.com',
+          cpf: '12345678900',
+          password: 'adminpassword',
+          rule: 'admin',
+        },
+      },
+    },
   })
-  @ApiCreatedResponse({ description: 'Sucesso na criação da conta.' })
+  @ApiCreatedResponse({ description: 'Account creation successful.' })
   @ApiResponse({
     status: 409,
-    description: 'Conflito ao criar uma nova conta.',
+    description: 'Conflict when creating a new account.',
   })
   @ApiResponse({ status: 400, description: 'Bad Request' })
   @HttpCode(201)
