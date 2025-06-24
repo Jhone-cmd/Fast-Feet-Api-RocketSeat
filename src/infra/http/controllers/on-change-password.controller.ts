@@ -8,13 +8,22 @@ import {
   UnauthorizedException,
   UseGuards,
 } from '@nestjs/common'
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger'
+import {
+  ApiBadRequestResponse,
+  ApiBearerAuth,
+  ApiBody,
+  ApiNoContentResponse,
+  ApiParam,
+  ApiTags,
+  ApiUnauthorizedResponse,
+} from '@nestjs/swagger'
 import { z } from 'zod'
 import { NotAllowed } from '@/core/errors/error/not-allowed'
 import { ResourceNotFound } from '@/core/errors/error/resource-not-found'
 import { CurrentAccount } from '@/infra/auth/current-account-decorator'
 import { AccountPayload } from '@/infra/auth/jwt.strategy'
 import { JwtAuthGuard } from '@/infra/auth/jwt-auth.guard'
+import { ChangeAccountPasswordProperties } from '../api-properties/change-account-password-properties'
 import { NestOnChangePasswordUseCase } from '../nest-use-cases/nest-on-change-password-use-case'
 import { ZodValidationPipe } from '../pipes/zod-validation-pipe'
 
@@ -33,6 +42,22 @@ export class OnChangePasswordController {
   constructor(private nestOnChangePassword: NestOnChangePasswordUseCase) {}
 
   @Patch()
+  @ApiBody({
+    description: 'Provide new password for updated',
+    type: ChangeAccountPasswordProperties,
+  })
+  @ApiNoContentResponse({
+    description: 'Changed Account Password Successfully.',
+  })
+  @ApiParam({
+    name: 'deliveryManId',
+    description:
+      'DeliverymanId parameter to check which account to change password.',
+  })
+  @ApiUnauthorizedResponse({
+    description: 'Unauthorized. Access restricted to administrator.',
+  })
+  @ApiBadRequestResponse({ description: 'Resource not found.' })
   @HttpCode(204)
   @UseGuards(JwtAuthGuard)
   async handle(

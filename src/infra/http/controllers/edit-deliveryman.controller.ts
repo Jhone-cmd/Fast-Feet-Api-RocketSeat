@@ -51,7 +51,7 @@ export class EditDeliveryManController {
   @ApiNoContentResponse({ description: 'Account Updated Successfully.' })
   @ApiParam({
     name: 'deliveryManId',
-    description: 'DeliverymanId parameter to check which account to delete.',
+    description: 'DeliverymanId parameter to check which account to update.',
   })
   @ApiUnauthorizedResponse({
     description: 'Unauthorized. Access restricted to administrator.',
