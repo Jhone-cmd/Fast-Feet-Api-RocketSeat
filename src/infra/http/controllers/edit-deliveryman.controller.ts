@@ -8,13 +8,22 @@ import {
   UnauthorizedException,
   UseGuards,
 } from '@nestjs/common'
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger'
+import {
+  ApiBadRequestResponse,
+  ApiBearerAuth,
+  ApiBody,
+  ApiNoContentResponse,
+  ApiParam,
+  ApiTags,
+  ApiUnauthorizedResponse,
+} from '@nestjs/swagger'
 import { z } from 'zod'
 import { NotAllowed } from '@/core/errors/error/not-allowed'
 import { ResourceNotFound } from '@/core/errors/error/resource-not-found'
 import { CurrentAccount } from '@/infra/auth/current-account-decorator'
 import { AccountPayload } from '@/infra/auth/jwt.strategy'
 import { JwtAuthGuard } from '@/infra/auth/jwt-auth.guard'
+import { EditAccountProperties } from '../api-properties/edit-account-properties'
 import { NestEditDeliveryManUseCase } from '../nest-use-cases/nest-edit-deliveryman-use-case'
 import { ZodValidationPipe } from '../pipes/zod-validation-pipe'
 
@@ -29,16 +38,30 @@ type EditDeliveryManBodySchema = z.infer<typeof editDeliveryManBodySchema>
 
 @ApiTags('Accounts')
 @ApiBearerAuth()
-@Controller('/accounts/:deliverymanId')
+@Controller('/accounts/:deliveryManId')
 export class EditDeliveryManController {
   constructor(private nestEditDeliveryMan: NestEditDeliveryManUseCase) {}
 
   @Put()
+  @ApiBody({
+    description: 'Provide name or email for updated',
+    type: EditAccountProperties,
+    required: false,
+  })
+  @ApiNoContentResponse({ description: 'Account Updated Successfully.' })
+  @ApiParam({
+    name: 'deliveryManId',
+    description: 'DeliverymanId parameter to check which account to delete.',
+  })
+  @ApiUnauthorizedResponse({
+    description: 'Unauthorized. Access restricted to administrator.',
+  })
+  @ApiBadRequestResponse({ description: 'Resource not found.' })
   @HttpCode(204)
   @UseGuards(JwtAuthGuard)
   async handle(
     @Body(bodyValidationPipe) body: EditDeliveryManBodySchema,
-    @Param('deliverymanId') deliverymanId: string,
+    @Param('deliveryManId') deliveryManId: string,
     @CurrentAccount() account: AccountPayload
   ) {
     const adminId = account.sub
@@ -47,7 +70,7 @@ export class EditDeliveryManController {
 
     const result = await this.nestEditDeliveryMan.execute({
       adminId,
-      deliveryManId: deliverymanId,
+      deliveryManId,
       name,
       email,
     })

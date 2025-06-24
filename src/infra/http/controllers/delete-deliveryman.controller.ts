@@ -10,9 +10,7 @@ import {
 import {
   ApiBadRequestResponse,
   ApiBearerAuth,
-  ApiMethodNotAllowedResponse,
   ApiNoContentResponse,
-  ApiNotFoundResponse,
   ApiParam,
   ApiTags,
   ApiUnauthorizedResponse,
