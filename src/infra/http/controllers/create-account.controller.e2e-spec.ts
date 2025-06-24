@@ -23,7 +23,7 @@ describe('Create Account (E2E)', () => {
       name: 'deliveryman',
       email: 'deliveryman@email.com',
       cpf: '12345678901',
-      password: '123456',
+      password: '123456789',
     })
 
     expect(response.statusCode).toBe(201)
