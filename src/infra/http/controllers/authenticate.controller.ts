@@ -7,7 +7,14 @@ import {
   UsePipes,
 } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
-import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger'
+import {
+  ApiAcceptedResponse,
+  ApiBody,
+  ApiMethodNotAllowedResponse,
+  ApiResponse,
+  ApiTags,
+  ApiUnauthorizedResponse,
+} from '@nestjs/swagger'
 import { compare } from 'bcryptjs'
 import { z } from 'zod'
 import { PrismaService } from '../../database/prisma/prisma.service'
@@ -44,13 +51,11 @@ export class AuthenticateController {
       },
     },
   })
-  @ApiResponse({
-    status: 200,
+  @ApiAcceptedResponse({
     description: 'access token.',
   })
-  @ApiResponse({
-    status: 401,
-    description: 'Unauthorized. Invalid Credentials',
+  @ApiUnauthorizedResponse({
+    description: 'Unauthorized. Invalid Credentials.',
   })
   @HttpCode(201)
   @UsePipes(new ZodValidationPipe(authenticateBodySchema))

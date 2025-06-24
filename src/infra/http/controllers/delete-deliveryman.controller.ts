@@ -1,8 +1,3 @@
-import { NotAllowed } from '@/core/errors/error/not-allowed'
-import { ResourceNotFound } from '@/core/errors/error/resource-not-found'
-import { CurrentAccount } from '@/infra/auth/current-account-decorator'
-import { JwtAuthGuard } from '@/infra/auth/jwt-auth.guard'
-import { AccountPayload } from '@/infra/auth/jwt.strategy'
 import {
   BadRequestException,
   Controller,
@@ -12,7 +7,21 @@ import {
   UnauthorizedException,
   UseGuards,
 } from '@nestjs/common'
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger'
+import {
+  ApiBadRequestResponse,
+  ApiBearerAuth,
+  ApiMethodNotAllowedResponse,
+  ApiNoContentResponse,
+  ApiNotFoundResponse,
+  ApiParam,
+  ApiTags,
+  ApiUnauthorizedResponse,
+} from '@nestjs/swagger'
+import { NotAllowed } from '@/core/errors/error/not-allowed'
+import { ResourceNotFound } from '@/core/errors/error/resource-not-found'
+import { CurrentAccount } from '@/infra/auth/current-account-decorator'
+import { AccountPayload } from '@/infra/auth/jwt.strategy'
+import { JwtAuthGuard } from '@/infra/auth/jwt-auth.guard'
 import { NestDeleteDeliveryManUseCase } from '../nest-use-cases/nest-delete-deliveryman-use-case'
 
 @ApiTags('Accounts')
@@ -22,6 +31,15 @@ export class DeleteDeliveryManController {
   constructor(private nestDeleteDeliveryMan: NestDeleteDeliveryManUseCase) {}
 
   @Delete()
+  @ApiNoContentResponse({ description: 'Account Deleted Successfully.' })
+  @ApiParam({
+    name: 'deliveryManId',
+    description: 'DeliverymanId parameter to check which account to delete.',
+  })
+  @ApiUnauthorizedResponse({
+    description: 'Unauthorized. Access restricted to administrator.',
+  })
+  @ApiBadRequestResponse({ description: 'Resource not found.' })
   @HttpCode(204)
   @UseGuards(JwtAuthGuard)
   async handle(

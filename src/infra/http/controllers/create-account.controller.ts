@@ -8,8 +8,11 @@ import {
   UsePipes,
 } from '@nestjs/common'
 import {
+  ApiBadRequestResponse,
   ApiBody,
+  ApiConflictResponse,
   ApiCreatedResponse,
+  ApiMethodNotAllowedResponse,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger'
@@ -62,12 +65,11 @@ export class CreateAccountController {
       },
     },
   })
-  @ApiCreatedResponse({ description: 'Account creation successful.' })
-  @ApiResponse({
-    status: 409,
+  @ApiCreatedResponse({ description: 'Account Creation Successful.' })
+  @ApiConflictResponse({
     description: 'Conflict when creating a new account.',
   })
-  @ApiResponse({ status: 400, description: 'Bad Request' })
+  @ApiBadRequestResponse({ description: 'Bad Request.' })
   @HttpCode(201)
   @UsePipes(new ZodValidationPipe(createAccountBodySchema))
   async handle(@Body() body: CreateAccountBodySchema) {
