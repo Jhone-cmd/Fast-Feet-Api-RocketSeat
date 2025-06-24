@@ -8,13 +8,22 @@ import {
   UnauthorizedException,
   UseGuards,
 } from '@nestjs/common'
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger'
+import {
+  ApiBadRequestResponse,
+  ApiBearerAuth,
+  ApiBody,
+  ApiNoContentResponse,
+  ApiParam,
+  ApiTags,
+  ApiUnauthorizedResponse,
+} from '@nestjs/swagger'
 import { z } from 'zod'
 import { NotAllowed } from '@/core/errors/error/not-allowed'
 import { ResourceNotFound } from '@/core/errors/error/resource-not-found'
 import { CurrentAccount } from '@/infra/auth/current-account-decorator'
 import { AccountPayload } from '@/infra/auth/jwt.strategy'
 import { JwtAuthGuard } from '@/infra/auth/jwt-auth.guard'
+import { EditRecipientProperties } from '../api-properties/edit-recipient-properties'
 import { NestEditRecipientUseCase } from '../nest-use-cases/nest-edit-recipient-use-case'
 import { ZodValidationPipe } from '../pipes/zod-validation-pipe'
 
@@ -34,6 +43,20 @@ export class EditRecipientController {
   constructor(private nestEditRecipient: NestEditRecipientUseCase) {}
 
   @Put()
+  @ApiBody({
+    description: 'Provide name or email for updated',
+    type: EditRecipientProperties,
+    required: false,
+  })
+  @ApiNoContentResponse({ description: 'Recipient Updated Successfully.' })
+  @ApiParam({
+    name: 'recipientId',
+    description: 'recipientId parameter to check which recipient to update.',
+  })
+  @ApiUnauthorizedResponse({
+    description: 'Unauthorized. Access restricted to administrator.',
+  })
+  @ApiBadRequestResponse({ description: 'Resource not found.' })
   @HttpCode(204)
   @UseGuards(JwtAuthGuard)
   async handle(
