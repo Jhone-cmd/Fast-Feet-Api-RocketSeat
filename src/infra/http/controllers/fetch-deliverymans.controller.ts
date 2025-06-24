@@ -5,7 +5,14 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common'
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger'
+import {
+  ApiBadRequestResponse,
+  ApiBearerAuth,
+  ApiOkResponse,
+  ApiQuery,
+  ApiTags,
+  ApiUnauthorizedResponse,
+} from '@nestjs/swagger'
 import { z } from 'zod'
 import { JwtAuthGuard } from '@/infra/auth/jwt-auth.guard'
 import { NestFetchDeliverymansUseCase } from '../nest-use-cases/nest-fetch-deliverymans-use-case'
@@ -30,6 +37,29 @@ export class FetchDeliveryMansController {
   constructor(private nestFetchDeliverymans: NestFetchDeliverymansUseCase) {}
 
   @Get()
+  @ApiOkResponse({
+    description: 'List of Deliverymans.',
+    example: {
+      deliverymans: [
+        {
+          id: 'b218cd6f-24ab-44f2-84vb-eb5a074065b9',
+          name: 'deliveryman',
+          email: 'deliveryman@example.com',
+          cpf: '01234567890',
+          rule: 'deliveryman',
+        },
+      ],
+    },
+  })
+  @ApiQuery({
+    name: 'page',
+    default: 1,
+    required: false,
+  })
+  @ApiUnauthorizedResponse({
+    description: 'Unauthorized. Access restricted to administrator.',
+  })
+  @ApiBadRequestResponse({ description: 'Bad Request.' })
   @UseGuards(JwtAuthGuard)
   async handle(@Query('page', queryValidationPipe) page: PageQueryParamSchema) {
     const result = await this.nestFetchDeliverymans.execute({ page })
