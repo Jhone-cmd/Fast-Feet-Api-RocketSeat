@@ -5,6 +5,7 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common'
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger'
 import { z } from 'zod'
 import { JwtAuthGuard } from '../../auth/jwt-auth.guard'
 import { NestFetchRecipientsUseCase } from '../nest-use-cases/nest-fetch-recipients-use-case'
@@ -21,7 +22,8 @@ const pageQueryParamSchema = z
 const queryValidationPipe = new ZodValidationPipe(pageQueryParamSchema)
 
 type PageQueryParamSchema = z.infer<typeof pageQueryParamSchema>
-
+@ApiTags('Recipients')
+@ApiBearerAuth()
 @Controller('/accounts/recipients')
 export class FetchRecipientsController {
   constructor(private nestFetchRecipients: NestFetchRecipientsUseCase) {}

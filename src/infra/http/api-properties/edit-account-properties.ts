@@ -5,6 +5,7 @@ export class EditAccountProperties {
     description: 'Name of the account',
     example: 'john doe',
     minLength: 3,
+    required: false,
   })
   name!: string
 
@@ -12,6 +13,7 @@ export class EditAccountProperties {
     description: 'Account email address (must be unique)',
     example: 'johndoe@example.com',
     format: 'email',
+    required: false,
   })
   email!: string
 }

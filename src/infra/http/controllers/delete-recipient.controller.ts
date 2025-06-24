@@ -1,8 +1,3 @@
-import { NotAllowed } from '@/core/errors/error/not-allowed'
-import { ResourceNotFound } from '@/core/errors/error/resource-not-found'
-import { CurrentAccount } from '@/infra/auth/current-account-decorator'
-import { JwtAuthGuard } from '@/infra/auth/jwt-auth.guard'
-import { AccountPayload } from '@/infra/auth/jwt.strategy'
 import {
   BadRequestException,
   Controller,
@@ -12,8 +7,16 @@ import {
   UnauthorizedException,
   UseGuards,
 } from '@nestjs/common'
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger'
+import { NotAllowed } from '@/core/errors/error/not-allowed'
+import { ResourceNotFound } from '@/core/errors/error/resource-not-found'
+import { CurrentAccount } from '@/infra/auth/current-account-decorator'
+import { AccountPayload } from '@/infra/auth/jwt.strategy'
+import { JwtAuthGuard } from '@/infra/auth/jwt-auth.guard'
 import { NestDeleteRecipientUseCase } from '../nest-use-cases/nest-delete-recipient-use-case'
 
+@ApiTags('Recipients')
+@ApiBearerAuth()
 @Controller('/recipients/:recipientId')
 export class DeleteRecipientController {
   constructor(private nestDeleteRecipient: NestDeleteRecipientUseCase) {}
