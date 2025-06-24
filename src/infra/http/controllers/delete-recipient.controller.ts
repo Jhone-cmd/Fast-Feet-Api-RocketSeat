@@ -7,7 +7,14 @@ import {
   UnauthorizedException,
   UseGuards,
 } from '@nestjs/common'
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger'
+import {
+  ApiBadRequestResponse,
+  ApiBearerAuth,
+  ApiNoContentResponse,
+  ApiParam,
+  ApiTags,
+  ApiUnauthorizedResponse,
+} from '@nestjs/swagger'
 import { NotAllowed } from '@/core/errors/error/not-allowed'
 import { ResourceNotFound } from '@/core/errors/error/resource-not-found'
 import { CurrentAccount } from '@/infra/auth/current-account-decorator'
@@ -22,6 +29,15 @@ export class DeleteRecipientController {
   constructor(private nestDeleteRecipient: NestDeleteRecipientUseCase) {}
 
   @Delete()
+  @ApiNoContentResponse({ description: 'Recipient Deleted Successfully.' })
+  @ApiParam({
+    name: 'recipientId',
+    description: 'recipientId parameter to check which recipient to delete.',
+  })
+  @ApiUnauthorizedResponse({
+    description: 'Unauthorized. Access restricted to administrator.',
+  })
+  @ApiBadRequestResponse({ description: 'Resource not found.' })
   @HttpCode(204)
   @UseGuards(JwtAuthGuard)
   async handle(

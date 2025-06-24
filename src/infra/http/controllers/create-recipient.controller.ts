@@ -15,6 +15,7 @@ import {
   ApiConflictResponse,
   ApiCreatedResponse,
   ApiTags,
+  ApiUnauthorizedResponse,
 } from '@nestjs/swagger'
 import { z } from 'zod'
 import { NotAllowed } from '@/core/errors/error/not-allowed'
@@ -64,6 +65,9 @@ export class CreateRecipientController {
   @ApiCreatedResponse({ description: 'Recipient Creation Successful.' })
   @ApiConflictResponse({
     description: 'Conflict when creating a new recipient.',
+  })
+  @ApiUnauthorizedResponse({
+    description: 'Unauthorized. Access restricted to administrator.',
   })
   @ApiBadRequestResponse({ description: 'Bad Request.' })
   @HttpCode(201)
