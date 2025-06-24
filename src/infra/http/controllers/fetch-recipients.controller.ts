@@ -5,7 +5,14 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common'
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger'
+import {
+  ApiBadRequestResponse,
+  ApiBearerAuth,
+  ApiOkResponse,
+  ApiQuery,
+  ApiTags,
+  ApiUnauthorizedResponse,
+} from '@nestjs/swagger'
 import { z } from 'zod'
 import { JwtAuthGuard } from '../../auth/jwt-auth.guard'
 import { NestFetchRecipientsUseCase } from '../nest-use-cases/nest-fetch-recipients-use-case'
@@ -29,6 +36,29 @@ export class FetchRecipientsController {
   constructor(private nestFetchRecipients: NestFetchRecipientsUseCase) {}
 
   @Get()
+  @ApiOkResponse({
+    description: 'List of Recipients.',
+    example: {
+      recipients: [
+        {
+          id: 'b218cd7f-24ef-55f2-84vb-eb5b274065b9',
+          name: 'recipient',
+          cpf: '01234567890',
+          phone: '55 94561-6547',
+          address: 'DC Street Left',
+        },
+      ],
+    },
+  })
+  @ApiQuery({
+    name: 'page',
+    default: 1,
+    required: false,
+  })
+  @ApiUnauthorizedResponse({
+    description: 'Unauthorized. Access restricted to administrator.',
+  })
+  @ApiBadRequestResponse({ description: 'Bad Request.' })
   @UseGuards(JwtAuthGuard)
   async handle(@Query('page', queryValidationPipe) page: PageQueryParamSchema) {
     const result = await this.nestFetchRecipients.execute({ page })
