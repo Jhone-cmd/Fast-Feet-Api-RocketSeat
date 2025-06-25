@@ -48,7 +48,7 @@ export class CreateRecipientController {
   @Post()
   @ApiBody({
     description:
-      'Provide recipient details to create a new user. CPF must be unique.',
+      'Provide recipient details to create a new recipient. CPF must be unique.',
     type: CreateRecipientProperties,
     examples: {
       recipientExample: {
