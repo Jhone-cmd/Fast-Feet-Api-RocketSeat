@@ -3,7 +3,7 @@ import { ApiProperty } from '@nestjs/swagger'
 export class CreateOrderProperties {
   @ApiProperty({
     description: 'Name of order',
-    example: '',
+    example: 'Order Box',
     minLength: 3,
   })
   name!: string

@@ -44,7 +44,7 @@ export class EditRecipientController {
 
   @Put()
   @ApiBody({
-    description: 'Provide name or email for updated',
+    description: 'Provide name, address or phone for updated',
     type: EditRecipientProperties,
     required: false,
   })
