@@ -5,6 +5,7 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common'
+import { ApiTags } from '@nestjs/swagger'
 import { z } from 'zod'
 import { JwtAuthGuard } from '../../auth/jwt-auth.guard'
 import { NestFetchRecentOrdersUseCase } from '../nest-use-cases/nest-fetch-recent-orders-use-case'
@@ -21,7 +22,7 @@ const pageQueryParamSchema = z
 const queryValidationPipe = new ZodValidationPipe(pageQueryParamSchema)
 
 type PageQueryParamSchema = z.infer<typeof pageQueryParamSchema>
-
+@ApiTags('Orders')
 @Controller('/orders')
 export class FetchRecentOrdersController {
   constructor(private nestFetchRecentOrders: NestFetchRecentOrdersUseCase) {}

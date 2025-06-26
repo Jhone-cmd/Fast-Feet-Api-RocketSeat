@@ -1,8 +1,3 @@
-import { NotAllowed } from '@/core/errors/error/not-allowed'
-import { ResourceNotFound } from '@/core/errors/error/resource-not-found'
-import { CurrentAccount } from '@/infra/auth/current-account-decorator'
-import { JwtAuthGuard } from '@/infra/auth/jwt-auth.guard'
-import { AccountPayload } from '@/infra/auth/jwt.strategy'
 import {
   BadRequestException,
   Body,
@@ -13,7 +8,13 @@ import {
   UnauthorizedException,
   UseGuards,
 } from '@nestjs/common'
+import { ApiTags } from '@nestjs/swagger'
 import { z } from 'zod'
+import { NotAllowed } from '@/core/errors/error/not-allowed'
+import { ResourceNotFound } from '@/core/errors/error/resource-not-found'
+import { CurrentAccount } from '@/infra/auth/current-account-decorator'
+import { AccountPayload } from '@/infra/auth/jwt.strategy'
+import { JwtAuthGuard } from '@/infra/auth/jwt-auth.guard'
 import { NestEditOrderUseCase } from '../nest-use-cases/nest-edit-order-use-case'
 import { ZodValidationPipe } from '../pipes/zod-validation-pipe'
 
@@ -25,7 +26,7 @@ const editOrderBodySchema = z.object({
 const bodyValidationPipe = new ZodValidationPipe(editOrderBodySchema)
 
 type EditOrderBodySchema = z.infer<typeof editOrderBodySchema>
-
+@ApiTags('Orders')
 @Controller('/orders/:orderId')
 export class EditOrderController {
   constructor(private nestEditOrder: NestEditOrderUseCase) {}

@@ -1,4 +1,3 @@
-import { JwtAuthGuard } from '@/infra/auth/jwt-auth.guard'
 import {
   BadRequestException,
   Body,
@@ -7,7 +6,9 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common'
+import { ApiTags } from '@nestjs/swagger'
 import { z } from 'zod'
+import { JwtAuthGuard } from '@/infra/auth/jwt-auth.guard'
 import { NestFetchNearbyOrdersUseCase } from '../nest-use-cases/nest-fetch-nearby-orders-use-case'
 import { ZodValidationPipe } from '../pipes/zod-validation-pipe'
 import { OrderPresenter } from '../presenters/order-presenter'
@@ -29,7 +30,7 @@ const queryValidationPipe = new ZodValidationPipe(pageQueryParamSchema)
 
 type FetchNearbyOrdersBodySchema = z.infer<typeof fetchNearbyOrdersBodySchema>
 type PageQueryParamSchema = z.infer<typeof pageQueryParamSchema>
-
+@ApiTags('Orders')
 @Controller('/orders/nearby')
 export class FetchNearbyOrdersController {
   constructor(private nestFetchNearbyOrders: NestFetchNearbyOrdersUseCase) {}

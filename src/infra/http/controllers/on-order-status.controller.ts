@@ -1,6 +1,3 @@
-import { ResourceNotFound } from '@/core/errors/error/resource-not-found'
-import { NotDeliveredOrder } from '@/domain/fast-feet/application/use-cases/errors/not-delivered-order'
-import { JwtAuthGuard } from '@/infra/auth/jwt-auth.guard'
 import {
   BadRequestException,
   Body,
@@ -10,7 +7,11 @@ import {
   Patch,
   UseGuards,
 } from '@nestjs/common'
+import { ApiTags } from '@nestjs/swagger'
 import { z } from 'zod'
+import { ResourceNotFound } from '@/core/errors/error/resource-not-found'
+import { NotDeliveredOrder } from '@/domain/fast-feet/application/use-cases/errors/not-delivered-order'
+import { JwtAuthGuard } from '@/infra/auth/jwt-auth.guard'
 import { NestOnOrderStatusUseCase } from '../nest-use-cases/nest-on-order-status-use-case'
 import { ZodValidationPipe } from '../pipes/zod-validation-pipe'
 
@@ -23,7 +24,7 @@ const onOrderStatusBodySchema = z.object({
 const bodyValidationPipe = new ZodValidationPipe(onOrderStatusBodySchema)
 
 type OnOrderStatusBodySchema = z.infer<typeof onOrderStatusBodySchema>
-
+@ApiTags('Orders')
 @Controller('/orders/:orderId/status')
 export class OnOrderStatusController {
   constructor(private nestOnOrderStatus: NestOnOrderStatusUseCase) {}
