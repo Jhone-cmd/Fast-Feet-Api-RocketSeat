@@ -6,6 +6,7 @@ import {
   UseGuards,
 } from '@nestjs/common'
 import {
+  ApiBadRequestResponse,
   ApiBearerAuth,
   ApiOkResponse,
   ApiQuery,
@@ -36,9 +37,9 @@ export class FetchRecentOrdersController {
 
   @Get()
   @ApiOkResponse({
-    description: 'List of Recipients.',
+    description: 'List of Orders.',
     example: {
-      recipients: [
+      orders: [
         {
           id: '81c99058-4e30-41f9-b18b-ac7c48a966de',
           name: 'order 1',
@@ -58,6 +59,7 @@ export class FetchRecentOrdersController {
     default: 1,
     required: false,
   })
+  @ApiBadRequestResponse({ description: 'Bad Request.' })
   @UseGuards(JwtAuthGuard)
   async handle(@Query('page', queryValidationPipe) page: PageQueryParamSchema) {
     const result = await this.nestFetchRecentOrders.execute({ page })
