@@ -4,6 +4,7 @@ import {
   Delete,
   HttpCode,
   Param,
+  Query,
   UnauthorizedException,
   UseGuards,
 } from '@nestjs/common'
@@ -12,6 +13,7 @@ import {
   ApiBearerAuth,
   ApiNoContentResponse,
   ApiParam,
+  ApiQuery,
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger'
@@ -20,6 +22,7 @@ import { ResourceNotFound } from '@/core/errors/error/resource-not-found'
 import { CurrentAccount } from '@/infra/auth/current-account-decorator'
 import { AccountPayload } from '@/infra/auth/jwt.strategy'
 import { JwtAuthGuard } from '@/infra/auth/jwt-auth.guard'
+import { AccountRole } from '../api-properties/account-role-properties'
 import { NestDeleteDeliveryManUseCase } from '../nest-use-cases/nest-delete-deliveryman-use-case'
 
 @ApiTags('Accounts')
@@ -34,6 +37,10 @@ export class DeleteDeliveryManController {
     name: 'deliveryManId',
     description: 'DeliverymanId parameter to check which account to delete.',
   })
+  @ApiQuery({
+    name: 'role',
+    enum: AccountRole,
+  })
   @ApiUnauthorizedResponse({
     description: 'Unauthorized. Access restricted to administrator.',
   })
@@ -42,9 +49,16 @@ export class DeleteDeliveryManController {
   @UseGuards(JwtAuthGuard)
   async handle(
     @Param('deliveryManId') deliveryManId: string,
-    @CurrentAccount() account: AccountPayload
+    @Query('role') role: AccountRole,
+    @CurrentAccount()
+    account: AccountPayload
   ) {
     const adminId = account.sub
+    if (role !== 'Admin') {
+      throw new UnauthorizedException(
+        'Unauthorized. Access restricted to administrator.'
+      )
+    }
     const result = await this.nestDeleteDeliveryMan.execute({
       adminId,
       deliveryManId,
