@@ -7,8 +7,6 @@ export class OrderPresenter {
       name: order.name,
       slug: order.slug.value.toString(),
       status: order.status,
-      latitude: order.latitude,
-      longitude: order.longitude,
     }
   }
 }

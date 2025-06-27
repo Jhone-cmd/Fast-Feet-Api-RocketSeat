@@ -17,7 +17,7 @@ import { z } from 'zod'
 import { JwtAuthGuard } from '../../auth/jwt-auth.guard'
 import { NestFetchRecentOrdersUseCase } from '../nest-use-cases/nest-fetch-recent-orders-use-case'
 import { ZodValidationPipe } from '../pipes/zod-validation-pipe'
-import { OrderPresenter } from '../presenters/order-presenter'
+import { OrderDetailsPresenter } from '../presenters/order-details-presenter'
 
 const pageQueryParamSchema = z
   .string()
@@ -70,6 +70,6 @@ export class FetchRecentOrdersController {
 
     const orders = result.value.orders
 
-    return { orders: orders.map(OrderPresenter.toHttp) }
+    return { orders: orders.map(OrderDetailsPresenter.toHttp) }
   }
 }

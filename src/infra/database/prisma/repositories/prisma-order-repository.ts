@@ -1,9 +1,9 @@
+import { Injectable } from '@nestjs/common'
 import { DomainEvents } from '@/core/events/domain-events'
 import { FindNearbyOrdersParams } from '@/core/repositories/find-nearby-orders-params'
 import { PaginationParams } from '@/core/repositories/pagination-params'
 import { OrderRepository } from '@/domain/fast-feet/application/repositories/order-repository'
 import { Order } from '@/domain/fast-feet/enterprise/entities/order'
-import { Injectable } from '@nestjs/common'
 import { PrismaOrderMapper } from '../mappers/prisma-order-mapper'
 import { PrismaService } from '../prisma.service'
 

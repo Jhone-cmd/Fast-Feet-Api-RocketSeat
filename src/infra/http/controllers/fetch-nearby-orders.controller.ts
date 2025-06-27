@@ -2,7 +2,6 @@ import {
   BadRequestException,
   Controller,
   Get,
-  Param,
   Query,
   UseGuards,
 } from '@nestjs/common'
@@ -10,7 +9,6 @@ import {
   ApiBadRequestResponse,
   ApiBearerAuth,
   ApiOkResponse,
-  ApiParam,
   ApiQuery,
   ApiTags,
   ApiUnauthorizedResponse,
@@ -22,38 +20,42 @@ import { NestFetchNearbyOrdersUseCase } from '../nest-use-cases/nest-fetch-nearb
 import { ZodValidationPipe } from '../pipes/zod-validation-pipe'
 import { OrderPresenter } from '../presenters/order-presenter'
 
-const fetchNearbyOrdersParamSchema = z.object({
+const fetchNearbyOrdersQueryParamSchema = z.object({
   latitude: z.coerce.number(),
   longitude: z.coerce.number(),
+  page: z
+    .string()
+    .optional()
+    .default('1')
+    .transform(Number)
+    .pipe(z.number().min(1)),
 })
 
-const pageQueryParamSchema = z
-  .string()
-  .optional()
-  .default('1')
-  .transform(Number)
-  .pipe(z.number().min(1))
+// const pageQueryParamSchema = z
+//   .string()
+//   .optional()
+//   .default('1')
+//   .transform(Number)
+//   .pipe(z.number().min(1))
 
-const paramValidationPipe = new ZodValidationPipe(fetchNearbyOrdersParamSchema)
-const queryValidationPipe = new ZodValidationPipe(pageQueryParamSchema)
+// const paramValidationPipe = new ZodValidationPipe(
+//   fetchNearbyOrdersQueryParamSchema
+// )
+const queryValidationPipe = new ZodValidationPipe(
+  fetchNearbyOrdersQueryParamSchema
+)
 
-type FetchNearbyOrdersParamSchema = z.infer<typeof fetchNearbyOrdersParamSchema>
-type PageQueryParamSchema = z.infer<typeof pageQueryParamSchema>
+type FetchNearbyOrdersQueryParamSchema = z.infer<
+  typeof fetchNearbyOrdersQueryParamSchema
+>
+// type PageQueryParamSchema = z.infer<typeof pageQueryParamSchema>
 @ApiTags('Orders')
 @ApiBearerAuth()
-@Controller('/orders/nearby/:latitude/:longitude')
+@Controller('/orders/nearby/')
 export class FetchNearbyOrdersController {
   constructor(private nestFetchNearbyOrders: NestFetchNearbyOrdersUseCase) {}
 
   @Get()
-  @ApiParam({
-    name: 'latitude',
-    description: 'The latitude of the user for fetching nearby orders.',
-  })
-  @ApiParam({
-    name: 'longitude',
-    description: 'The longitude of the user for fetching nearby orders.',
-  })
   @ApiOkResponse({
     description: 'List of Orders.',
     example: {
@@ -63,14 +65,20 @@ export class FetchNearbyOrdersController {
           name: 'order 1',
           slug: 'order-1',
           status: 'waiting',
-          latitude: -15.8466048,
-          longitude: -48.0247808,
         },
       ],
     },
   })
   @ApiUnauthorizedResponse({
     description: 'Unauthorized. Access restricted.',
+  })
+  @ApiQuery({
+    name: 'latitude',
+    default: -15.8466048,
+  })
+  @ApiQuery({
+    name: 'longitude',
+    default: -48.0247808,
   })
   @ApiQuery({
     name: 'page',
@@ -80,11 +88,11 @@ export class FetchNearbyOrdersController {
   @ApiBadRequestResponse({ description: 'Bad Request.' })
   @UseGuards(JwtAuthGuard)
   async handle(
-    @Param(paramValidationPipe) {
+    @Query(queryValidationPipe) {
+      page,
       latitude,
       longitude,
-    }: FetchNearbyOrdersParamSchema,
-    @Query('page', queryValidationPipe) page: PageQueryParamSchema
+    }: FetchNearbyOrdersQueryParamSchema
   ) {
     const result = await this.nestFetchNearbyOrders.execute({
       userLatitude: latitude,
