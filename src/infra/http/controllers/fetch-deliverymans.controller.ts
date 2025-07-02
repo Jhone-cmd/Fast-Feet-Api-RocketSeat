@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   Query,
+  UnauthorizedException,
   UseGuards,
 } from '@nestjs/common'
 import {
@@ -15,6 +16,7 @@ import {
 } from '@nestjs/swagger'
 import { z } from 'zod'
 import { JwtAuthGuard } from '@/infra/auth/jwt-auth.guard'
+import { AccountRole } from '../api-properties/account-role-properties'
 import { NestFetchDeliverymansUseCase } from '../nest-use-cases/nest-fetch-deliverymans-use-case'
 import { ZodValidationPipe } from '../pipes/zod-validation-pipe'
 import { DeliveryManPresenter } from '../presenters/deliveryman-presenter'
@@ -56,12 +58,25 @@ export class FetchDeliveryMansController {
     default: 1,
     required: false,
   })
+  @ApiQuery({
+    name: 'role',
+    enum: AccountRole,
+  })
   @ApiUnauthorizedResponse({
     description: 'Unauthorized. Access restricted to administrator.',
   })
   @ApiBadRequestResponse({ description: 'Bad Request.' })
   @UseGuards(JwtAuthGuard)
-  async handle(@Query('page', queryValidationPipe) page: PageQueryParamSchema) {
+  async handle(
+    @Query('page', queryValidationPipe) page: PageQueryParamSchema,
+    @Query('role') role: AccountRole
+  ) {
+    if (role !== 'Admin') {
+      throw new UnauthorizedException(
+        'Unauthorized. Access restricted to administrator.'
+      )
+    }
+
     const result = await this.nestFetchDeliverymans.execute({ page })
 
     if (result.isLeft()) {

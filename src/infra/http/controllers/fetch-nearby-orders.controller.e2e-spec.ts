@@ -1,5 +1,3 @@
-import { Slug } from '@/domain/fast-feet/enterprise/entities/value-objects/slug'
-import { DatabaseModule } from '@/infra/database/database.module'
 import { INestApplication } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { Test } from '@nestjs/testing'
@@ -7,6 +5,8 @@ import request from 'supertest'
 import { AccountFactory } from 'test/factories/make-employee'
 import { OrderFactory } from 'test/factories/make-order'
 import { RecipientFactory } from 'test/factories/make-recipient'
+import { Slug } from '@/domain/fast-feet/enterprise/entities/value-objects/slug'
+import { DatabaseModule } from '@/infra/database/database.module'
 import { AppModule } from '../../app.module'
 import { PrismaService } from '../../database/prisma/prisma.service'
 
@@ -56,12 +56,9 @@ describe('Fetch Nearby Orders (E2E)', () => {
     ])
 
     const response = await request(app.getHttpServer())
-      .get('/orders/nearby')
+      .get('/orders/nearby/?latitude=-16.0167985&longitude=-48.0722519')
       .set('Authorization', `Bearer ${accessToken}`)
-      .send({
-        userLatitude: -16.0167985,
-        userLongitude: -48.0722519,
-      })
+      .send()
 
     expect(response.statusCode).toBe(200)
     expect(response.body).toEqual({

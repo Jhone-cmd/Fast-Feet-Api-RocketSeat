@@ -5,6 +5,7 @@ import {
   HttpCode,
   Param,
   Patch,
+  Query,
   UnauthorizedException,
   UseGuards,
 } from '@nestjs/common'
@@ -14,6 +15,7 @@ import {
   ApiBody,
   ApiNoContentResponse,
   ApiParam,
+  ApiQuery,
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger'
@@ -23,6 +25,7 @@ import { ResourceNotFound } from '@/core/errors/error/resource-not-found'
 import { CurrentAccount } from '@/infra/auth/current-account-decorator'
 import { AccountPayload } from '@/infra/auth/jwt.strategy'
 import { JwtAuthGuard } from '@/infra/auth/jwt-auth.guard'
+import { AccountRole } from '../api-properties/account-role-properties'
 import { ChangeAccountPasswordProperties } from '../api-properties/change-account-password-properties'
 import { NestOnChangePasswordUseCase } from '../nest-use-cases/nest-on-change-password-use-case'
 import { ZodValidationPipe } from '../pipes/zod-validation-pipe'
@@ -54,6 +57,10 @@ export class OnChangePasswordController {
     description:
       'DeliverymanId parameter to check which account to change password.',
   })
+  @ApiQuery({
+    name: 'role',
+    enum: AccountRole,
+  })
   @ApiUnauthorizedResponse({
     description: 'Unauthorized. Access restricted to administrator.',
   })
@@ -63,8 +70,14 @@ export class OnChangePasswordController {
   async handle(
     @Body(bodyValidationPipe) body: OnChangePasswordBodySchema,
     @Param('deliveryManId') deliveryManId: string,
-    @CurrentAccount() account: AccountPayload
+    @CurrentAccount() account: AccountPayload,
+    @Query('role') role: AccountRole
   ) {
+    if (role !== 'Admin') {
+      throw new UnauthorizedException(
+        'Unauthorized. Access restricted to administrator.'
+      )
+    }
     const adminId = account.sub
 
     const { password } = body

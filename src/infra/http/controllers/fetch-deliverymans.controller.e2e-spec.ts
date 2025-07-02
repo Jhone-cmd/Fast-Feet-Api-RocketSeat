@@ -1,10 +1,10 @@
-import { CPF } from '@/domain/fast-feet/enterprise/entities/value-objects/cpf'
-import { DatabaseModule } from '@/infra/database/database.module'
 import { INestApplication } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { Test } from '@nestjs/testing'
 import request from 'supertest'
 import { AccountFactory } from 'test/factories/make-employee'
+import { CPF } from '@/domain/fast-feet/enterprise/entities/value-objects/cpf'
+import { DatabaseModule } from '@/infra/database/database.module'
 import { AppModule } from '../../app.module'
 import { PrismaService } from '../../database/prisma/prisma.service'
 
@@ -44,7 +44,7 @@ describe('Fetch Deliverymans (E2E)', () => {
     ])
 
     const response = await request(app.getHttpServer())
-      .get('/accounts/deliverymans')
+      .get('/accounts/deliverymans?role=Admin')
       .set('Authorization', `Bearer ${accessToken}`)
       .send()
 
