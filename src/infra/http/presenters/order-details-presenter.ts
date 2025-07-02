@@ -9,8 +9,8 @@ export class OrderDetailsPresenter {
       status: order.status,
       latitude: order.latitude,
       longitude: order.longitude,
-      deliveryman: order.deliverymanId?.toString(),
-      recipient: order.recipientId.toString(),
+      deliveryman: order.deliverymanName,
+      recipient: order.recipientName,
       createdAt: order.createdAt,
       updatedAt: order.updatedAt,
     }

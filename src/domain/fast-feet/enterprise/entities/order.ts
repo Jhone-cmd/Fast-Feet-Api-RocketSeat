@@ -7,9 +7,10 @@ import { Slug } from './value-objects/slug'
 
 export interface OrderProps {
   name: string
-  // employeeId: UniqueEntityId
   deliverymanId: UniqueEntityId | null
   recipientId: UniqueEntityId
+  deliverymanName?: string | null
+  recipientName?: string | null
   status: OrderStatus
   slug: Slug
   latitude: number
@@ -28,10 +29,6 @@ export class Order extends AggregateRoot<OrderProps> {
     this.touch()
   }
 
-  // get employeeId() {
-  //   return this.props.employeeId
-  // }
-
   get deliverymanId() {
     return this.props.deliverymanId
   }
@@ -39,6 +36,14 @@ export class Order extends AggregateRoot<OrderProps> {
   set deliverymanId(deliverymanId: UniqueEntityId | null) {
     this.props.deliverymanId = deliverymanId
     this.touch()
+  }
+
+  get deliverymanName() {
+    return this.props.deliverymanName
+  }
+
+  get recipientName() {
+    return this.props.recipientName
   }
 
   get recipientId() {

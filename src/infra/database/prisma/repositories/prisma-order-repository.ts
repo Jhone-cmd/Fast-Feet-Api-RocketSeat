@@ -26,6 +26,18 @@ export class PrismaOrderRepository implements OrderRepository {
       orderBy: {
         createdAt: 'desc',
       },
+      include: {
+        deliveryman: {
+          select: {
+            name: true,
+          },
+        },
+        recipient: {
+          select: {
+            name: true,
+          },
+        },
+      },
     })
 
     return orders.map(PrismaOrderMapper.toDomain)
@@ -35,6 +47,18 @@ export class PrismaOrderRepository implements OrderRepository {
     const order = await this.prisma.orders.findUnique({
       where: {
         id,
+      },
+      include: {
+        deliveryman: {
+          select: {
+            name: true,
+          },
+        },
+        recipient: {
+          select: {
+            name: true,
+          },
+        },
       },
     })
 
@@ -74,6 +98,18 @@ export class PrismaOrderRepository implements OrderRepository {
       skip: (page - 1) * perPage,
       orderBy: {
         createdAt: 'desc',
+      },
+      include: {
+        deliveryman: {
+          select: {
+            name: true,
+          },
+        },
+        recipient: {
+          select: {
+            name: true,
+          },
+        },
       },
     })
 
