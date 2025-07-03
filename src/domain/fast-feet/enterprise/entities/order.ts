@@ -7,9 +7,9 @@ import { Slug } from './value-objects/slug'
 
 export interface OrderProps {
   name: string
-  deliverymanId: UniqueEntityId | null
+  deliveryManId: UniqueEntityId | null
   recipientId: UniqueEntityId
-  deliverymanName?: string | null
+  deliveryManName?: string | null
   recipientName?: string | null
   status: OrderStatus
   slug: Slug
@@ -29,17 +29,17 @@ export class Order extends AggregateRoot<OrderProps> {
     this.touch()
   }
 
-  get deliverymanId() {
-    return this.props.deliverymanId
+  get deliveryManId() {
+    return this.props.deliveryManId
   }
 
-  set deliverymanId(deliverymanId: UniqueEntityId | null) {
-    this.props.deliverymanId = deliverymanId
+  set deliveryManId(deliveryManId: UniqueEntityId | null) {
+    this.props.deliveryManId = deliveryManId
     this.touch()
   }
 
-  get deliverymanName() {
-    return this.props.deliverymanName
+  get deliveryManName() {
+    return this.props.deliveryManName
   }
 
   get recipientName() {
@@ -96,13 +96,13 @@ export class Order extends AggregateRoot<OrderProps> {
   }
 
   static create(
-    props: Optional<OrderProps, 'createdAt' | 'slug' | 'deliverymanId'>,
+    props: Optional<OrderProps, 'createdAt' | 'slug' | 'deliveryManId'>,
     id?: UniqueEntityId
   ) {
     const order = new Order(
       {
         ...props,
-        deliverymanId: props.deliverymanId ?? null,
+        deliveryManId: props.deliveryManId ?? null,
         slug: props.slug ?? Slug.createFromText(props.name),
         createdAt: props.createdAt ?? new Date(),
       },

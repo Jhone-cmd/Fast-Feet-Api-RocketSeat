@@ -1,4 +1,3 @@
-import { DatabaseModule } from '@/infra/database/database.module'
 import { INestApplication } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { Test } from '@nestjs/testing'
@@ -7,6 +6,7 @@ import { AccountFactory } from 'test/factories/make-employee'
 import { OrderFactory } from 'test/factories/make-order'
 import { OrderAttachmentFactory } from 'test/factories/make-order-attachment'
 import { RecipientFactory } from 'test/factories/make-recipient'
+import { DatabaseModule } from '@/infra/database/database.module'
 import { AppModule } from '../../app.module'
 import { PrismaService } from '../../database/prisma/prisma.service'
 
@@ -40,13 +40,14 @@ describe('On Order Status (E2E)', () => {
     await app.init()
   })
 
-  test('[PATCH] /orders/:orderId/status', async () => {
+  test('[PATCH] accounts/:deliveryManId/orders/:orderId/status', async () => {
     const account = await accountFactory.makePrismaEmployee({})
     const accessToken = jwt.sign({ sub: account.id.toString() })
 
     const recipient = await recipientFactory.makePrismaRecipient({})
 
     const order = await orderFactory.makePrismaOrder({
+      deliveryManId: account.id,
       recipientId: recipient.id,
     })
 
@@ -65,7 +66,9 @@ describe('On Order Status (E2E)', () => {
     })
 
     const response = await request(app.getHttpServer())
-      .patch(`/orders/${order.id.toString()}/status`)
+      .patch(
+        `/accounts/${account.id.toString()}/orders/${order.id.toString()}/status`
+      )
       .set('Authorization', `Bearer ${accessToken}`)
       .send({
         status: 'delivered',

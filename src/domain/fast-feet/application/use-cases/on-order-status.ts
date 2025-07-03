@@ -4,9 +4,9 @@ import { OrderRepository } from '@/domain/fast-feet/application/repositories/ord
 import { OrderStatus } from '@/domain/fast-feet/enterprise/entities/types/order-status'
 import { OrderAttachmentRepository } from '../repositories/order-attachment-repository'
 import { NotDeliveredOrder } from './errors/not-delivered-order'
-
 export interface OnOrderStatusUseCaseRequest {
   orderId: string
+  deliveryManId: string
   status: OrderStatus
 }
 
@@ -23,6 +23,7 @@ export class OnOrderStatusUseCase {
 
   async execute({
     orderId,
+    deliveryManId,
     status,
   }: OnOrderStatusUseCaseRequest): Promise<OnOrderStatusUseCaseResponse> {
     const order = await this.orderRepository.findById(orderId)
@@ -31,7 +32,11 @@ export class OnOrderStatusUseCase {
 
     if (!order) return left(new ResourceNotFound())
 
-    if (!attachment && status === 'delivered') {
+    if (
+      !attachment &&
+      status === 'delivered' &&
+      deliveryManId !== order.deliveryManId?.toString()
+    ) {
       return left(new NotDeliveredOrder())
     }
 

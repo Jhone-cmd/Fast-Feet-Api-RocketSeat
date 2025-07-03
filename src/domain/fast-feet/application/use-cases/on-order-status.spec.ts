@@ -1,9 +1,9 @@
-import { UniqueEntityId } from '@/core/entities/unique-entity-id'
-import { ResourceNotFound } from '@/core/errors/error/resource-not-found'
 import { makeOrder } from 'test/factories/make-order'
 import { makeOrderAttachment } from 'test/factories/make-order-attachment'
 import { InMemoryOrderAttachmentRepository } from 'test/repositories/in-memory-order-attachment-repository'
 import { InMemoryOrderRepository } from 'test/repositories/in-memory-order-repository'
+import { UniqueEntityId } from '@/core/entities/unique-entity-id'
+import { ResourceNotFound } from '@/core/errors/error/resource-not-found'
 import { NotDeliveredOrder } from './errors/not-delivered-order'
 import { OnOrderStatusUseCase } from './on-order-status'
 
@@ -23,11 +23,15 @@ describe('On Order Status', () => {
 
   it('should be able to on change status', async () => {
     await inMemoryOrderRepository.create(
-      makeOrder({}, new UniqueEntityId('order-1'))
+      makeOrder(
+        { deliveryManId: new UniqueEntityId('deliveryman-1') },
+        new UniqueEntityId('order-1')
+      )
     )
 
     const result = await sut.execute({
       orderId: 'order-1',
+      deliveryManId: 'deliveryman-1',
       status: 'withdrawal',
     })
 
@@ -39,11 +43,15 @@ describe('On Order Status', () => {
 
   it('should not be able to change the status of another order', async () => {
     await inMemoryOrderRepository.create(
-      makeOrder({}, new UniqueEntityId('order-1'))
+      makeOrder(
+        { deliveryManId: new UniqueEntityId('deliveryman-1') },
+        new UniqueEntityId('order-1')
+      )
     )
 
     const result = await sut.execute({
       orderId: 'order-2',
+      deliveryManId: 'deliveryman-1',
       status: 'withdrawal',
     })
     expect(result.isLeft()).toBeTruthy()
@@ -51,7 +59,10 @@ describe('On Order Status', () => {
   })
 
   it('should be able to mark the order as delivered', async () => {
-    const order = makeOrder({}, new UniqueEntityId('order-1'))
+    const order = makeOrder(
+      { deliveryManId: new UniqueEntityId('deliveryman-1') },
+      new UniqueEntityId('order-1')
+    )
     await inMemoryOrderRepository.create(order)
 
     await inMemoryOrderAttachmentRepository.create(
@@ -60,6 +71,7 @@ describe('On Order Status', () => {
 
     const result = await sut.execute({
       orderId: 'order-1',
+      deliveryManId: 'deliveryman-1',
       status: 'delivered',
     })
 
@@ -76,6 +88,7 @@ describe('On Order Status', () => {
 
     const result = await sut.execute({
       orderId: 'order-1',
+      deliveryManId: '',
       status: 'delivered',
     })
     expect(result.isLeft()).toBeTruthy()

@@ -10,8 +10,6 @@ import { JwtService } from '@nestjs/jwt'
 import {
   ApiAcceptedResponse,
   ApiBody,
-  ApiMethodNotAllowedResponse,
-  ApiResponse,
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger'

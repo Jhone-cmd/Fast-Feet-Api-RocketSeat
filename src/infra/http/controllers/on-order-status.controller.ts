@@ -35,7 +35,7 @@ const bodyValidationPipe = new ZodValidationPipe(onOrderStatusBodySchema)
 type OnOrderStatusBodySchema = z.infer<typeof onOrderStatusBodySchema>
 @ApiTags('Orders')
 @ApiBearerAuth()
-@Controller('/orders/:orderId/status')
+@Controller('/accounts/:deliveryManId/orders/:orderId/status')
 export class OnOrderStatusController {
   constructor(private nestOnOrderStatus: NestOnOrderStatusUseCase) {}
 
@@ -46,6 +46,11 @@ export class OnOrderStatusController {
   })
   @ApiNoContentResponse({
     description: 'Changed Status Order Successfully.',
+  })
+  @ApiParam({
+    name: 'deliveryManId',
+    description:
+      'deliveryManId parameter to check which order to change status.',
   })
   @ApiParam({
     name: 'orderId',
@@ -59,12 +64,14 @@ export class OnOrderStatusController {
   @UseGuards(JwtAuthGuard)
   async handle(
     @Body(bodyValidationPipe) body: OnOrderStatusBodySchema,
+    @Param('deliveryManId') deliveryManId: string,
     @Param('orderId') orderId: string
   ) {
     const { status } = body
 
     const result = await this.nestOnOrderStatus.execute({
       orderId,
+      deliveryManId,
       status,
     })
 
