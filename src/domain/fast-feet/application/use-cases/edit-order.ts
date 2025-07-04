@@ -43,9 +43,9 @@ export class EditOrderUseCase {
     if (!order) return left(new ResourceNotFound())
 
     order.name = name ? name : order.name
-    order.deliverymanId = deliveryManId
+    order.deliveryManId = deliveryManId
       ? new UniqueEntityId(deliveryManId)
-      : order.deliverymanId
+      : order.deliveryManId
 
     await this.orderRepository.save(order)
 

@@ -15,8 +15,9 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger'
 import { z } from 'zod'
+import { CurrentAccount } from '@/infra/auth/current-account-decorator'
+import { AccountPayload } from '@/infra/auth/jwt.strategy'
 import { JwtAuthGuard } from '@/infra/auth/jwt-auth.guard'
-import { AccountRole } from '../api-properties/account-role-properties'
 import { NestFetchDeliverymansUseCase } from '../nest-use-cases/nest-fetch-deliverymans-use-case'
 import { ZodValidationPipe } from '../pipes/zod-validation-pipe'
 import { DeliveryManPresenter } from '../presenters/deliveryman-presenter'
@@ -39,6 +40,7 @@ export class FetchDeliveryMansController {
   constructor(private nestFetchDeliverymans: NestFetchDeliverymansUseCase) {}
 
   @Get()
+  @UseGuards(JwtAuthGuard)
   @ApiOkResponse({
     description: 'List of Deliverymans.',
     example: {
@@ -58,20 +60,17 @@ export class FetchDeliveryMansController {
     default: 1,
     required: false,
   })
-  @ApiQuery({
-    name: 'role',
-    enum: AccountRole,
-  })
   @ApiUnauthorizedResponse({
     description: 'Unauthorized. Access restricted to administrator.',
   })
   @ApiBadRequestResponse({ description: 'Bad Request.' })
-  @UseGuards(JwtAuthGuard)
   async handle(
     @Query('page', queryValidationPipe) page: PageQueryParamSchema,
-    @Query('role') role: AccountRole
+    @CurrentAccount()
+    account: AccountPayload
   ) {
-    if (role !== 'Admin') {
+    const { rule } = account
+    if (rule !== 'admin') {
       throw new UnauthorizedException(
         'Unauthorized. Access restricted to administrator.'
       )

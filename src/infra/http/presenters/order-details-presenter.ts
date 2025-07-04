@@ -9,7 +9,7 @@ export class OrderDetailsPresenter {
       status: order.status,
       latitude: order.latitude,
       longitude: order.longitude,
-      deliveryman: order.deliverymanName,
+      deliveryman: order.deliveryManName,
       recipient: order.recipientName,
       createdAt: order.createdAt,
       updatedAt: order.updatedAt,
