@@ -1,4 +1,3 @@
-import { DatabaseModule } from '@/infra/database/database.module'
 import { INestApplication } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { Test } from '@nestjs/testing'
@@ -7,6 +6,7 @@ import { AccountFactory } from 'test/factories/make-employee'
 import { OrderFactory } from 'test/factories/make-order'
 import { RecipientFactory } from 'test/factories/make-recipient'
 import { waitFor } from 'test/utils/wait-for'
+import { DatabaseModule } from '@/infra/database/database.module'
 import { AppModule } from '../../app.module'
 import { PrismaService } from '../../database/prisma/prisma.service'
 
@@ -35,7 +35,10 @@ describe('On Order Change Status - Notification (E2E)', () => {
 
   it('should to able send a notification when order status change', async () => {
     const account = await accountFactory.makePrismaEmployee({})
-    const accessToken = jwt.sign({ sub: account.id.toString() })
+    const accessToken = jwt.sign({
+      sub: account.id.toString(),
+      rule: account.rule,
+    })
 
     const recipient = await recipientFactory.makePrismaRecipient({})
 
@@ -44,7 +47,9 @@ describe('On Order Change Status - Notification (E2E)', () => {
     })
 
     await request(app.getHttpServer())
-      .patch(`/orders/${order.id.toString()}/status`)
+      .patch(
+        `/accounts/${account.id.toString()}/orders/${order.id.toString()}/status`
+      )
       .set('Authorization', `Bearer ${accessToken}`)
       .send({
         status: 'withdrawal',

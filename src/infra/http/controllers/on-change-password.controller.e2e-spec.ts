@@ -28,14 +28,12 @@ describe('On Change Password (E2E)', () => {
 
   test('[PATCH] /accounts/:deliveryManId/change-password', async () => {
     const admin = await accountFactory.makePrismaEmployee({ rule: 'admin' })
-    const accessToken = jwt.sign({ sub: admin.id.toString() })
+    const accessToken = jwt.sign({ sub: admin.id.toString(), rule: admin.rule })
 
     const deliveryman = await accountFactory.makePrismaEmployee()
 
     const response = await request(app.getHttpServer())
-      .patch(
-        `/accounts/${deliveryman.id.toString()}/change-password?role=Admin`
-      )
+      .patch(`/accounts/${deliveryman.id.toString()}/change-password/`)
       .set('Authorization', `Bearer ${accessToken}`)
       .send({
         password: '12345678',

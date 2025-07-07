@@ -30,7 +30,7 @@ describe('Fetch Deliverymans (E2E)', () => {
   test('[GET] /accounts/deliverymans', async () => {
     const admin = await accountFactory.makePrismaEmployee({ rule: 'admin' })
 
-    const accessToken = jwt.sign({ sub: admin.id.toString() })
+    const accessToken = jwt.sign({ sub: admin.id.toString(), rule: admin.rule })
 
     await Promise.all([
       accountFactory.makePrismaEmployee({
@@ -44,7 +44,7 @@ describe('Fetch Deliverymans (E2E)', () => {
     ])
 
     const response = await request(app.getHttpServer())
-      .get('/accounts/deliverymans?role=Admin')
+      .get('/accounts/deliverymans/')
       .set('Authorization', `Bearer ${accessToken}`)
       .send()
 

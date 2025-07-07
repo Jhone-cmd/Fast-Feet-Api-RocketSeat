@@ -28,12 +28,12 @@ describe('Edit Deliveryman (E2E)', () => {
 
   test('[PUT] /accounts/:deliverymanId', async () => {
     const admin = await accountFactory.makePrismaEmployee({ rule: 'admin' })
-    const accessToken = jwt.sign({ sub: admin.id.toString() })
+    const accessToken = jwt.sign({ sub: admin.id.toString(), rule: admin.rule })
 
     const deliveryman = await accountFactory.makePrismaEmployee()
 
     const response = await request(app.getHttpServer())
-      .put(`/accounts/${deliveryman.id.toString()}?role=Admin`)
+      .put(`/accounts/${deliveryman.id.toString()}/`)
       .set('Authorization', `Bearer ${accessToken}`)
       .send({
         email: 'deliveryman2@email.com',
