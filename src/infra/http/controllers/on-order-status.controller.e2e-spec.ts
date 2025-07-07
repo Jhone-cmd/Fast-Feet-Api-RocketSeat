@@ -40,7 +40,7 @@ describe('On Order Status (E2E)', () => {
     await app.init()
   })
 
-  test('[PATCH] accounts/:deliveryManId/orders/:orderId/status', async () => {
+  test('[PATCH] /orders/:orderId/status', async () => {
     const account = await accountFactory.makePrismaEmployee({})
     const accessToken = jwt.sign({ sub: account.id.toString() })
 
@@ -66,9 +66,7 @@ describe('On Order Status (E2E)', () => {
     })
 
     const response = await request(app.getHttpServer())
-      .patch(
-        `/accounts/${account.id.toString()}/orders/${order.id.toString()}/status`
-      )
+      .patch(`/orders/${order.id.toString()}/status`)
       .set('Authorization', `Bearer ${accessToken}`)
       .send({
         status: 'delivered',

@@ -6,7 +6,7 @@ import { OrderAttachmentRepository } from '../repositories/order-attachment-repo
 import { NotDeliveredOrder } from './errors/not-delivered-order'
 export interface OnOrderStatusUseCaseRequest {
   orderId: string
-  deliveryManId: string
+  deliveryManId?: string | null
   status: OrderStatus
 }
 

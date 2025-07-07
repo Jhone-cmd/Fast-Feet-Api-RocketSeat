@@ -47,9 +47,7 @@ describe('On Order Change Status - Notification (E2E)', () => {
     })
 
     await request(app.getHttpServer())
-      .patch(
-        `/accounts/${account.id.toString()}/orders/${order.id.toString()}/status`
-      )
+      .patch(`/orders/${order.id.toString()}/status`)
       .set('Authorization', `Bearer ${accessToken}`)
       .send({
         status: 'withdrawal',
