@@ -7,6 +7,10 @@ export abstract class OrderRepository {
   abstract findManyOrder(params: PaginationParams): Promise<Order[]>
   abstract findById(id: string): Promise<Order | null>
   abstract findNearbyOrders(params: FindNearbyOrdersParams): Promise<Order[]>
+  abstract findManyOrderPerDeliveryMan(
+    deliveryManId: string,
+    params: PaginationParams
+  ): Promise<Order[]>
   abstract save(order: Order): Promise<void>
   abstract delete(order: Order): Promise<void>
 }

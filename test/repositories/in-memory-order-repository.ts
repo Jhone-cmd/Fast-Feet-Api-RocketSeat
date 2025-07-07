@@ -54,6 +54,18 @@ export class InMemoryOrderRepository implements OrderRepository {
     return orders
   }
 
+  async findManyOrderPerDeliveryMan(
+    deliveryManId: string,
+    { page }: PaginationParams
+  ): Promise<Order[]> {
+    const orders = this.items
+      .filter(item => item.deliveryManId?.toString() === deliveryManId)
+      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+      .slice((page - 1) * 20, page * 20)
+
+    return orders
+  }
+
   async save(order: Order): Promise<void> {
     const orderIndex = this.items.findIndex(item => item.id === order.id)
     this.items[orderIndex] = order
