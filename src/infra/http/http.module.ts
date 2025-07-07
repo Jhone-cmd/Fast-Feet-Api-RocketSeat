@@ -13,6 +13,7 @@ import { EditOrderController } from './controllers/edit-order.controller'
 import { EditRecipientController } from './controllers/edit-recipient.controller'
 import { FetchDeliveryMansController } from './controllers/fetch-deliverymans.controller'
 import { FetchNearbyOrdersController } from './controllers/fetch-nearby-orders.controller'
+import { FetchOrdersPerDeliveryManController } from './controllers/fetch-orders-per-deliveryman.controller'
 import { FetchRecentOrdersController } from './controllers/fetch-recent-orders.controller'
 import { FetchRecipientsController } from './controllers/fetch-recipients.controller'
 import { OnChangePasswordController } from './controllers/on-change-password.controller'
@@ -30,6 +31,7 @@ import { NestEditOrderUseCase } from './nest-use-cases/nest-edit-order-use-case'
 import { NestEditRecipientUseCase } from './nest-use-cases/nest-edit-recipient-use-case'
 import { NestFetchDeliverymansUseCase } from './nest-use-cases/nest-fetch-deliverymans-use-case'
 import { NestFetchNearbyOrdersUseCase } from './nest-use-cases/nest-fetch-nearby-orders-use-case'
+import { NestFetchOrdersPerDeliveryManUseCase } from './nest-use-cases/nest-fetch-order-per-deliveryman-use-case'
 import { NestFetchRecentOrdersUseCase } from './nest-use-cases/nest-fetch-recent-orders-use-case'
 import { NestFetchRecipientsUseCase } from './nest-use-cases/nest-fetch-recipients-use-case'
 import { NestOnChangePasswordUseCase } from './nest-use-cases/nest-on-change-password-use-case'
@@ -49,6 +51,7 @@ import { StorageModule } from './storage/storage.module'
     FetchRecipientsController,
     FetchRecentOrdersController,
     FetchNearbyOrdersController,
+    FetchOrdersPerDeliveryManController,
     EditDeliveryManController,
     EditRecipientController,
     EditOrderController,
@@ -68,6 +71,7 @@ import { StorageModule } from './storage/storage.module'
     NestCreateOrderUseCase,
     NestFetchRecentOrdersUseCase,
     NestFetchNearbyOrdersUseCase,
+    NestFetchOrdersPerDeliveryManUseCase,
     NestEditDeliveryManUseCase,
     NestEditRecipientUseCase,
     NestEditOrderUseCase,
