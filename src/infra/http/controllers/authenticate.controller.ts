@@ -76,7 +76,7 @@ export class AuthenticateController {
 
     const payload = { sub: account.id, rule: account.rule }
 
-    const accessToken = this.jwt.signAsync(payload)
+    const accessToken = this.jwt.sign(payload)
 
     return {
       access_token: accessToken,

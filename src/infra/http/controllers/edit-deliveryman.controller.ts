@@ -5,7 +5,6 @@ import {
   HttpCode,
   Param,
   Put,
-  Query,
   UnauthorizedException,
   UseGuards,
 } from '@nestjs/common'
@@ -15,7 +14,6 @@ import {
   ApiBody,
   ApiNoContentResponse,
   ApiParam,
-  ApiQuery,
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger'
@@ -25,7 +23,6 @@ import { ResourceNotFound } from '@/core/errors/error/resource-not-found'
 import { CurrentAccount } from '@/infra/auth/current-account-decorator'
 import { AccountPayload } from '@/infra/auth/jwt.strategy'
 import { JwtAuthGuard } from '@/infra/auth/jwt-auth.guard'
-import { AccountRole } from '../api-properties/account-role-properties'
 import { EditAccountProperties } from '../api-properties/edit-account-properties'
 import { NestEditDeliveryManUseCase } from '../nest-use-cases/nest-edit-deliveryman-use-case'
 import { ZodValidationPipe } from '../pipes/zod-validation-pipe'
@@ -56,10 +53,6 @@ export class EditDeliveryManController {
     name: 'deliveryManId',
     description: 'DeliverymanId parameter to check which account to update.',
   })
-  @ApiQuery({
-    name: 'role',
-    enum: AccountRole,
-  })
   @ApiUnauthorizedResponse({
     description: 'Unauthorized. Access restricted to administrator.',
   })
@@ -69,16 +62,14 @@ export class EditDeliveryManController {
   async handle(
     @Body(bodyValidationPipe) body: EditDeliveryManBodySchema,
     @Param('deliveryManId') deliveryManId: string,
-    @CurrentAccount() account: AccountPayload,
-    @Query('role') role: AccountRole
+    @CurrentAccount() account: AccountPayload
   ) {
-    if (role !== 'Admin') {
+    const { sub: adminId, rule } = account
+    if (rule !== 'admin') {
       throw new UnauthorizedException(
         'Unauthorized. Access restricted to administrator.'
       )
     }
-
-    const adminId = account.sub
 
     const { name, email } = body
 

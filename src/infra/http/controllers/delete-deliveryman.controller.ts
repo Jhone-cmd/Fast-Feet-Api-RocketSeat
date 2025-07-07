@@ -45,14 +45,12 @@ export class DeleteDeliveryManController {
     @CurrentAccount()
     account: AccountPayload
   ) {
-    const adminId = account.sub
-    // const rule = account.rule
-
-    // if (rule !== 'admin') {
-    //   throw new UnauthorizedException(
-    //     'Unauthorized. Access restricted to administrator.'
-    //   )
-    // }
+    const { sub: adminId, rule } = account
+    if (rule !== 'admin') {
+      throw new UnauthorizedException(
+        'Unauthorized. Access restricted to administrator.'
+      )
+    }
     const result = await this.nestDeleteDeliveryMan.execute({
       adminId,
       deliveryManId,
