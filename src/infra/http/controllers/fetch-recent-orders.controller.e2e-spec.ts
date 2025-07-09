@@ -1,5 +1,3 @@
-import { Slug } from '@/domain/fast-feet/enterprise/entities/value-objects/slug'
-import { DatabaseModule } from '@/infra/database/database.module'
 import { INestApplication } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { Test } from '@nestjs/testing'
@@ -7,6 +5,8 @@ import request from 'supertest'
 import { AccountFactory } from 'test/factories/make-employee'
 import { OrderFactory } from 'test/factories/make-order'
 import { RecipientFactory } from 'test/factories/make-recipient'
+import { Slug } from '@/domain/fast-feet/enterprise/entities/value-objects/slug'
+import { DatabaseModule } from '@/infra/database/database.module'
 import { AppModule } from '../../app.module'
 import { PrismaService } from '../../database/prisma/prisma.service'
 
@@ -36,7 +36,7 @@ describe('Fetch Recent Orders (E2E)', () => {
   test('[GET] /orders', async () => {
     const admin = await accountFactory.makePrismaEmployee({ rule: 'admin' })
 
-    const accessToken = jwt.sign({ sub: admin.id.toString() })
+    const accessToken = jwt.sign({ sub: admin.id.toString(), rule: admin.rule })
 
     const recipient = await recipientFactory.makePrismaRecipient()
 

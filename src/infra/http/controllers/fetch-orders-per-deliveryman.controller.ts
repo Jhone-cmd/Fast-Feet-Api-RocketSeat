@@ -4,6 +4,7 @@ import {
   Get,
   Param,
   Query,
+  UnauthorizedException,
   UseGuards,
 } from '@nestjs/common'
 import {
@@ -16,6 +17,8 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger'
 import { z } from 'zod'
+import { CurrentAccount } from '@/infra/auth/current-account-decorator'
+import { AccountPayload } from '@/infra/auth/jwt.strategy'
 import { JwtAuthGuard } from '../../auth/jwt-auth.guard'
 import { NestFetchOrdersPerDeliveryManUseCase } from '../nest-use-cases/nest-fetch-order-per-deliveryman-use-case'
 import { ZodValidationPipe } from '../pipes/zod-validation-pipe'
@@ -71,8 +74,13 @@ export class FetchOrdersPerDeliveryManController {
   @UseGuards(JwtAuthGuard)
   async handle(
     @Param('deliveryManId') deliveryManId: string,
-    @Query('page', queryValidationPipe) page: PageQueryParamSchema
+    @Query('page', queryValidationPipe) page: PageQueryParamSchema,
+    @CurrentAccount() account: AccountPayload
   ) {
+    const { sub: deliveryman } = account
+    if (deliveryman !== deliveryManId) {
+      throw new UnauthorizedException('Unauthorized. Access restricted.')
+    }
     const result = await this.nestFetchOrdersPerDeliveryMan.execute({
       deliveryManId,
       page,

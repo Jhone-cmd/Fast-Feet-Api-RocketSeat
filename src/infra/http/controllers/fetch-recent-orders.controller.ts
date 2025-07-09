@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   Query,
+  UnauthorizedException,
   UseGuards,
 } from '@nestjs/common'
 import {
@@ -14,6 +15,8 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger'
 import { z } from 'zod'
+import { CurrentAccount } from '@/infra/auth/current-account-decorator'
+import { AccountPayload } from '@/infra/auth/jwt.strategy'
 import { JwtAuthGuard } from '../../auth/jwt-auth.guard'
 import { NestFetchRecentOrdersUseCase } from '../nest-use-cases/nest-fetch-recent-orders-use-case'
 import { ZodValidationPipe } from '../pipes/zod-validation-pipe'
@@ -65,7 +68,17 @@ export class FetchRecentOrdersController {
   })
   @ApiBadRequestResponse({ description: 'Bad Request.' })
   @UseGuards(JwtAuthGuard)
-  async handle(@Query('page', queryValidationPipe) page: PageQueryParamSchema) {
+  async handle(
+    @Query('page', queryValidationPipe) page: PageQueryParamSchema,
+    @CurrentAccount() account: AccountPayload
+  ) {
+    const { rule } = account
+    if (rule !== 'admin') {
+      throw new UnauthorizedException(
+        'Unauthorized. Access restricted to administrator.'
+      )
+    }
+
     const result = await this.nestFetchRecentOrders.execute({ page })
 
     if (result.isLeft()) {
