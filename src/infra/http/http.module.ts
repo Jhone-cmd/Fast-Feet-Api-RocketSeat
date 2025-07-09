@@ -16,6 +16,7 @@ import { FetchNearbyOrdersController } from './controllers/fetch-nearby-orders.c
 import { FetchOrdersPerDeliveryManController } from './controllers/fetch-orders-per-deliveryman.controller'
 import { FetchRecentOrdersController } from './controllers/fetch-recent-orders.controller'
 import { FetchRecipientsController } from './controllers/fetch-recipients.controller'
+import { HomeController } from './controllers/home.controller'
 import { OnChangePasswordController } from './controllers/on-change-password.controller'
 import { OnOrderStatusController } from './controllers/on-order-status.controller'
 import { ReadNotificationController } from './controllers/read-notification.controller'
@@ -43,6 +44,7 @@ import { StorageModule } from './storage/storage.module'
 @Module({
   imports: [DatabaseModule, CryptographyModule, StorageModule],
   controllers: [
+    HomeController,
     CreateAccountController,
     AuthenticateController,
     CreateOrderController,
