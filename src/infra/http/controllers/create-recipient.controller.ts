@@ -76,7 +76,12 @@ export class CreateRecipientController {
     @Body(bodyValidationSchema) body: CreateRecipientBodySchema,
     @CurrentAccount() account: AccountPayload
   ) {
-    const adminId = account.sub
+    const { sub: adminId, rule } = account
+    if (rule !== 'admin') {
+      throw new UnauthorizedException(
+        'Unauthorized. Access restricted to administrator.'
+      )
+    }
 
     const { name, cpf, phone, address } = body
 

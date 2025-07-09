@@ -44,7 +44,12 @@ export class DeleteRecipientController {
     @Param('recipientId') recipientId: string,
     @CurrentAccount() account: AccountPayload
   ) {
-    const adminId = account.sub
+    const { sub: adminId, rule } = account
+    if (rule !== 'admin') {
+      throw new UnauthorizedException(
+        'Unauthorized. Access restricted to administrator.'
+      )
+    }
 
     const result = await this.nestDeleteRecipient.execute({
       adminId,
